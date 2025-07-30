@@ -6,8 +6,10 @@ Usage:
     python run_scraper.py --setup-db                    # Initialize database
     python run_scraper.py --test                        # Test with 3 Anthropic stories
     python run_scraper.py --test --source openai        # Test with 3 OpenAI stories
+    python run_scraper.py --test --source microsoft     # Test with 3 Microsoft stories
     python run_scraper.py --limit 10                    # Process up to 10 Anthropic stories
     python run_scraper.py --source openai --limit 5     # Process up to 5 OpenAI stories
+    python run_scraper.py --source microsoft --limit 5  # Process up to 5 Microsoft stories
     python run_scraper.py                               # Process all available Anthropic stories
 """
 
@@ -29,8 +31,8 @@ def main():
                        help='Test mode: process only 3 stories')
     parser.add_argument('--limit', type=int, metavar='N',
                        help='Limit number of stories to process')
-    parser.add_argument('--source', choices=['anthropic', 'openai'], default='anthropic',
-                       help='Source to scrape: anthropic (default) or openai')
+    parser.add_argument('--source', choices=['anthropic', 'openai', 'microsoft'], default='anthropic',
+                       help='Source to scrape: anthropic (default), openai, or microsoft')
     
     args = parser.parse_args()
     

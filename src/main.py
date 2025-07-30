@@ -6,6 +6,7 @@ from src.database.connection import DatabaseConnection
 from src.database.models import DatabaseOperations, CustomerStory
 from src.scrapers.anthropic_scraper import AnthropicScraper
 from src.scrapers.openai_scraper import OpenAIScraper
+from src.scrapers.microsoft_scraper import MicrosoftScraper
 from src.ai_integration.claude_processor import ClaudeProcessor
 
 logger = logging.getLogger(__name__)
@@ -81,6 +82,39 @@ class AIStoriesProcessor:
             # Cleanup WebDriver
             if hasattr(scraper, 'driver') and scraper.driver:
                 scraper.driver.quit()
+    
+    def scrape_microsoft_stories(self, limit: int = None) -> List[Dict[str, Any]]:
+        """Scrape Microsoft Azure AI customer stories"""
+        logger.info(f"Starting Microsoft scraping (limit: {limit})")
+        
+        scraper = MicrosoftScraper()
+        
+        # Get story URLs
+        story_urls = scraper.get_customer_story_urls()
+        
+        if limit:
+            story_urls = story_urls[:limit]
+        
+        logger.info(f"Found {len(story_urls)} story URLs to scrape")
+        
+        # Scrape stories
+        scraped_stories = []
+        for i, url in enumerate(story_urls):
+            logger.info(f"Scraping story {i+1}/{len(story_urls)}: {url}")
+            
+            # Check if story already exists
+            if self.db_ops.check_story_exists(url):
+                logger.info(f"Story already exists, skipping: {url}")
+                continue
+            
+            story_data = scraper.scrape_story(url)
+            if story_data:
+                scraped_stories.append(story_data)
+            else:
+                logger.warning(f"Failed to scrape: {url}")
+        
+        logger.info(f"Successfully scraped {len(scraped_stories)} new stories")
+        return scraped_stories
     
     def scrape_anthropic_stories(self, limit: int = None) -> List[Dict[str, Any]]:
         """Scrape Anthropic customer stories with publish dates"""
@@ -198,6 +232,9 @@ class AIStoriesProcessor:
             if source.lower() == "openai":
                 scraped_stories = self.scrape_openai_stories(limit)
                 source_name = "OpenAI"
+            elif source.lower() == "microsoft":
+                scraped_stories = self.scrape_microsoft_stories(limit)
+                source_name = "Microsoft"
             else:
                 scraped_stories = self.scrape_anthropic_stories(limit)
                 source_name = "Anthropic"

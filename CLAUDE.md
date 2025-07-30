@@ -4,5 +4,6 @@ Please review it and keep updating it, as needed.
 It is very important that we are throughful, deleberate and do not take shortcuts to minimize the need for rework
 When in doubt, ask user - please do not make any assumptions before confirming with user
 At any point, if we were to restart - all required documentations should be in the ai-big5-stories and the tracker-log md documents
-Let us continue with our Phase 2 implementation of Microsoft
+Let us continue with our Phase 2 implementation of GCP
+Please use as much of the approach for Microsoft and AWS for inspiration
 As always, test regularly and often and we should commit once we are done

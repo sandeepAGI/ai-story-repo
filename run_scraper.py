@@ -3,10 +3,12 @@
 AI Customer Stories Scraper - Main Runner Script
 
 Usage:
-    python run_scraper.py --setup-db        # Initialize database
-    python run_scraper.py --test            # Test with 3 stories
-    python run_scraper.py --limit 10        # Process up to 10 stories
-    python run_scraper.py                   # Process all available stories
+    python run_scraper.py --setup-db                    # Initialize database
+    python run_scraper.py --test                        # Test with 3 Anthropic stories
+    python run_scraper.py --test --source openai        # Test with 3 OpenAI stories
+    python run_scraper.py --limit 10                    # Process up to 10 Anthropic stories
+    python run_scraper.py --source openai --limit 5     # Process up to 5 OpenAI stories
+    python run_scraper.py                               # Process all available Anthropic stories
 """
 
 import argparse
@@ -27,6 +29,8 @@ def main():
                        help='Test mode: process only 3 stories')
     parser.add_argument('--limit', type=int, metavar='N',
                        help='Limit number of stories to process')
+    parser.add_argument('--source', choices=['anthropic', 'openai'], default='anthropic',
+                       help='Source to scrape: anthropic (default) or openai')
     
     args = parser.parse_args()
     
@@ -43,15 +47,15 @@ def main():
         limit = None
         if args.test:
             limit = 3
-            print("Running in test mode (3 stories)")
+            print(f"Running in test mode (3 {args.source} stories)")
         elif args.limit:
             limit = args.limit
-            print(f"Processing up to {limit} stories")
+            print(f"Processing up to {limit} {args.source} stories")
         else:
-            print("Processing all available stories")
+            print(f"Processing all available {args.source} stories")
         
         # Run the pipeline
-        processor.run_full_pipeline(limit=limit)
+        processor.run_full_pipeline(source=args.source, limit=limit)
         
     except KeyboardInterrupt:
         print("\nOperation cancelled by user")

@@ -17,6 +17,21 @@ class Source:
     active: bool = True
 
 @dataclass
+class DiscoveredUrl:
+    id: Optional[int]
+    source_id: int
+    url: str
+    inferred_customer_name: Optional[str] = None
+    inferred_title: Optional[str] = None
+    publish_date: Optional[datetime] = None
+    discovered_date: Optional[datetime] = None
+    last_scrape_attempt: Optional[datetime] = None
+    scrape_attempts: int = 0
+    scrape_status: str = 'pending'  # 'pending', 'scraped', 'failed', 'filtered_out'
+    scrape_error: Optional[str] = None
+    notes: Optional[str] = None
+
+@dataclass
 class CustomerStory:
     id: Optional[int]
     source_id: int
@@ -161,6 +176,98 @@ class DatabaseOperations:
                 (source_id,)
             )
     
+    # Discovered URLs operations for two-phase scraping
+    
+    def insert_discovered_url(self, discovered_url: DiscoveredUrl) -> int:
+        """Insert a new discovered URL and return its ID"""
+        with self.db.get_cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO discovered_urls 
+                (source_id, url, inferred_customer_name, inferred_title, publish_date, notes)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (url) DO UPDATE SET
+                    inferred_customer_name = EXCLUDED.inferred_customer_name,
+                    inferred_title = EXCLUDED.inferred_title,
+                    publish_date = EXCLUDED.publish_date,
+                    notes = EXCLUDED.notes
+                RETURNING id
+            """, (
+                discovered_url.source_id,
+                discovered_url.url,
+                discovered_url.inferred_customer_name,
+                discovered_url.inferred_title,
+                discovered_url.publish_date,
+                discovered_url.notes
+            ))
+            
+            row = cursor.fetchone()
+            discovered_id = row['id']
+            logger.info(f"Inserted/updated discovered URL ID: {discovered_id}")
+            return discovered_id
+    
+    def get_pending_urls(self, source_id: int, limit: int = None) -> List[DiscoveredUrl]:
+        """Get URLs that are pending scraping"""
+        query = """
+            SELECT * FROM discovered_urls 
+            WHERE source_id = %s AND scrape_status = 'pending'
+            ORDER BY publish_date DESC NULLS LAST, discovered_date ASC
+        """
+        params = [source_id]
+        
+        if limit:
+            query += " LIMIT %s"
+            params.append(limit)
+        
+        with self.db.get_cursor() as cursor:
+            cursor.execute(query, params)
+            rows = cursor.fetchall()
+            return [self._row_to_discovered_url(row) for row in rows]
+    
+    def update_discovered_url_status(self, url_id: int, status: str, error: str = None):
+        """Update scrape status and attempt count for discovered URL"""
+        with self.db.get_cursor() as cursor:
+            cursor.execute("""
+                UPDATE discovered_urls 
+                SET scrape_status = %s, 
+                    scrape_attempts = scrape_attempts + 1,
+                    last_scrape_attempt = CURRENT_TIMESTAMP,
+                    scrape_error = %s
+                WHERE id = %s
+            """, (status, error, url_id))
+            logger.info(f"Updated discovered URL {url_id} status to: {status}")
+    
+    def get_discovered_url_by_url(self, url: str) -> Optional[DiscoveredUrl]:
+        """Get discovered URL by URL string"""
+        with self.db.get_cursor() as cursor:
+            cursor.execute("SELECT * FROM discovered_urls WHERE url = %s", (url,))
+            row = cursor.fetchone()
+            if row:
+                return self._row_to_discovered_url(row)
+            return None
+    
+    def get_discovery_stats(self, source_id: int) -> Dict[str, int]:
+        """Get statistics about discovered URLs for a source"""
+        with self.db.get_cursor() as cursor:
+            cursor.execute("""
+                SELECT 
+                    scrape_status,
+                    COUNT(*) as count
+                FROM discovered_urls 
+                WHERE source_id = %s 
+                GROUP BY scrape_status
+            """, (source_id,))
+            
+            stats = {row['scrape_status']: row['count'] for row in cursor.fetchall()}
+            
+            # Get total count
+            cursor.execute(
+                "SELECT COUNT(*) as total FROM discovered_urls WHERE source_id = %s", 
+                (source_id,)
+            )
+            stats['total'] = cursor.fetchone()['total']
+            
+            return stats
+    
     def _row_to_story(self, row: Dict) -> CustomerStory:
         """Convert database row to CustomerStory object"""
         return CustomerStory(
@@ -178,6 +285,23 @@ class DatabaseOperations:
             scraped_date=row['scraped_date'],
             last_updated=row['last_updated'],
             publish_date=row['publish_date']
+        )
+    
+    def _row_to_discovered_url(self, row: Dict) -> DiscoveredUrl:
+        """Convert database row to DiscoveredUrl object"""
+        return DiscoveredUrl(
+            id=row['id'],
+            source_id=row['source_id'],
+            url=row['url'],
+            inferred_customer_name=row['inferred_customer_name'],
+            inferred_title=row['inferred_title'],
+            publish_date=row['publish_date'],
+            discovered_date=row['discovered_date'],
+            last_scrape_attempt=row['last_scrape_attempt'],
+            scrape_attempts=row['scrape_attempts'],
+            scrape_status=row['scrape_status'],
+            scrape_error=row['scrape_error'],
+            notes=row['notes']
         )
 
 def generate_content_hash(content: str) -> str:

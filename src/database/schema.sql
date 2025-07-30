@@ -9,6 +9,22 @@ CREATE TABLE sources (
     active BOOLEAN DEFAULT true
 );
 
+-- URL discovery table for two-phase scraping (especially for bot-protected sources)
+CREATE TABLE discovered_urls (
+    id SERIAL PRIMARY KEY,
+    source_id INTEGER REFERENCES sources(id),
+    url VARCHAR(500) UNIQUE NOT NULL,
+    inferred_customer_name VARCHAR(255), -- Customer name extracted from URL or preview
+    inferred_title VARCHAR(500), -- Title from preview or link text
+    publish_date DATE, -- Publication date if discoverable
+    discovered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_scrape_attempt TIMESTAMP,
+    scrape_attempts INTEGER DEFAULT 0,
+    scrape_status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'scraped', 'failed', 'filtered_out'
+    scrape_error TEXT, -- Error message from last scrape attempt
+    notes TEXT -- Additional metadata or filtering notes
+);
+
 -- Main customer stories table
 CREATE TABLE customer_stories (
     id SERIAL PRIMARY KEY,
@@ -103,6 +119,12 @@ CREATE INDEX idx_customer_stories_search ON customer_stories USING gin(search_ve
 CREATE INDEX idx_customer_stories_extracted_data ON customer_stories USING gin(extracted_data);
 CREATE INDEX idx_story_metrics_type ON story_metrics(metric_type);
 CREATE INDEX idx_story_technologies_story ON story_technologies(story_id);
+
+-- Indexes for discovered_urls table
+CREATE INDEX idx_discovered_urls_source_status ON discovered_urls(source_id, scrape_status);
+CREATE INDEX idx_discovered_urls_status ON discovered_urls(scrape_status);
+CREATE INDEX idx_discovered_urls_publish_date ON discovered_urls(publish_date);
+CREATE INDEX idx_discovered_urls_discovered_date ON discovered_urls(discovered_date);
 
 -- Initial data
 INSERT INTO sources (name, base_url) VALUES 

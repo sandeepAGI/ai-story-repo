@@ -5,6 +5,7 @@ from src.config import Config
 from src.database.connection import DatabaseConnection
 from src.database.models import DatabaseOperations, CustomerStory
 from src.scrapers.anthropic_scraper import AnthropicScraper
+from src.scrapers.openai_scraper import OpenAIScraper
 from src.ai_integration.claude_processor import ClaudeProcessor
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,45 @@ class AIStoriesProcessor:
         except Exception as e:
             logger.error(f"Database setup failed: {e}")
             raise
+    
+    def scrape_openai_stories(self, limit: int = None) -> List[Dict[str, Any]]:
+        """Scrape OpenAI customer stories"""
+        logger.info(f"Starting OpenAI scraping (limit: {limit})")
+        
+        scraper = OpenAIScraper()
+        
+        try:
+            # Get story URLs (OpenAI scraper doesn't need separate date extraction)
+            story_urls = scraper.get_customer_story_urls()
+            
+            if limit:
+                story_urls = story_urls[:limit]
+            
+            logger.info(f"Found {len(story_urls)} story URLs to scrape")
+            
+            # Scrape stories
+            scraped_stories = []
+            for i, url in enumerate(story_urls):
+                logger.info(f"Scraping story {i+1}/{len(story_urls)}: {url}")
+                
+                # Check if story already exists
+                if self.db_ops.check_story_exists(url):
+                    logger.info(f"Story already exists, skipping: {url}")
+                    continue
+                
+                story_data = scraper.scrape_story(url)
+                if story_data:
+                    scraped_stories.append(story_data)
+                else:
+                    logger.warning(f"Failed to scrape: {url}")
+            
+            logger.info(f"Successfully scraped {len(scraped_stories)} new stories")
+            return scraped_stories
+            
+        finally:
+            # Cleanup WebDriver
+            if hasattr(scraper, 'driver') and scraper.driver:
+                scraper.driver.quit()
     
     def scrape_anthropic_stories(self, limit: int = None) -> List[Dict[str, Any]]:
         """Scrape Anthropic customer stories with publish dates"""
@@ -92,14 +132,14 @@ class AIStoriesProcessor:
         logger.info(f"Claude processing completed: {len(processed_stories)} stories processed")
         return processed_stories
     
-    def save_stories_to_database(self, stories: List[Dict[str, Any]]) -> List[int]:
+    def save_stories_to_database(self, stories: List[Dict[str, Any]], source_name: str = "Anthropic") -> List[int]:
         """Save processed stories to database"""
-        logger.info(f"Saving {len(stories)} stories to database")
+        logger.info(f"Saving {len(stories)} stories to database for source: {source_name}")
         
-        # Get Anthropic source ID
-        anthropic_source = self.db_ops.get_source_by_name("Anthropic")
-        if not anthropic_source:
-            logger.error("Anthropic source not found in database")
+        # Get source ID
+        source = self.db_ops.get_source_by_name(source_name)
+        if not source:
+            logger.error(f"{source_name} source not found in database")
             return []
         
         saved_story_ids = []
@@ -121,7 +161,7 @@ class AIStoriesProcessor:
                 # Create CustomerStory object
                 customer_story = CustomerStory(
                     id=None,
-                    source_id=anthropic_source.id,
+                    source_id=source.id,
                     customer_name=story['customer_name'],
                     title=story.get('title'),
                     url=story['url'],
@@ -144,18 +184,23 @@ class AIStoriesProcessor:
                 logger.error(f"Failed to save story {story.get('url', 'unknown')}: {e}")
         
         # Update source last_scraped timestamp
-        self.db_ops.update_source_last_scraped(anthropic_source.id)
+        self.db_ops.update_source_last_scraped(source.id)
         
         logger.info(f"Successfully saved {len(saved_story_ids)} stories to database")
         return saved_story_ids
     
-    def run_full_pipeline(self, limit: int = None):
+    def run_full_pipeline(self, source: str = "anthropic", limit: int = None):
         """Run the complete scraping and processing pipeline"""
-        logger.info("Starting full AI Stories pipeline")
+        logger.info(f"Starting full AI Stories pipeline for {source}")
         
         try:
             # Step 1: Scrape stories
-            scraped_stories = self.scrape_anthropic_stories(limit)
+            if source.lower() == "openai":
+                scraped_stories = self.scrape_openai_stories(limit)
+                source_name = "OpenAI"
+            else:
+                scraped_stories = self.scrape_anthropic_stories(limit)
+                source_name = "Anthropic"
             
             if not scraped_stories:
                 logger.info("No new stories to process")
@@ -169,7 +214,7 @@ class AIStoriesProcessor:
                 return
             
             # Step 3: Save to database
-            saved_ids = self.save_stories_to_database(processed_stories)
+            saved_ids = self.save_stories_to_database(processed_stories, source_name)
             
             logger.info(f"Pipeline completed successfully. Saved {len(saved_ids)} stories.")
             
@@ -206,10 +251,24 @@ class AIStoriesProcessor:
 
 def main():
     """Main entry point"""
+    import sys
+    
     processor = AIStoriesProcessor()
     
-    # For Phase 1 testing, limit to 5 stories
-    processor.run_full_pipeline(limit=5)
+    # Parse command line arguments
+    source = "anthropic"  # default
+    limit = 5  # default for testing
+    
+    if len(sys.argv) > 1:
+        source = sys.argv[1].lower()
+    if len(sys.argv) > 2:
+        try:
+            limit = int(sys.argv[2])
+        except ValueError:
+            logger.warning("Invalid limit argument, using default of 5")
+    
+    logger.info(f"Running pipeline with source: {source}, limit: {limit}")
+    processor.run_full_pipeline(source=source, limit=limit)
 
 if __name__ == "__main__":
     main()

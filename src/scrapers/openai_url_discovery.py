@@ -1,14 +1,17 @@
 import time
 import logging
+import random
+import json
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 
@@ -30,20 +33,53 @@ class OpenAIUrlDiscovery:
         self._get_source_id()
         
     def _setup_driver(self):
-        """Setup Selenium WebDriver with Chrome for URL discovery"""
+        """Setup Selenium WebDriver with enhanced anti-bot protection"""
         try:
             chrome_options = Options()
+            
+            # Enhanced browser fingerprinting to avoid detection
             chrome_options.add_argument("--headless")  # Run in background
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-dev-shm-usage")
             chrome_options.add_argument("--disable-gpu")
             chrome_options.add_argument("--window-size=1920,1080")
-            chrome_options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+            
+            # More realistic user agent (current Chrome version)
+            chrome_options.add_argument("--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
+            
+            # Anti-detection measures
+            chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+            chrome_options.add_argument("--disable-extensions")
+            chrome_options.add_argument("--disable-plugins-discovery")
+            chrome_options.add_argument("--disable-web-security")
+            chrome_options.add_argument("--allow-running-insecure-content")
+            
+            # Realistic browser preferences
+            prefs = {
+                "profile.default_content_setting_values": {
+                    "notifications": 2,
+                    "geolocation": 2,
+                },
+                "profile.managed_default_content_settings": {
+                    "images": 2
+                }
+            }
+            chrome_options.add_experimental_option("prefs", prefs)
             
             # Auto-install ChromeDriver
             service = Service(ChromeDriverManager().install())
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
-            logger.info("URL Discovery WebDriver initialized successfully")
+            
+            # Execute script to remove webdriver property
+            self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+            
+            # Set realistic viewport and properties
+            self.driver.execute_script("Object.defineProperty(navigator, 'languages', {get: () => ['en-US', 'en']})")
+            self.driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]})")
+            
+            logger.info("Enhanced URL Discovery WebDriver initialized successfully")
             
         except Exception as e:
             logger.error(f"Failed to initialize WebDriver: {e}")
@@ -65,6 +101,82 @@ class OpenAIUrlDiscovery:
             except:
                 pass
     
+    def _human_like_scroll(self, scroll_pause_time=None):
+        """Simulate human-like scrolling behavior"""
+        if scroll_pause_time is None:
+            scroll_pause_time = random.uniform(1.5, 3.5)
+        
+        # Get current scroll position and page height
+        current_scroll = self.driver.execute_script("return window.pageYOffset;")
+        total_height = self.driver.execute_script("return document.body.scrollHeight;")
+        
+        # Calculate scroll increments (human-like variable scrolling)
+        scroll_increments = random.randint(3, 5)
+        increment_size = (total_height - current_scroll) / scroll_increments
+        
+        for i in range(scroll_increments):
+            # Add some randomness to scroll distance
+            scroll_distance = current_scroll + (increment_size * (i + 1)) + random.randint(-50, 50)
+            scroll_distance = min(scroll_distance, total_height)
+            
+            self.driver.execute_script(f"window.scrollTo(0, {scroll_distance});")
+            time.sleep(random.uniform(0.3, 0.8))
+        
+        time.sleep(scroll_pause_time)
+    
+    def _human_like_wait(self, min_seconds=1, max_seconds=3):
+        """Add random human-like delays"""
+        wait_time = random.uniform(min_seconds, max_seconds)
+        time.sleep(wait_time)
+    
+    def _simulate_mouse_movement(self, element):
+        """Simulate realistic mouse movement before clicking"""
+        try:
+            actions = ActionChains(self.driver)
+            
+            # Move to a random nearby position first
+            random_x = random.randint(-20, 20)
+            random_y = random.randint(-20, 20)
+            actions.move_to_element_with_offset(element, random_x, random_y)
+            
+            # Pause briefly (human-like hesitation)
+            actions.pause(random.uniform(0.3, 0.8))
+            
+            # Move to the actual element
+            actions.move_to_element(element)
+            actions.pause(random.uniform(0.2, 0.5))
+            
+            actions.perform()
+            logger.debug("Simulated human-like mouse movement")
+            
+        except Exception as e:
+            logger.debug(f"Mouse movement simulation failed: {e}")
+    
+    def _wait_for_content_change(self, initial_count, max_wait=15):
+        """Wait for content to change after clicking load more"""
+        start_time = time.time()
+        
+        while time.time() - start_time < max_wait:
+            try:
+                current_count = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
+                if current_count > initial_count:
+                    logger.info(f"Content loaded: {initial_count} -> {current_count} links")
+                    return True
+                
+                # Check for loading indicators
+                loading_elements = self.driver.find_elements(By.CSS_SELECTOR, 
+                    ".loading, .spinner, [class*='load'], [aria-label*='load' i]")
+                if loading_elements:
+                    logger.debug("Loading indicator detected, waiting...")
+                
+                time.sleep(0.5)
+                
+            except Exception as e:
+                logger.debug(f"Error checking content change: {e}")
+                time.sleep(0.5)
+        
+        return False
+    
     def discover_story_urls(self) -> List[DiscoveredUrl]:
         """
         Phase 1: Discover story URLs from OpenAI stories page using dynamic loading
@@ -73,16 +185,22 @@ class OpenAIUrlDiscovery:
         discovered_urls = []
         
         try:
-            logger.info("Starting OpenAI URL discovery with dynamic content loading...")
+            logger.info("Starting enhanced OpenAI URL discovery with human-like behavior...")
             self.driver.get("https://openai.com/stories")
             
-            # Wait for initial page to load
-            WebDriverWait(self.driver, 10).until(
+            # Wait for initial page to load with better conditions
+            WebDriverWait(self.driver, 15).until(
                 EC.presence_of_element_located((By.TAG_NAME, "body"))
             )
             
-            # Give initial content time to load
-            time.sleep(3)
+            # Wait for stories to load
+            WebDriverWait(self.driver, 15).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "a[href*='/index/']"))
+            )
+            
+            # Human-like initial page interaction
+            self._human_like_wait(2, 4)
+            self._human_like_scroll()
             
             # Discovery loop with optimized incremental processing
             previous_count = 0
@@ -131,8 +249,8 @@ class OpenAIUrlDiscovery:
                     no_new_content_rounds += 1
                     logger.info(f"Attempt {attempt}: No new URLs found (round {no_new_content_rounds}/{max_no_content_rounds})")
                 
-                # Try to load more content
-                more_content_loaded, load_more_clicked = self._try_load_more_content()
+                # Try to load more content with enhanced methods
+                more_content_loaded, load_more_clicked = self._try_load_more_content_enhanced()
                 
                 if load_more_clicked:
                     successful_load_more_clicks += 1
@@ -148,8 +266,8 @@ class OpenAIUrlDiscovery:
                 
                 previous_count = len(discovered_urls)
                 
-                # Longer delay between attempts to let content load properly
-                time.sleep(3)
+                # Human-like delay between attempts
+                self._human_like_wait(3, 6)
             
             if no_new_content_rounds >= max_no_content_rounds:
                 logger.info(f"Stopped discovery after {no_new_content_rounds} rounds with no new content")
@@ -310,7 +428,7 @@ class OpenAIUrlDiscovery:
         except Exception:
             return None
     
-    def _try_load_more_content(self) -> tuple[bool, bool]:
+    def _try_load_more_content_enhanced(self) -> tuple[bool, bool]:
         """
         Try multiple strategies to load more content dynamically
         Returns (content_loaded, load_more_clicked) tuple
@@ -318,22 +436,26 @@ class OpenAIUrlDiscovery:
         content_loaded = False
         load_more_clicked = False
         
-        # Strategy 1: Look for and click "Load More" or similar buttons (more aggressive)
+        # Get initial content count for validation
+        initial_count = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
+        
+        # First, try human-like scrolling to reveal more content
+        self._human_like_scroll()
+        self._human_like_wait(1, 2)
+        
+        # Strategy 1: Enhanced load more button detection with better selectors
         load_more_selectors = [
-            # More specific button text searches
-            "//button[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'load more')]",
-            "//button[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show more')]",
-            "//button[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'more stories')]",
-            "//button[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'load')]",
-            # Class-based searches
+            # Most specific - exact text matches
+            "//button[normalize-space(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')) = 'load more']",
+            "//button[normalize-space(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')) = 'show more']",
+            # Contains but more specific
+            "//button[contains(normalize-space(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')), 'load more')]",
+            # Class-based approaches
             "//button[contains(@class, 'load-more') or contains(@class, 'show-more') or contains(@class, 'load_more')]",
-            "//div[contains(@class, 'load-more') or contains(@class, 'pagination')]//button",
-            # Generic buttons at bottom of page
-            "//button[position()=last()]",
-            "//div[contains(@class, 'stories') or contains(@class, 'content')]//button[last()]",
-            # Links that might trigger loading
-            "//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'load more')]",
-            "//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'show more')]"
+            # ARIA labels
+            "//button[contains(@aria-label, 'load') or contains(@aria-label, 'more')]",
+            # Data attributes that might indicate load more functionality
+            "//button[contains(@data-testid, 'load') or contains(@data-testid, 'more')]"
         ]
         
         for selector in load_more_selectors:
@@ -343,43 +465,89 @@ class OpenAIUrlDiscovery:
                 
                 for button in buttons:
                     try:
-                        if button.is_enabled() and button.is_displayed():
-                            # Get current content count for comparison
-                            current_links = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
+                        # Enhanced button validation
+                        if not (button.is_enabled() and button.is_displayed()):
+                            continue
                             
-                            # Scroll button into view
-                            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", button)
-                            time.sleep(2)
+                        # Get button text and validate it's a load more button
+                        button_text = button.text.strip().lower()
+                        
+                        # Skip buttons that are clearly not load more buttons
+                        skip_buttons = ['log in', 'sign up', 'sort', 'manage cookies', 'done', 'english', 'united states', 'menu', 'search', 'close', 'cancel']
+                        if any(skip_text in button_text for skip_text in skip_buttons):
+                            logger.debug(f"Skipping non-load-more button: '{button_text}'")
+                            continue
+                        
+                        # Only proceed if it looks like a load more button
+                        valid_button_indicators = ['load', 'more', 'show']
+                        if not (any(indicator in button_text for indicator in valid_button_indicators) or button_text == ''):
+                            logger.debug(f"Skipping button that doesn't contain load/more/show: '{button_text}'")
+                            continue
+                        
+                        logger.info(f"Found potential load more button: '{button_text}' with selector: {selector}")
+                        
+                        # Enhanced human-like clicking approach
+                        try:
+                            # 1. Scroll button into view with human-like behavior
+                            self.driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", button)
+                            self._human_like_wait(1, 2)
                             
-                            # Try multiple click methods
-                            button_text = button.text.strip()
-                            logger.info(f"Attempting to click button: '{button_text}' with selector: {selector}")
+                            # 2. Simulate mouse movement to button
+                            self._simulate_mouse_movement(button)
                             
-                            # Method 1: JavaScript click
+                            # 3. Wait for any overlapping elements to disappear
                             try:
-                                self.driver.execute_script("arguments[0].click();", button)
+                                WebDriverWait(self.driver, 3).until(
+                                    EC.element_to_be_clickable(button)
+                                )
+                            except TimeoutException:
+                                logger.debug("Button not immediately clickable, trying anyway")
+                            
+                            # 4. Multiple click methods with validation
+                            click_successful = False
+                            
+                            # Method 1: ActionChains click (most human-like)
+                            try:
+                                actions = ActionChains(self.driver)
+                                actions.move_to_element(button).pause(random.uniform(0.1, 0.3)).click().perform()
+                                click_successful = True
                                 load_more_clicked = True
-                                logger.info(f"JavaScript clicked button: '{button_text}'")
-                            except:
-                                # Method 2: Regular click
+                                logger.info(f"ActionChains clicked button: '{button_text}'")
+                            except (ElementClickInterceptedException, Exception) as e:
+                                logger.debug(f"ActionChains click failed: {e}")
+                                
+                                # Method 2: JavaScript click with validation
                                 try:
-                                    button.click()
+                                    self.driver.execute_script("arguments[0].click();", button)
+                                    click_successful = True
                                     load_more_clicked = True
-                                    logger.info(f"Regular clicked button: '{button_text}'")
-                                except:
-                                    continue
+                                    logger.info(f"JavaScript clicked button: '{button_text}'")
+                                except Exception as e:
+                                    logger.debug(f"JavaScript click failed: {e}")
+                                    
+                                    # Method 3: Direct click as last resort
+                                    try:
+                                        button.click()
+                                        click_successful = True
+                                        load_more_clicked = True
+                                        logger.info(f"Direct clicked button: '{button_text}'")
+                                    except Exception as e:
+                                        logger.debug(f"Direct click failed: {e}")
+                                        continue
                             
-                            # Wait longer for content to load (OpenAI might be slow)
-                            time.sleep(6)
+                            if click_successful:
+                                # Wait for content change with enhanced validation
+                                if self._wait_for_content_change(initial_count, max_wait=20):
+                                    content_loaded = True
+                                    logger.info("SUCCESS: Load more button click resulted in new content")
+                                    return (True, True)
+                                else:
+                                    logger.info(f"Button clicked successfully but no new content detected")
+                                    # Continue trying other buttons
                             
-                            # Check if more content appeared
-                            new_links = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
-                            if new_links > current_links:
-                                logger.info(f"SUCCESS: Content loaded after button click: {current_links} -> {new_links} links")
-                                content_loaded = True
-                                return (True, True)
-                            else:
-                                logger.info(f"Button clicked but no new content: {current_links} links remain")
+                        except Exception as e:
+                            logger.debug(f"Error clicking button '{button_text}': {e}")
+                            continue
                             
                     except Exception as e:
                         logger.debug(f"Could not click button with selector {selector}: {e}")
@@ -388,45 +556,87 @@ class OpenAIUrlDiscovery:
                 logger.debug(f"Error with selector {selector}: {e}")
                 continue
         
-        # Strategy 2: Scroll to bottom to trigger infinite scroll
+        # Strategy 2: Enhanced infinite scroll with human-like behavior
         if not content_loaded:
             try:
-                current_links = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
+                logger.info("Trying enhanced infinite scroll approach...")
                 
-                # Scroll to bottom
-                self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(4)
+                # Human-like gradual scrolling to bottom
+                self._human_like_scroll()
                 
-                # Check if more content loaded
-                new_links = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
-                if new_links > current_links:
-                    logger.info(f"Infinite scroll triggered: {current_links} -> {new_links} links")
+                # Wait and check for content changes
+                if self._wait_for_content_change(initial_count, max_wait=10):
                     content_loaded = True
+                    logger.info("SUCCESS: Infinite scroll triggered new content")
+                else:
+                    logger.debug("Infinite scroll did not trigger new content")
+                    
             except Exception as e:
-                logger.debug(f"Infinite scroll failed: {e}")
+                logger.debug(f"Enhanced infinite scroll failed: {e}")
         
-        # Strategy 3: Try to trigger AJAX by scrolling and waiting
+        # Strategy 3: Multiple scroll positions with human-like timing
         if not content_loaded:
             try:
-                # Multiple scroll positions to trigger lazy loading
-                scroll_positions = [0.5, 0.7, 0.9, 1.0]
+                logger.info("Trying multiple scroll positions...")
+                scroll_positions = [0.3, 0.5, 0.7, 0.85, 1.0]
                 
-                for position in scroll_positions:
-                    current_links = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
+                for i, position in enumerate(scroll_positions):
+                    # Human-like scroll to position
+                    target_position = self.driver.execute_script("return document.body.scrollHeight;") * position
+                    self.driver.execute_script(f"window.scrollTo({{top: {target_position}, behavior: 'smooth'}});")
                     
-                    # Scroll to position
-                    self.driver.execute_script(f"window.scrollTo(0, document.body.scrollHeight * {position});")
-                    time.sleep(3)
+                    # Human-like wait with variation
+                    self._human_like_wait(2, 4)
                     
                     # Check for new content
-                    new_links = len(self.driver.find_elements(By.CSS_SELECTOR, "a[href*='/index/']"))
-                    if new_links > current_links:
-                        logger.info(f"Lazy loading triggered at {position*100}%: {current_links} -> {new_links} links")
+                    if self._wait_for_content_change(initial_count, max_wait=8):
+                        logger.info(f"SUCCESS: Scroll to {position*100}% triggered new content")
                         content_loaded = True
+                        break
+                    
+                    # Add small random movements to seem more human
+                    if i < len(scroll_positions) - 1:
+                        random_scroll = random.randint(-100, 100)
+                        self.driver.execute_script(f"window.scrollBy(0, {random_scroll});")
+                        time.sleep(random.uniform(0.2, 0.5))
+                        
+            except Exception as e:
+                logger.debug(f"Multiple scroll positions failed: {e}")
+        
+        # Strategy 4: Try to find pagination or navigation elements
+        if not content_loaded and not load_more_clicked:
+            try:
+                logger.info("Looking for pagination or navigation elements...")
+                
+                # Look for pagination elements
+                pagination_selectors = [
+                    "//nav[contains(@class, 'pagination') or contains(@aria-label, 'pagination')]//button",
+                    "//div[contains(@class, 'paging') or contains(@class, 'nav')]//button",
+                    "//button[contains(@class, 'next') or contains(text(), 'Next') or contains(@aria-label, 'next')]"
+                ]
+                
+                for selector in pagination_selectors:
+                    buttons = self.driver.find_elements(By.XPATH, selector)
+                    for button in buttons:
+                        if button.is_enabled() and button.is_displayed():
+                            button_text = button.text.strip().lower()
+                            if 'next' in button_text or 'more' in button_text:
+                                logger.info(f"Found pagination button: {button_text}")
+                                try:
+                                    self._simulate_mouse_movement(button)
+                                    button.click()
+                                    if self._wait_for_content_change(initial_count, max_wait=15):
+                                        content_loaded = True
+                                        load_more_clicked = True
+                                        logger.info("SUCCESS: Pagination click triggered new content")
+                                        break
+                                except Exception as e:
+                                    logger.debug(f"Pagination click failed: {e}")
+                    if content_loaded:
                         break
                         
             except Exception as e:
-                logger.debug(f"Lazy loading strategy failed: {e}")
+                logger.debug(f"Pagination strategy failed: {e}")
         
         if not content_loaded and not load_more_clicked:
             logger.debug("No additional content could be loaded and no buttons were clicked")

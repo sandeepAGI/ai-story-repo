@@ -36,6 +36,17 @@ def show_all_stories():
             print(f"Company Size: {story.company_size}")
             print(f"Use Case Category: {story.use_case_category}")
             print(f"Scraped Date: {story.scraped_date}")
+            
+            # Show publish date with estimation info
+            pub_date_str = story.publish_date.strftime('%Y-%m-%d') if story.publish_date else 'Unknown'
+            if hasattr(story, 'publish_date_estimated') and story.publish_date_estimated:
+                confidence = getattr(story, 'publish_date_confidence', 'unknown') or 'unknown'
+                reasoning = getattr(story, 'publish_date_reasoning', '') or ''
+                pub_date_str += f" (estimated with {confidence} confidence"
+                if reasoning:
+                    pub_date_str += f": {reasoning[:100]}..."
+                pub_date_str += ")"
+            print(f"Publish Date: {pub_date_str}")
             print(f"Content Hash: {story.content_hash[:16]}...")
             
             # Show raw content metadata
@@ -99,7 +110,8 @@ def show_database_stats():
             
             # Show recent stories
             cursor.execute("""
-                SELECT customer_name, title, scraped_date 
+                SELECT customer_name, title, scraped_date, publish_date,
+                       publish_date_estimated, publish_date_confidence
                 FROM customer_stories 
                 ORDER BY scraped_date DESC 
                 LIMIT 5
@@ -108,7 +120,11 @@ def show_database_stats():
             
             print(f"\nMOST RECENT STORIES:")
             for row in recent:
-                print(f"  {row['scraped_date'].strftime('%Y-%m-%d %H:%M')} - {row['customer_name']}")
+                pub_date_str = row['publish_date'].strftime('%Y-%m-%d') if row['publish_date'] else 'Unknown'
+                if row['publish_date_estimated']:
+                    confidence = row['publish_date_confidence'] or 'unknown'
+                    pub_date_str += f" (est. {confidence})"
+                print(f"  {row['scraped_date'].strftime('%Y-%m-%d %H:%M')} - {row['customer_name']} (Published: {pub_date_str})")
                 
     except Exception as e:
         print(f"Error getting database stats: {e}")

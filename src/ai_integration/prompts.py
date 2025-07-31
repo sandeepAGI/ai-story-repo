@@ -26,6 +26,9 @@ Analyze this AI customer story and extract structured information. Return a vali
     "geography": "Geographic region if mentioned (e.g., north_america, europe, asia, global)"
   }},
   "content_quality_score": 0.0-1.0,
+  "estimated_publish_date": "YYYY-MM-DD or null if no date context available",
+  "date_confidence": "high|medium|low - confidence in estimated date",
+  "date_reasoning": "Brief explanation of how date was estimated",
   "last_processed": "timestamp"
 }}
 
@@ -37,6 +40,16 @@ Guidelines for extraction:
 5. If information is not available, use null or empty arrays appropriately
 6. Extract ALL technologies mentioned, including specific AI models, cloud services, databases, etc.
 7. Use lowercase with underscores for categorical values (e.g., "customer_service" not "Customer Service")
+8. For estimated_publish_date: Look for date clues in content like:
+   - "In 2023, we implemented..." or "Since early 2024..."
+   - Technology releases mentioned (e.g., "using GPT-4" suggests 2023+, "Claude 3" suggests 2024+)
+   - Events referenced (conferences, product launches, etc.)
+   - Business context (pandemic references suggest 2020-2022, etc.)
+   - If no date context exists, use null
+9. Date confidence levels:
+   - high: Explicit dates or clear time references in content
+   - medium: Technology timeline or contextual clues provide reasonable estimate
+   - low: Vague indicators or educated guess based on technology maturity
 
 Story content to analyze:
 

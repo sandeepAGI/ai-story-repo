@@ -34,7 +34,8 @@ class QueryInterface:
             cursor.execute("""
                 SELECT s.name, COUNT(cs.id) as story_count,
                        MIN(cs.publish_date) as earliest_story,
-                       MAX(cs.publish_date) as latest_story
+                       MAX(cs.publish_date) as latest_story,
+                       COUNT(CASE WHEN cs.publish_date_estimated = TRUE THEN 1 END) as estimated_dates
                 FROM sources s 
                 LEFT JOIN customer_stories cs ON s.id = cs.source_id 
                 GROUP BY s.name, s.id
@@ -44,13 +45,17 @@ class QueryInterface:
             print("\nSTORIES BY SOURCE:")
             print("-" * 40)
             total_stories = 0
+            total_estimated = 0
             for row in cursor.fetchall():
                 earliest = row['earliest_story'].strftime('%Y-%m-%d') if row['earliest_story'] else 'N/A'
                 latest = row['latest_story'].strftime('%Y-%m-%d') if row['latest_story'] else 'N/A'
-                print(f"{row['name']:<15}: {row['story_count']:>3} stories ({earliest} to {latest})")
+                estimated = row['estimated_dates'] or 0
+                est_indicator = f" ({estimated} estimated)" if estimated > 0 else ""
+                print(f"{row['name']:<15}: {row['story_count']:>3} stories ({earliest} to {latest}){est_indicator}")
                 total_stories += row['story_count']
+                total_estimated += estimated
             
-            print(f"{'TOTAL':<15}: {total_stories:>3} stories")
+            print(f"{'TOTAL':<15}: {total_stories:>3} stories ({total_estimated} with estimated dates)")
             
             # Industry breakdown
             cursor.execute("""
@@ -83,7 +88,8 @@ class QueryInterface:
             
             # Recent stories
             cursor.execute("""
-                SELECT customer_name, s.name as source, publish_date, scraped_date
+                SELECT customer_name, s.name as source, publish_date, scraped_date,
+                       publish_date_estimated, publish_date_confidence
                 FROM customer_stories cs
                 JOIN sources s ON cs.source_id = s.id
                 ORDER BY cs.scraped_date DESC 
@@ -95,7 +101,11 @@ class QueryInterface:
             for row in cursor.fetchall():
                 pub_date = row['publish_date'].strftime('%Y-%m-%d') if row['publish_date'] else 'Unknown'
                 scraped_date = row['scraped_date'].strftime('%Y-%m-%d')
-                print(f"{row['customer_name']:<20} ({row['source']}) - Published: {pub_date}, Scraped: {scraped_date}")
+                date_indicator = ""
+                if row['publish_date_estimated']:
+                    confidence = row['publish_date_confidence'] or 'unknown'
+                    date_indicator = f" (est. {confidence})"
+                print(f"{row['customer_name']:<20} ({row['source']}) - Published: {pub_date}{date_indicator}, Scraped: {scraped_date}")
     
     def search_stories(self, query: str, limit: int = 10) -> List[Dict]:
         """Search stories using full-text search"""
@@ -110,13 +120,18 @@ class QueryInterface:
         
         results = []
         for i, story in enumerate(stories, 1):
+            pub_date_str = story.publish_date.strftime('%Y-%m-%d') if story.publish_date else 'Unknown'
+            if hasattr(story, 'publish_date_estimated') and story.publish_date_estimated:
+                confidence = getattr(story, 'publish_date_confidence', 'unknown') or 'unknown'
+                pub_date_str += f" (est. {confidence})"
+            
             result = {
                 'rank': i,
                 'customer_name': story.customer_name,
                 'title': story.title,
                 'industry': story.industry,
                 'url': story.url,
-                'publish_date': story.publish_date.strftime('%Y-%m-%d') if story.publish_date else 'Unknown',
+                'publish_date': pub_date_str,
                 'summary': story.extracted_data.get('summary', 'No summary available') if story.extracted_data else 'No summary available'
             }
             results.append(result)
@@ -155,7 +170,15 @@ class QueryInterface:
                 print(f"Title: {story['title'] or 'No title'}")
                 print(f"Industry: {story['industry'] or 'Unknown'}")
                 print(f"Company Size: {story['company_size'] or 'Unknown'}")
-                print(f"Published: {story['publish_date'].strftime('%Y-%m-%d') if story['publish_date'] else 'Unknown'}")
+                pub_date_str = story['publish_date'].strftime('%Y-%m-%d') if story['publish_date'] else 'Unknown'
+                if story.get('publish_date_estimated'):
+                    confidence = story.get('publish_date_confidence', 'unknown') or 'unknown'
+                    reasoning = story.get('publish_date_reasoning', '')
+                    pub_date_str += f" (estimated with {confidence} confidence"
+                    if reasoning:
+                        pub_date_str += f": {reasoning[:100]}..."
+                    pub_date_str += ")"
+                print(f"Published: {pub_date_str}")
                 print(f"URL: {story['url']}")
                 
                 if story['extracted_data']:

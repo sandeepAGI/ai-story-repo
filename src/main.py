@@ -5,9 +5,10 @@ from src.config import Config
 from src.database.connection import DatabaseConnection
 from src.database.models import DatabaseOperations, CustomerStory
 from src.scrapers.anthropic_scraper import AnthropicScraper
-from src.scrapers.openai_scraper import OpenAIScraper
+# OpenAI scraper removed - handled by process_openai_html.py
 from src.scrapers.microsoft_scraper import MicrosoftScraper
 from src.scrapers.aws_scraper import AWScraper
+from src.scrapers.googlecloud_scraper import GoogleCloudScraper
 from src.ai_integration.claude_processor import ClaudeProcessor
 
 logger = logging.getLogger(__name__)
@@ -45,44 +46,7 @@ class AIStoriesProcessor:
             logger.error(f"Database setup failed: {e}")
             raise
     
-    def scrape_openai_stories(self, limit: int = None) -> List[Dict[str, Any]]:
-        """Scrape OpenAI customer stories"""
-        logger.info(f"Starting OpenAI scraping (limit: {limit})")
-        
-        scraper = OpenAIScraper()
-        
-        try:
-            # Get story URLs (OpenAI scraper doesn't need separate date extraction)
-            story_urls = scraper.get_customer_story_urls()
-            
-            if limit:
-                story_urls = story_urls[:limit]
-            
-            logger.info(f"Found {len(story_urls)} story URLs to scrape")
-            
-            # Scrape stories
-            scraped_stories = []
-            for i, url in enumerate(story_urls):
-                logger.info(f"Scraping story {i+1}/{len(story_urls)}: {url}")
-                
-                # Check if story already exists
-                if self.db_ops.check_story_exists(url):
-                    logger.info(f"Story already exists, skipping: {url}")
-                    continue
-                
-                story_data = scraper.scrape_story(url)
-                if story_data:
-                    scraped_stories.append(story_data)
-                else:
-                    logger.warning(f"Failed to scrape: {url}")
-            
-            logger.info(f"Successfully scraped {len(scraped_stories)} new stories")
-            return scraped_stories
-            
-        finally:
-            # Cleanup WebDriver
-            if hasattr(scraper, 'driver') and scraper.driver:
-                scraper.driver.quit()
+    # OpenAI stories are handled by process_openai_html.py - no scraping method needed
     
     def scrape_microsoft_stories(self, limit: int = None) -> List[Dict[str, Any]]:
         """Scrape Microsoft Azure AI customer stories"""
@@ -191,6 +155,39 @@ class AIStoriesProcessor:
         logger.info(f"Successfully scraped {len(scraped_stories)} new stories")
         return scraped_stories
     
+    def scrape_googlecloud_stories(self, limit: int = None) -> List[Dict[str, Any]]:
+        """Scrape Google Cloud AI customer stories"""
+        logger.info(f"Starting Google Cloud scraping (limit: {limit})")
+        
+        scraper = GoogleCloudScraper()
+        
+        # Get story URLs
+        story_urls = scraper.get_customer_story_urls()
+        
+        if limit:
+            story_urls = story_urls[:limit]
+        
+        logger.info(f"Found {len(story_urls)} story URLs to scrape")
+        
+        # Scrape stories
+        scraped_stories = []
+        for i, url in enumerate(story_urls):
+            logger.info(f"Scraping story {i+1}/{len(story_urls)}: {url}")
+            
+            # Check if story already exists
+            if self.db_ops.check_story_exists(url):
+                logger.info(f"Story already exists, skipping: {url}")
+                continue
+            
+            story_data = scraper.scrape_story(url)
+            if story_data:
+                scraped_stories.append(story_data)
+            else:
+                logger.warning(f"Failed to scrape: {url}")
+        
+        logger.info(f"Successfully scraped {len(scraped_stories)} new stories")
+        return scraped_stories
+    
     def process_stories_with_claude(self, stories: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Process scraped stories with Claude for data extraction"""
         logger.info(f"Processing {len(stories)} stories with Claude")
@@ -219,12 +216,30 @@ class AIStoriesProcessor:
                 
                 # Convert publish_date string to date object if available
                 publish_date = None
+                publish_date_estimated = False
+                publish_date_confidence = None
+                publish_date_reasoning = None
+                
                 if story.get('publish_date'):
                     try:
                         from datetime import datetime
                         publish_date = datetime.strptime(story['publish_date'], "%Y-%m-%d").date()
                     except ValueError:
                         logger.warning(f"Invalid publish date format: {story.get('publish_date')}")
+                
+                # If no original publish date, try using Claude's estimated date
+                if publish_date is None and extracted_data.get('estimated_publish_date'):
+                    try:
+                        from datetime import datetime
+                        estimated_date = extracted_data.get('estimated_publish_date')
+                        if estimated_date and estimated_date != 'null':
+                            publish_date = datetime.strptime(estimated_date, "%Y-%m-%d").date()
+                            publish_date_estimated = True
+                            publish_date_confidence = extracted_data.get('date_confidence')
+                            publish_date_reasoning = extracted_data.get('date_reasoning')
+                            logger.info(f"Using Claude estimated publish date: {estimated_date} (confidence: {publish_date_confidence})")
+                    except ValueError:
+                        logger.warning(f"Invalid estimated publish date format: {extracted_data.get('estimated_publish_date')}")
                 
                 # Create CustomerStory object
                 customer_story = CustomerStory(
@@ -239,7 +254,10 @@ class AIStoriesProcessor:
                     use_case_category=extracted_data.get('use_cases', [None])[0] if extracted_data.get('use_cases') else None,
                     raw_content=story['raw_content'],
                     extracted_data=extracted_data,
-                    publish_date=publish_date
+                    publish_date=publish_date,
+                    publish_date_estimated=publish_date_estimated,
+                    publish_date_confidence=publish_date_confidence,
+                    publish_date_reasoning=publish_date_reasoning
                 )
                 
                 # Save to database
@@ -264,14 +282,17 @@ class AIStoriesProcessor:
         try:
             # Step 1: Scrape stories
             if source.lower() == "openai":
-                scraped_stories = self.scrape_openai_stories(limit)
-                source_name = "OpenAI"
+                logger.info("OpenAI stories are handled by process_openai_html.py - skipping scraping")
+                return
             elif source.lower() == "microsoft":
                 scraped_stories = self.scrape_microsoft_stories(limit)
                 source_name = "Microsoft"
             elif source.lower() == "aws":
                 scraped_stories = self.scrape_aws_stories(limit)
                 source_name = "AWS"
+            elif source.lower() == "googlecloud":
+                scraped_stories = self.scrape_googlecloud_stories(limit)
+                source_name = "Google Cloud"
             else:
                 scraped_stories = self.scrape_anthropic_stories(limit)
                 source_name = "Anthropic"

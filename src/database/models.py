@@ -47,6 +47,9 @@ class CustomerStory:
     scraped_date: Optional[datetime] = None
     last_updated: Optional[datetime] = None
     publish_date: Optional[datetime] = None
+    publish_date_estimated: bool = False
+    publish_date_confidence: Optional[str] = None  # 'high', 'medium', 'low'
+    publish_date_reasoning: Optional[str] = None
 
 class DatabaseOperations:
     def __init__(self, db_connection: DatabaseConnection = None):
@@ -76,8 +79,9 @@ class DatabaseOperations:
         INSERT INTO customer_stories (
             source_id, customer_name, title, url, content_hash,
             industry, company_size, use_case_category,
-            raw_content, extracted_data, publish_date
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            raw_content, extracted_data, publish_date,
+            publish_date_estimated, publish_date_confidence, publish_date_reasoning
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
         """
         
@@ -92,7 +96,10 @@ class DatabaseOperations:
             story.use_case_category,
             json.dumps(story.raw_content) if story.raw_content else None,
             json.dumps(story.extracted_data) if story.extracted_data else None,
-            story.publish_date
+            story.publish_date,
+            story.publish_date_estimated,
+            story.publish_date_confidence,
+            story.publish_date_reasoning
         )
         
         with self.db.get_cursor() as cursor:

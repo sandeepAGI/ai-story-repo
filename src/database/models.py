@@ -50,6 +50,16 @@ class CustomerStory:
     publish_date_estimated: bool = False
     publish_date_confidence: Optional[str] = None  # 'high', 'medium', 'low'
     publish_date_reasoning: Optional[str] = None
+    # Gen AI Classification fields (not stored in DB yet - only in extracted_data)
+    gen_ai_superpowers: Optional[List[str]] = None
+    superpowers_other: Optional[str] = None
+    business_impacts: Optional[List[str]] = None
+    impacts_other: Optional[str] = None
+    adoption_enablers: Optional[List[str]] = None
+    enablers_other: Optional[str] = None
+    business_function: Optional[str] = None
+    function_other: Optional[str] = None
+    classification_confidence: Optional[Dict[str, float]] = None
 
 class DatabaseOperations:
     def __init__(self, db_connection: DatabaseConnection = None):

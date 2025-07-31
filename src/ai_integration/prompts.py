@@ -29,6 +29,20 @@ Analyze this AI customer story and extract structured information. Return a vali
   "estimated_publish_date": "YYYY-MM-DD or null if no date context available",
   "date_confidence": "high|medium|low - confidence in estimated date",
   "date_reasoning": "Brief explanation of how date was estimated",
+  "gen_ai_superpowers": ["List from: code, create_content, automate_with_agents, find_data_insights, research, brainstorm, natural_language"],
+  "superpowers_other": "Description of novel capabilities not in predefined list (null if none)",
+  "business_impacts": ["List from: innovation, efficiency, speed, quality, client_satisfaction, risk_reduction"],
+  "impacts_other": "Description of unique business benefits not in predefined list (null if none)",
+  "adoption_enablers": ["List from: data_and_digital, innovation_culture, ecosystem_partners, policy_and_governance, risk_management"],
+  "enablers_other": "Description of unique organizational factors not in predefined list (null if none)",
+  "business_function": "Primary function from: marketing, sales, production, distribution, service, finance_and_accounting",
+  "function_other": "Description if cross-functional or unique departmental use (null if fits predefined)",
+  "classification_confidence": {{
+    "superpowers": 0.0-1.0,
+    "impacts": 0.0-1.0,
+    "enablers": 0.0-1.0,
+    "function": 0.0-1.0
+  }},
   "last_processed": "timestamp"
 }}
 
@@ -50,6 +64,61 @@ Guidelines for extraction:
    - high: Explicit dates or clear time references in content
    - medium: Technology timeline or contextual clues provide reasonable estimate
    - low: Vague indicators or educated guess based on technology maturity
+
+10. Gen AI Classification Guidelines:
+    **Superpowers** - What AI capabilities are being used:
+    - code: Programming, software development, code generation/review
+    - create_content: Text, images, videos, marketing materials, documentation
+    - automate_with_agents: AI agents, workflows, process automation
+    - find_data_insights: Analytics, pattern recognition, data discovery, recommendations
+    - research: Information gathering, market research, literature review
+    - brainstorm: Ideation, creative thinking, problem solving
+    - natural_language: Conversational AI, language understanding, translation
+    
+    **Business Impacts** - What outcomes were achieved:
+    - innovation: New products, services, or breakthrough capabilities
+    - efficiency: Streamlined processes, reduced waste, optimized operations
+    - speed: Faster time-to-market, accelerated processes, quick responses
+    - quality: Improved accuracy, better outcomes, enhanced standards
+    - client_satisfaction: Better customer experience, satisfaction scores
+    - risk_reduction: Lower risks, better compliance, improved security
+    
+    **Adoption Enablers** - What organizational factors enabled success:
+    - data_and_digital: Data infrastructure, digital maturity, tech stack
+    - innovation_culture: Change readiness, experimentation mindset, leadership support
+    - ecosystem_partners: Vendor relationships, system integrators, consultants
+    - policy_and_governance: Guidelines, standards, approval processes
+    - risk_management: Security measures, compliance frameworks, risk controls
+    
+    **Business Function** - Which department/area benefited (choose PRIMARY):
+    - marketing: Brand, campaigns, content marketing, market research
+    - sales: Lead generation, customer acquisition, sales processes
+    - production: Manufacturing, operations, supply chain, quality control
+    - distribution: Logistics, delivery, inventory management
+    - service: Customer support, technical service, maintenance
+    - finance_and_accounting: Financial analysis, accounting, reporting, budgeting
+
+11. **CRITICAL: "Other" Field Usage Guidelines (USE SPARINGLY)**:
+    - **Only use "other" fields for truly novel capabilities** that don't fit ANY existing category
+    - **Strongly prefer existing categories** - try to fit capabilities into predefined lists first
+    - **"Other" must be similar in spirit** to existing categories in that dimension
+    - **Examples of what should NOT go in "other":**
+      - "Travel planning/recommendations" → use `find_data_insights`
+      - "Process automation" → use `automate_with_agents`
+      - "Cross-functional impact" → pick the PRIMARY function, don't use function_other
+      - "Content generation for marketing" → use `create_content`
+      - "Customer analytics" → use `find_data_insights`
+    - **Valid "other" examples** (rare cases only):
+      - Entirely new AI capabilities not covered by the 7 superpowers
+      - Novel business impacts beyond the 6 standard categories
+      - Unique organizational factors not in the 5 enabler categories
+      - Business functions genuinely outside the 6 standard departments
+
+12. Classification confidence scoring:
+    - 1.0: Very clear evidence in story content
+    - 0.7-0.9: Strong indicators and context clues
+    - 0.4-0.6: Some evidence but requires interpretation
+    - 0.0-0.3: Weak evidence or educated guess
 
 Story content to analyze:
 

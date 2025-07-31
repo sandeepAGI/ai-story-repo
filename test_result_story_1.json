@@ -1,0 +1,75 @@
+{
+  "story_info": {
+    "customer_name": "Expedia",
+    "source_id": 5,
+    "url": "https://openai.com/index/expedia/"
+  },
+  "enhanced_classification": {
+    "customer_name": "Expedia Group",
+    "industry": "travel",
+    "company_size": "enterprise",
+    "summary": "Expedia Group is leveraging AI to transform its marketing operations across content creation, customer insights, and travel planning. The company is using generative AI to scale content production, improve analytics capabilities, and adapt to changing consumer search behaviors.",
+    "problem_statement": "Need to adapt marketing operations to changing consumer behaviors, create content at scale, and provide faster travel planning experiences for customers",
+    "solution_description": "Implemented AI solutions for content generation, analytics, and customer insights while building internal AI capabilities through cross-functional teams",
+    "technologies_used": [
+      "OpenAI APIs",
+      "ChatGPT",
+      "machine learning",
+      "generative AI"
+    ],
+    "business_outcomes": [
+      {
+        "type": "productivity_gain",
+        "value": null,
+        "unit": "time_reduction",
+        "description": "Content creation process reduced from years to significantly shorter timeframes for brand campaigns, social, and organic content"
+      }
+    ],
+    "use_cases": [
+      "content_generation",
+      "analytics",
+      "customer_insights",
+      "image_processing",
+      "marketing_automation"
+    ],
+    "key_quote": "Generative AI helps us turn that scale into compelling content\u2014especially video. We've pulled that content across brand campaigns, social, and organic at a speed that would have taken years using traditional methods.",
+    "implementation_timeline": null,
+    "company_info": {
+      "estimated_size": "enterprise",
+      "industry_sector": "online_travel_booking",
+      "geography": "global"
+    },
+    "content_quality_score": 0.9,
+    "estimated_publish_date": "2025-05-14",
+    "date_confidence": "high",
+    "date_reasoning": "Article explicitly dated May 14, 2025",
+    "gen_ai_superpowers": [
+      "create_content",
+      "find_data_insights",
+      "automate_with_agents"
+    ],
+    "superpowers_other": null,
+    "business_impacts": [
+      "efficiency",
+      "speed",
+      "innovation",
+      "quality"
+    ],
+    "impacts_other": null,
+    "adoption_enablers": [
+      "data_and_digital",
+      "innovation_culture",
+      "ecosystem_partners"
+    ],
+    "enablers_other": null,
+    "business_function": "marketing",
+    "function_other": null,
+    "classification_confidence": {
+      "superpowers": 0.9,
+      "impacts": 0.8,
+      "enablers": 0.7,
+      "function": 1.0
+    },
+    "last_processed": "2025-07-31T10:00:31.392684"
+  }
+}

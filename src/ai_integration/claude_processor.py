@@ -166,6 +166,40 @@ class ClaudeProcessor:
                 logger.warning("Invalid business outcome structure")
                 return False
         
+        # Validate Gen AI classification fields
+        classification_fields = {
+            'gen_ai_superpowers': ['code', 'create_content', 'automate_with_agents', 'find_data_insights', 'research', 'brainstorm', 'natural_language'],
+            'business_impacts': ['innovation', 'efficiency', 'speed', 'quality', 'client_satisfaction', 'risk_reduction'],
+            'adoption_enablers': ['data_and_digital', 'innovation_culture', 'ecosystem_partners', 'policy_and_governance', 'risk_management']
+        }
+        
+        for field_name, valid_values in classification_fields.items():
+            field_data = data.get(field_name, [])
+            if not isinstance(field_data, list):
+                logger.warning(f"{field_name} should be a list")
+                return False
+            
+            # Check if values are valid (allow empty lists)
+            for value in field_data:
+                if value not in valid_values:
+                    logger.warning(f"Invalid value '{value}' in {field_name}. Valid values: {valid_values}")
+                    # Don't fail validation - just log warning for flexibility
+        
+        # Validate business function
+        business_function = data.get('business_function')
+        if business_function:
+            valid_functions = ['marketing', 'sales', 'production', 'distribution', 'service', 'finance_and_accounting']
+            if business_function not in valid_functions:
+                logger.warning(f"Invalid business_function '{business_function}'. Valid values: {valid_functions}")
+                # Don't fail validation - just log warning
+        
+        # Validate classification confidence structure
+        confidence = data.get('classification_confidence', {})
+        if confidence and isinstance(confidence, dict):
+            for conf_field, conf_value in confidence.items():
+                if not isinstance(conf_value, (int, float)) or not (0 <= conf_value <= 1):
+                    logger.warning(f"Invalid confidence score for {conf_field}: {conf_value}")
+        
         return True
     
     def batch_process_stories(self, stories: list, delay: float = 1.0) -> list:

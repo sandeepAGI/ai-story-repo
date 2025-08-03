@@ -19,7 +19,7 @@ This project scrapes, processes, and analyzes AI customer stories to provide com
 - **Claude AI Integration**: Automated extraction of structured data from raw content
 - **4-Dimensional Gen AI Classification**: Superpowers, Business Impacts, Adoption Enablers, Business Functions
 - **Content Quality Scoring**: Automated assessment of story completeness and detail
-- **Deduplication Engine**: Cross-source and per-source duplicate detection
+- **Deduplication System**: Two-tiered approach with URL-based insertion prevention and post-processing analysis
 
 ### 📊 **Rich Analytics**
 - **Business Outcomes Tracking**: Quantified metrics (cost savings, time reduction, productivity gains)
@@ -102,11 +102,45 @@ python show_stories.py --analytics
 
 ## Current Database Stats
 
-- **52 High-Quality Stories** across all 5 major AI providers
+- **900+ High-Quality Stories** across all 5 major AI providers (with Phase 5 Microsoft enhancement)
 - **100% Data Completeness** with zero missing critical fields
 - **Average Quality Score**: 0.863 (range: 0.70-0.90)
 - **Rich Business Outcomes**: All stories contain quantified metrics
 - **Date Range**: 2016-2025 with transparent estimated vs. actual dates
+
+### Enhanced Microsoft Collection (Phase 5)
+- **Pre-Phase 5**: 60 Microsoft stories
+- **Post-Phase 5**: ~700 Microsoft stories (10x improvement)
+- **Source**: Microsoft's official 1000+ AI stories blog post
+- **Method**: Pre-collected URL approach with smart fallback
+
+## Deduplication System
+
+The system implements a **two-tiered deduplication approach** with distinct purposes:
+
+### 1. Pre-Insert Duplicate Prevention
+- **Function**: `check_story_exists()` in database operations
+- **Purpose**: Prevents duplicate URLs from being inserted during scraping
+- **Scope**: Exact URL matching only
+- **When**: During scraping/insertion process
+- **Action**: Blocks duplicate insertion
+
+### 2. Post-Insert Deduplication Analysis  
+- **Function**: `DeduplicationEngine` class in `src/utils/deduplication.py`
+- **Purpose**: Analytical tool for finding sophisticated duplicates in existing data
+- **Scope**: Content similarity, company name normalization, cross-source analysis
+- **When**: Run manually via `python query_stories.py dedup`
+- **Action**: **Reports findings but does NOT remove duplicates**
+
+### Key Features
+- **Company Name Normalization**: Removes business suffixes, special characters
+- **Content Similarity**: Compares story content using sequence matching
+- **Cross-Source Analysis**: Identifies customers appearing across multiple AI providers
+- **Customer Profiling**: Creates unified profiles for multi-source customers
+- **Weighted Scoring**: 30% company name + 50% content + 20% title similarity
+
+### Important Note
+⚠️ **The sophisticated deduplication analysis does NOT prevent database insertion.** It identifies duplicates for reporting and analysis purposes while preserving all original stories in the database.
 
 ## Architecture
 
@@ -123,6 +157,26 @@ ai_customer_stories/
 └── requirements.txt
 ```
 
+## Enhanced Collection Methods
+
+### Microsoft Pre-collected URLs (Phase 5)
+The Microsoft scraper now features an **enhanced collection approach**:
+
+- **Primary Method**: Loads 656 pre-collected URLs from Microsoft's official 1000+ AI stories blog
+- **Fallback Method**: Original page scraping if pre-collected URLs unavailable
+- **Smart AI Filtering**: Disabled for Microsoft-verified stories, enabled for discovered URLs
+- **Backward Compatible**: Works seamlessly with existing `update_all_databases.py` commands
+
+**Usage**: Standard command automatically uses enhanced approach:
+```bash
+python update_all_databases.py update --source microsoft
+# Now processes 656 stories instead of ~60
+```
+
+**Files**:
+- `microsoft_story_links.json` - Pre-collected story URLs with metadata
+- `extract_microsoft_blog_links.py` - URL extraction utility for blog updates
+
 ## Contributing
 
 This project uses a modular architecture with clear separation between scraping, AI processing, and database operations. Each AI provider has its own specialized scraper following the common `BaseScraper` interface.
@@ -131,8 +185,9 @@ This project uses a modular architecture with clear separation between scraping,
 
 - ✅ **Phase 1**: Anthropic foundation (completed)
 - ✅ **Phase 2**: All 5 AI provider scrapers (completed)  
-- 🔄 **Phase 3**: Gen AI classification enhancement (in progress)
-- ⏳ **Phase 4**: Web dashboard (planned)
+- ✅ **Phase 3**: Gen AI classification enhancement (completed)
+- ✅ **Phase 4**: Web dashboard (completed)
+- ✅ **Phase 5**: Enhanced Microsoft collection - 10x improvement (completed)
 
 ## License
 

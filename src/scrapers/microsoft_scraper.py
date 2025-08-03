@@ -28,8 +28,18 @@ class MicrosoftScraper(BaseScraper):
         }
     
     def get_customer_story_urls(self) -> List[str]:
-        """Get list of Microsoft AI customer story URLs"""
-        logger.info(f"Fetching customer story URLs from {self.base_url}")
+        """Get list of Microsoft AI customer story URLs - Enhanced with pre-collected URLs"""
+        
+        # First, try to load pre-collected URLs from the 1000+ stories blog extraction
+        pre_collected_urls = self._load_pre_collected_urls()
+        
+        if pre_collected_urls:
+            logger.info(f"Using {len(pre_collected_urls)} pre-collected URLs from Microsoft 1000+ stories blog")
+            self._using_pre_collected = True  # Flag to skip AI filtering
+            return pre_collected_urls
+        
+        # Fallback to original discovery method if pre-collected URLs not available
+        logger.info(f"Pre-collected URLs not found, falling back to original discovery from {self.base_url}")
         
         response = self.make_request(self.base_url)
         if not response:
@@ -67,8 +77,27 @@ class MicrosoftScraper(BaseScraper):
             except Exception as e:
                 logger.debug(f"Error parsing script tag: {e}")
         
-        logger.info(f"Found {len(story_urls)} potential story URLs")
+        logger.info(f"Found {len(story_urls)} potential story URLs using original discovery")
         return story_urls
+    
+    def _load_pre_collected_urls(self) -> List[str]:
+        """Load pre-collected Microsoft story URLs from the 1000+ stories blog extraction"""
+        import json
+        import os
+        
+        # Look for the pre-collected URLs file in the project root
+        json_file = 'microsoft_story_links.json'
+        if os.path.exists(json_file):
+            try:
+                with open(json_file, 'r') as f:
+                    data = json.load(f)
+                    urls = data.get('links', [])
+                    logger.info(f"Successfully loaded {len(urls)} pre-collected URLs")
+                    return urls
+            except Exception as e:
+                logger.warning(f"Error loading pre-collected URLs: {e}")
+        
+        return []
     
     def _is_valid_story_url(self, url: str) -> bool:
         """Check if URL is a valid Microsoft customer story URL"""
@@ -89,8 +118,9 @@ class MicrosoftScraper(BaseScraper):
         
         soup = self.parse_html(response.text)
         
-        # Check if this is an AI-related story
-        if not self._is_ai_story(soup, response.text):
+        # Skip AI filtering for pre-collected URLs since Microsoft states all are AI-related
+        # Check if this is an AI-related story (only for discovered URLs)
+        if not hasattr(self, '_using_pre_collected') and not self._is_ai_story(soup, response.text):
             logger.info(f"Skipping non-AI story: {url}")
             return None
         

@@ -1,0 +1,661 @@
+Microsoft Customer Story Links - Extracted on 2025-08-02 11:43:53
+Source: https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/
+Total Links: 656
+================================================================================
+
+  1. https://customers.microsoft.com/en-ca/story/1724583469377234521-spar-ics-retailer-cloud-for-retail
+  2. https://customers.microsoft.com/en-gb/story/1770174778560829849-vodafone-group-azure-telecommunications-en-united-kingdom
+  3. https://customers.microsoft.com/en-gb/story/1782421038868081701-maire-microsoft-teams-energy-en-italy
+  4. https://customers.microsoft.com/en-gb/story/1782799284354734628-nestbank-azure-databricks-ai-banking-and-capital-markets-en-poland
+  5. https://customers.microsoft.com/en-gb/story/1790435165492425096-eon-se-microsoft-copilot-for-microsoft-365-energy-en-germany
+  6. https://customers.microsoft.com/en-gb/story/1797319592906573606-planted-foods-ag-dynamics-365-business-central-other-en-switzerland
+  7. https://customers.microsoft.com/en-gb/story/1799824484108434730-swiss-azure-travel-and-transportation-en-switzerland
+  8. https://customers.microsoft.com/en-gb/story/1805001416118108722-teladochealth-power-apps-health-provider-en-united-states
+  9. https://customers.microsoft.com/en-gb/story/1815128464686923048-aztec-group-microsoft-365-copilot-banking-and-capital-markets-en-united-kingdom
+ 10. https://customers.microsoft.com/en-gb/story/1816271784634453515-four-agency-microsoft-365-copilot-professional-services-en-united-kingdom
+ 11. https://customers.microsoft.com/en-gb/story/1820447052778490032-rnib-azure-ai-services-nonprofit-en-united-kingdom
+ 12. https://customers.microsoft.com/en-us/story/1703082544077596378-zeiss-group-microsoft-fabric-germany
+ 13. https://customers.microsoft.com/en-us/story/1703594261178267318-bayer-microsoft-copilot-germany
+ 14. https://customers.microsoft.com/en-us/story/1709539049606899869-pacific-gas-and-electric-microsoft-power-apps-energy-usa
+ 15. https://customers.microsoft.com/en-us/story/1715820133841482699-ally-azure-banking-en-united-states
+ 16. https://customers.microsoft.com/en-us/story/1719466218077596326-cognizant-azureai-software-en-india
+ 17. https://customers.microsoft.com/en-us/story/1723797353687211986-icertis-professional-services-azure-openai
+ 18. https://customers.microsoft.com/en-us/story/1723808815413508250-tomtom-azure-netherlands
+ 19. https://customers.microsoft.com/en-us/story/1731404546482708710-asos-retailer-azure-ai-studio
+ 20. https://customers.microsoft.com/en-us/story/1731604994973070357-paigeai-azure-healthcare-en-united-states
+ 21. https://customers.microsoft.com/en-us/story/1739352737304784739-albertheijn-azure-open-ai-service-retailers-en-netherlands
+ 22. https://customers.microsoft.com/en-us/story/1739790055278570755-telkomsel-azure-openai-service-telecommunications-en-indonesia
+ 23. https://customers.microsoft.com/en-us/story/1740058425924206437-telstra-telecommunications-azure-openai-service
+ 24. https://customers.microsoft.com/en-us/story/1741559204804365124-groupama-azure-openai-service-banking-en-france
+ 25. https://customers.microsoft.com/en-us/story/1744450394922857891-onepoint-github-copilot-professional-services-en-france
+ 26. https://customers.microsoft.com/en-us/story/1744468024452864249-kantar-windows-11-professional-services-en-united-kingdom
+ 27. https://customers.microsoft.com/en-us/story/1745242950134216820-schneider-electric-azure-machine-learning-discrete-manufacturing-en-france
+ 28. https://customers.microsoft.com/en-us/story/1747047183590598802-saphyre-azure-banking-and-capital-markets-en-united-states
+ 29. https://customers.microsoft.com/en-us/story/1747191591416935394-meesho-azure-retail-en-india
+ 30. https://customers.microsoft.com/en-us/story/1749166093660637548-gigxr-azure-ai-speech-other-en-united-states
+ 31. https://customers.microsoft.com/en-us/story/1749403583645228440-amadeus-microsoft-365-professional-services-en-france
+ 32. https://customers.microsoft.com/en-us/story/1749522406496386350-kpmg-microsoft-365-copilot-professional-services-en-united-states
+ 33. https://customers.microsoft.com/en-us/story/1749530601364196664-nc-fusion-microsoft-dataverse-nonprofit-en-united-states
+ 34. https://customers.microsoft.com/en-us/story/1749551971490840608-wipro-microsoft-365-professional-services-en-india
+ 35. https://customers.microsoft.com/en-us/story/1749886282579475320-mcdonalds-china-azure-retailers-en-china
+ 36. https://customers.microsoft.com/en-us/story/1750059518785857549-airindia-microsoft-teams-travel-and-transportation-en-india
+ 37. https://customers.microsoft.com/en-us/story/1750108992835776308-capitaland-azure-other-en-singapore
+ 38. https://customers.microsoft.com/en-us/story/1751257654493783966-cineplex-telecommunications-power-automate-en-canada
+ 39. https://customers.microsoft.com/en-us/story/1751482919190212988-trustingsocial-azure-banking-and-capital-markets-en-vietnam
+ 40. https://customers.microsoft.com/en-us/story/1752392067274688790-suzuki-motor-corporation-azure-automotive-en-japan
+ 41. https://customers.microsoft.com/en-us/story/1752754742242485191-zavarovalnica-triglav-azure-openai-service-insurance-en-slovenia
+ 42. https://customers.microsoft.com/en-us/story/1754582924902623921-adobe-inc-azure-retailers-en-united-states
+ 43. https://customers.microsoft.com/en-us/story/1758695276753608190-petrobras-azure-openai-service-energy-en-brazil
+ 44. https://customers.microsoft.com/en-us/story/1758740373423665704-govtech-azure-openai-service-professional-services-en-singapore
+ 45. https://customers.microsoft.com/en-us/story/1758915282906956032-scottishwater-microsoft-copilot-energy-en-united-kingdom
+ 46. https://customers.microsoft.com/en-us/story/1759188982673652446-o2-microsoft-365-telecommunications-en-czech-republic
+ 47. https://customers.microsoft.com/en-us/story/1759306888687672662-morulahealth-microsoft-365-business-premium-health-provider-en-united-kigdom
+ 48. https://customers.microsoft.com/en-us/story/1759309014350031747-joos-microsoft-copilot-consumer-goods-en-united-kingdom
+ 49. https://customers.microsoft.com/en-us/story/1759333055842391656-topsoe-azure-openai-service-discrete-manufacturing-en-denmark
+ 50. https://customers.microsoft.com/en-us/story/1760377839901581759-axa-gie-azure-insurance-en-france
+ 51. https://customers.microsoft.com/en-us/story/1761232956003920370-usf-microsoft-copilot-higher-education-en-united-states
+ 52. https://customers.microsoft.com/en-us/story/1761512190744606726-pacifico-microsoft-365-insurance-en-peru
+ 53. https://customers.microsoft.com/en-us/story/1761931588230983875-first-national-bank-dynamics-365-sales-banking-and-capital-markets-en-south-africa
+ 54. https://customers.microsoft.com/en-us/story/1762214991743764118-van-lanschot-kempen-copilot-for-microsoft-365-banking-and-capital-markets-en-netherlands
+ 55. https://customers.microsoft.com/en-us/story/1768027434711024743-shrinerschildrens-azure-health-provider-en-united-states
+ 56. https://customers.microsoft.com/en-us/story/1769469533256482338-unity-technologies-azure-open-ai-service-gaming-en-united-states
+ 57. https://customers.microsoft.com/en-us/story/1769790334604179311-coles-group-azure-machine-learning-retailers-en-australia
+ 58. https://customers.microsoft.com/en-us/story/1770157430043720426-amgen-inc-microsoft-copilot-for-microsoft-365-health-provider-en-united-states
+ 59. https://customers.microsoft.com/en-us/story/1770472924267393932-motor-oil-group-microsoft-365-energy-en-greece
+ 60. https://customers.microsoft.com/en-us/story/1771607059660027073-canary-speech-azure-ai-services-health-provider-en-united-states
+ 61. https://customers.microsoft.com/en-us/story/1771647415089854527-hrblock-azure-ai-studio-professional-services-en-united-states
+ 62. https://customers.microsoft.com/en-us/story/1771760434465986810-lumen-microsoft-copilot-telecommunications-en-united-states
+ 63. https://customers.microsoft.com/en-us/story/1771914030592960432-chanel-azure-data-factory-retailers-en-france
+ 64. https://customers.microsoft.com/en-us/story/1772120481217819586-unumgroup-azure-insurance-en-united-states
+ 65. https://customers.microsoft.com/en-us/story/1772353582649569700-ocgoodwill-azure-ai-services-nonprofit-en-united-states
+ 66. https://customers.microsoft.com/en-us/story/1774095788906881160-orange-azure-openai-service-telecommunications-en-france
+ 67. https://customers.microsoft.com/en-us/story/1774373123930343901-nbg-azure-banking-and-capital-markets-en-greece
+ 68. https://customers.microsoft.com/en-us/story/1774868194783832907-visma-visual-studio-professional-services-en-norway
+ 69. https://customers.microsoft.com/en-us/story/1776965075841351020-petrochemical-industries-company-microsoft-365-energy-en-kuwait
+ 70. https://customers.microsoft.com/en-us/story/1777364400660400778-boyner-azure-retailers-en-turkiye
+ 71. https://customers.microsoft.com/en-us/story/1777785808385732889-investec-microsoft-teams-banking-and-capital-markets-en-united-kingdom
+ 72. https://customers.microsoft.com/en-us/story/1779541850037077027-mhi-azure-discrete-manufacturing-en-japan
+ 73. https://customers.microsoft.com/en-us/story/1781698642929941032-paysafe-microsoft-copilot-for-microsoft-365-banking-and-capital-markets-en-bulgaria
+ 74. https://customers.microsoft.com/en-us/story/1782343682836979145-iu-internationale-hochschule-gmbh-azure-openai-service-higher-education-en-germany
+ 75. https://customers.microsoft.com/en-us/story/1783172439597920946-absa-github-copilot-banking-and-capital-markets-en-south-africa
+ 76. https://customers.microsoft.com/en-us/story/1784680492304822753-itouch-corporation-microsoft-fabric-professional-services-en-japan
+ 77. https://customers.microsoft.com/en-us/story/1785340736965832631-w2m-azure-ai-speech-travel-and-transportation-en-spain
+ 78. https://customers.microsoft.com/en-us/story/1785425602161769458-university-of-sydney-azure-openai-service-higher-education-en-united-states
+ 79. https://customers.microsoft.com/en-us/story/1785448033474736158-sandvik-coromant-microsoft-copilot-for-sales-discrete-manufacturing-en-sweden
+ 80. https://customers.microsoft.com/en-us/story/1786814215980808594-wilh-wilhelmsen-microsoft-viva-goals-travel-and-transportation-en-norway
+ 81. https://customers.microsoft.com/en-us/story/1790114264617229624-clearbank-azure-api-management-banking-and-capital-markets-en-united-kingdom
+ 82. https://customers.microsoft.com/en-us/story/1790507377097905834-paconsulting-dynamics-365-sales-professional-services-en-united-kingdom
+ 83. https://customers.microsoft.com/en-us/story/1790845375817388896-ey-power-apps-professional-services-en-united-states
+ 84. https://customers.microsoft.com/en-us/story/1792260322207475324-lionbridge-technologies-azure-openai-service-other-en-united-states
+ 85. https://customers.microsoft.com/en-us/story/1792296600814885165-auburn-microsoft-sentinel-higher-education-en-united-states
+ 86. https://customers.microsoft.com/en-us/story/1792657160796124295-chalhoubgroup-microsoft-fabric-retailers-en-united-arab-emirates
+ 87. https://customers.microsoft.com/en-us/story/1792966154673709027-nagel-group-azure-openai-service-travel-and-transportation-en-germany
+ 88. https://customers.microsoft.com/en-us/story/1794371049083171324-milpark-education-dynamics-365-customer-service-higher-education-en-south-africa
+ 89. https://customers.microsoft.com/en-us/story/1794442287816192713-asahi-europe-and-international-microsoft-copilot-for-microsoft-365-consumer-goods-en-czechia
+ 90. https://customers.microsoft.com/en-us/story/1794733067648840156-commercial-bank-of-dubai-azure-banking-and-capital-markets-en-united-arab-emirates
+ 91. https://customers.microsoft.com/en-us/story/1795477416065405316-epam-systems-microsoft-copilot-for-microsoft-365-professional-services-en-hungary
+ 92. https://customers.microsoft.com/en-us/story/1795890438217888078-pkshatech-microsoft-copilot-for-microsoft-365-other-en-japan
+ 93. https://customers.microsoft.com/en-us/story/1796987311720019561-network-rail-azure-databricks-travel-and-transportation-en-united-kingdom
+ 94. https://customers.microsoft.com/en-us/story/1798374461640442079-capita-group-github-copilot-professional-services-en-united-kingdom
+ 95. https://customers.microsoft.com/en-us/story/1798509188103498351-softchoice-microsoft-copilot-for-microsoft-365-consumer-goods-en-united-states
+ 96. https://customers.microsoft.com/en-us/story/1799912172105528685-parexel-azure-data-lake-analytics-health-provider-en-united-states
+ 97. https://customers.microsoft.com/en-us/story/1800038623596257192-gatech-azure-ai-studio-higher-education-en-united-states
+ 98. https://customers.microsoft.com/en-us/story/1800598946211744899-nflpa-azure-ai-services-nonprofit-en-united-states
+ 99. https://customers.microsoft.com/en-us/story/1802830664758543360-rti-international-microsoft-teams-nonprofit-en-united-states
+100. https://customers.microsoft.com/en-us/story/1803548215767581643-dewa-azure-ai-services-government-en-united-arab-emirates
+101. https://customers.microsoft.com/en-us/story/1804528563383903958-florida-crystals-corporation-microsoft-teams-phone-manufacturing-en-united-states
+102. https://customers.microsoft.com/en-us/story/1804624062321190625-lotte-hotels-and-resorts-azure-ai-studio-travel-and-transportation-en-korea
+103. https://customers.microsoft.com/en-us/story/1805346719014513003-xavier-college-dynamics-365-customer-insights-higher-education-en-australia
+104. https://customers.microsoft.com/en-us/story/1805371430718336282-unilever-azure-consumer-goods-en-united-kingdom
+105. https://customers.microsoft.com/en-us/story/1812248324658189027-mcknight-microsoft-copilot-for-microsoft-365-nonprofit-en-united-states
+106. https://customers.microsoft.com/en-us/story/1812266855486401339-syndigo-azure-professional-services-en-united-states
+107. https://customers.microsoft.com/en-us/story/1812576965312816472-torfaen-microsoft-copilot-for-microsoft-365-national-government-en-united-kingdom
+108. https://customers.microsoft.com/en-us/story/1813700096910640854-accelleron-microsoft-dataverse-discrete-manufacturing-en-switzerland
+109. https://customers.microsoft.com/en-us/story/1814827447818396950-agnostic-intelligence-azure-marketplace-other-en-switzerland
+110. https://customers.microsoft.com/en-us/story/1814943470387755703-molslinjen-azure-service-fabric-travel-and-transportation-en-denmark
+111. https://customers.microsoft.com/en-us/story/1815861561509835507-zf-power-apps-automotive-en-germany
+112. https://customers.microsoft.com/en-us/story/1816212812226771892-kaya-power-bi-professional-services-en-india
+113. https://customers.microsoft.com/en-us/story/1816233578469159840-fast-shop-azure-analysis-services-retailers-en-brazil
+114. https://customers.microsoft.com/en-us/story/1817720705929928929-elunic-azure-openai-service-other-en-germany
+115. https://customers.microsoft.com/en-us/story/1817798972170302828-dsb-microsoft-365-copilot-travel-and-transportation-en-denmark
+116. https://customers.microsoft.com/en-us/story/1817800430022189544-cassidy-azure-openai-service-other-en-united-states
+117. https://customers.microsoft.com/en-us/story/1820166640605522715-ouh-microsoft-365-copilot-health-provider-en-united-kingdom
+118. https://customers.microsoft.com/en-us/story/1820202403198385865-buckinghamshire-council-microsoft-365-copilot-government-en-united-kingdom
+119. https://customers.microsoft.com/en-us/story/1821284073143161043-insight-enterprises-inc-surface-laptop-professional-services-en-united-states
+120. https://customers.microsoft.com/en-us/story/1822396525953324537-novo-azure-openai-service-health-provider-en-denmark
+121. https://customers.microsoft.com/en-us/story/1822762543599961678-denso-corporation-azure-open-ai-service-automotive-en-japan
+122. https://customers.microsoft.com/en-us/story/1823101967024425351-florafoodgroup-azure-synapse-analytics-consumer-goods-en-netherlands
+123. https://customers.microsoft.com/en-us/story/1823424868741213189-syensqo-azure-open-ai-service-other-en-belgium
+124. https://customers.microsoft.com/en-us/story/1824718946474231481-elcome-microsoft-365-copilot-consumer-goods-en-united-arab-emirates
+125. https://customers.microsoft.com/en-us/story/1824902121184173261-british-heart-foundation-microsoft-copilot-nonprofit-en-united-kingdom
+126. https://customers.microsoft.com/en-us/story/1825162116194410361-lgt-excel-banking-and-capital-markets-en-liechtenstein
+127. https://customers.microsoft.com/en-us/story/1825206333142790059-qatar-charity-azure-ai-services-nonprofit-en-qatar
+128. https://customers.microsoft.com/en-us/story/1825642148546862376-capitec-bank-power-bi-banking-and-capital-markets-en-south-africa
+129. https://customers.microsoft.com/en-us/story/1825988149746373274-bradesco-azure-ai-services-banking-and-capital-markets-en-brazil
+130. https://customers.microsoft.com/en-us/story/1826019653953914614-maniadechurrasco-azure-synapse-analytics-retailers-en-brazil
+131. https://customers.microsoft.com/en-us/story/1826307332667818248-farm-credit-canada-microsoft-365-copilot-government-en-canada
+132. https://customers.microsoft.com/en-us/story/1827391161519296074-orbitalwitness-azure-professional-services-en-united-kingdom
+133. https://customers.microsoft.com/en-us/story/1827945851075596388-axon-azure-openai-service-national-government-en-united-states
+134. https://customers.microsoft.com/en-us/story/1828282129545930288-cdw-corporation-microsoft-viva-learning-consumer-goods-en-united-states
+135. https://customers.microsoft.com/en-us/story/1828290649088791526-virtualdentalcare-azure-virtual-machines-health-provider-en-united-states
+136. https://customers.microsoft.com/en-us/story/1828343452663470824-acentra-azure-openai-service-health-provider-en-united-states
+137. https://customers.microsoft.com/en-us/story/1828672699218736809-presidio-azure-openai-service-other-en-united-states
+138. https://customers.microsoft.com/en-us/story/1829828630587553613-ltimindtree-microsoft-sentinel-professional-services-en-india
+139. https://customers.microsoft.com/en-us/story/1831036907720807463-esmadrid-azure-openai-service-national-government-en-spain
+140. https://customers.microsoft.com/en-us/story/1832762432689198259-dlapiper-microsoft-365-copilot-professional-services-en-united-states
+141. https://customers.microsoft.com/en-us/story/1832767714677750676-cradle-azure-openai-service-other-unsegmented-en-malaysia
+142. https://customers.microsoft.com/en-us/story/1832880073951334987-jato-dynamics-azure-open-ai-service-automotive-en-united-kingdom
+143. https://customers.microsoft.com/en-us/story/1833247205652391288-legrand-cloud-for-manufacturing-discrete-manufacturing-en-france
+144. https://customers.microsoft.com/en-us/story/1833614171187901763-sace-microsoft-viva-suite-insurance-en-italy
+145. https://customers.microsoft.com/en-us/story/1833973787621467669-doctolib-azure-openai-service-health-provider-en-france
+146. https://customers.microsoft.com/en-us/story/1834023197365666109-pimco-azure-ai-search-banking-and-capital-markets-en-united-states
+147. https://customers.microsoft.com/en-us/story/1834508996209335697-medigold-health-azure-ai-services-health-provider-en-united-kingdom
+148. https://customers.microsoft.com/en-us/story/1834923084335117944-laliga-azure-arc-media-and-entertainment-en-spain
+149. https://customers.microsoft.com/en-us/story/1835026746816257326-harvey-azure-openai-service-other-en-united-states
+150. https://customers.microsoft.com/en-us/story/1835031712819389839-mia-labs-microsoft-defender-for-cloud-automotive-en-united-states
+151. https://customers.microsoft.com/en-us/story/1835242622798889710-operationsmile-azure-openai-service-nonprofit-en-united-states
+152. https://customers.microsoft.com/en-us/story/1835335026854319278-starkist-machine-learning-services-ai-other-en-united-states
+153. https://customers.microsoft.com/en-us/story/1835590701993611997-nba-azure-openai-service-media-and-entertainment-en-united-states
+154. https://customers.microsoft.com/en-us/story/1835832718338159187-mars-azure-machine-learning-professional-services-en-united-states
+155. https://customers.microsoft.com/en-us/story/1836108400811529412-airindia-azure-ai-search-travel-and-transportation-en-india
+156. https://customers.microsoft.com/en-us/story/1836366161136561849-ey-azure-ai-studio-professional-services-en-united-states
+157. https://customers.microsoft.com/en-us/story/1836503929316061467-bmw-azure-app-service-automotive-en-germany
+158. https://customers.microsoft.com/en-us/story/1837247326532243131-canadian-tire-corporation-azure-retailers-en-canada
+159. https://customers.microsoft.com/en-us/story/1837367358659329204-hollandamerica-microsoft-dataverse-travel-and-transportation-en-united-states
+160. https://customers.microsoft.com/en-us/story/1837606451567673137-cathaypacific-microsoft-365-copilot-travel-and-transportation-en-hong-kong-sar
+161. https://customers.microsoft.com/en-us/story/1837624667267994535-parloa-azure-openai-service-professional-services-en-germany
+162. https://customers.microsoft.com/en-us/story/1837633288515694884-eaton-microsoft-365-copilot-discrete-manufacturing-en-united-states
+163. https://customers.microsoft.com/en-us/story/1837647984192425990-mckesson-azure-openai-service-health-provider-en-united-states
+164. https://customers.microsoft.com/en-us/story/1837649623806233713-dentsu-azure-kubernetes-service-telecommunications-en-united-kingdom
+165. https://customers.microsoft.com/en-us/story/1837667199713758792-clifford-chance-mcrosoft-365-copilot-professional-services-en-united-kingdom
+166. https://customers.microsoft.com/en-us/story/1837788400819593167-lenovo-dynamics-365-customer-service-discrete-manufacturing-en-united-states
+167. https://customers.microsoft.com/en-us/story/1837822642507786660-docusign-azure-logic-apps-other-en-united-states
+168. https://customers.microsoft.com/en-us/story/1837976425667863739-localiza-microsoft-365-copilot-automotive-en-brazil
+169. https://customers.microsoft.com/en-us/story/1838122771592262367-redcross-azure-ai-services-nonprofit-en-kenya
+170. https://customers.microsoft.com/en-us/story/1838588977497742792-kmslh-azure-openai-service-professional-services-en-israel
+171. https://go.microsoft.com/fwlink/?LinkID=206977
+172. https://go.microsoft.com/fwlink/?LinkId=521839
+173. https://go.microsoft.com/fwlink/?linkid=2139749
+174. https://go.microsoft.com/fwlink/?linkid=2196227
+175. https://go.microsoft.com/fwlink/?linkid=2196228
+176. https://go.microsoft.com/fwlink/?linkid=2259814
+177. https://twitter.com/intent/tweet?url=https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/&text=AI-powered+success%E2%80%94with+more+than+1%2C000+stories+of+customer+transformation+and+innovation
+178. https://www.facebook.com/sharer/sharer.php?u=https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/
+179. https://www.linkedin.com/sharing/share-offsite/?url=https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/
+180. https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/
+181. https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/#article
+182. https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/#breadcrumb
+183. https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/#primaryimage
+184. https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/#respond
+185. https://www.microsoft.com/en-us/microsoft-cloud/blog/content-type/customer-stories/
+186. https://www.microsoft.com/en-us/microsoft-cloud/blog/wp-content/uploads/2026/12/Cloud_1000customerstories_Blog_250716.webp
+187. https://www.microsoft.com/en-us/microsoft-cloud/solutions/customer-experience
+188. https://www.microsoft.com/en-us/microsoft-copilot/blog/copilot-studio/improving-customer-and-employee-experiences-with-microsoft-copilot-studio-2/
+189. https://www.microsoft.com/en-us/startups/blog/aiseras-conversational-ai-solution-enhances-customer-experiences-at-scale-launchwithai/
+190. https://www.microsoft.com/en/customers/story/1333507815541987694-alderhey-ai
+191. https://www.microsoft.com/en/customers/story/1363135847046352781-capita
+192. https://www.microsoft.com/en/customers/story/1379631359425784399-datasite-banking-capital-markets-azure-cognitive-services
+193. https://www.microsoft.com/en/customers/story/1403555873105018969-dow-chemicals-azure-en-united-states
+194. https://www.microsoft.com/en/customers/story/1409585222396616040-laval-gov-azure-canada
+195. https://www.microsoft.com/en/customers/story/1430042061294998422-zurich-germany-en-switzerland
+196. https://www.microsoft.com/en/customers/story/1444543738602986229-nc-dinos-media-entertainment-azure-en-korea
+197. https://www.microsoft.com/en/customers/story/1488865816968786936-gameloft-media-entertainment-azure-cognitive-services
+198. https://www.microsoft.com/en/customers/story/1503067502270490175-visionary-wealth-advisors-banking-capital-markets-microsoft-security-solutions
+199. https://www.microsoft.com/en/customers/story/1514388404994802868-vitra-professional-services-azure
+200. https://www.microsoft.com/en/customers/story/1518108403768741675-avex-digital-media-entertainment-azure-en-japan
+201. https://www.microsoft.com/en/customers/story/1518521945649112744-sandvik-discrete-manufacturing-azure-en-sweden
+202. https://www.microsoft.com/en/customers/story/1533261355300735842-sveriges-television-ab-media-entertainment-azure
+203. https://www.microsoft.com/en/customers/story/1549838968222249829-trelent-azure-openai-service
+204. https://www.microsoft.com/en/customers/story/1552642769228088273-Beiersdorf-consumer-goods-azure-cognitive-search
+205. https://www.microsoft.com/en/customers/story/1559945185151571155-relias-power-bi-azure-synapse-analytics
+206. https://www.microsoft.com/en/customers/story/1571328090497733071-rabobank-banking-power-platform
+207. https://www.microsoft.com/en/customers/story/1574405316039819618-animal-supply-retailers-azure-en-united-states
+208. https://www.microsoft.com/en/customers/story/1595576394972854750-veritone-partner-professional-services-azure
+209. https://www.microsoft.com/en/customers/story/1599589307518906982-rabobank-banking-and-capital-markets-azure
+210. https://www.microsoft.com/en/customers/story/1606701483174950905-Laerdal-medical-health-provider-azure
+211. https://www.microsoft.com/en/customers/story/1606719824701463630-USA-Surfing-Media-and-Entertainment-Azure-Computer-Vision
+212. https://www.microsoft.com/en/customers/story/1614991556089505103-wedel-software-telecommunications-azure-emea
+213. https://www.microsoft.com/en/customers/story/1615006373510337084-moveworks-professional-services-azure-openai-service
+214. https://www.microsoft.com/en/customers/story/1615006392710416983-hellotalk-azure-ai-education-china
+215. https://www.microsoft.com/en/customers/story/1615444758685258325-asc-teams-azure-en
+216. https://www.microsoft.com/en/customers/story/1620830893779583117-thread-professional-services-azure-openai-service
+217. https://www.microsoft.com/en/customers/story/1623125651482069014-national-taiwan-normal-university-higher-education-azure-openai-service
+218. https://www.microsoft.com/en/customers/story/1633492927843310178-cipio-professional-services-azure-openai-service
+219. https://www.microsoft.com/en/customers/story/1634977781280887044-nota-media-and-entertainment-azure-openai-service
+220. https://www.microsoft.com/en/customers/story/1637511309136244127-att-telecommunications-azure-openai-service
+221. https://www.microsoft.com/en/customers/story/1637929534319366070-swift-banking-capital-markets-azure-machine-learning
+222. https://www.microsoft.com/en/customers/story/1641166525350342888-city-of-kelowna-government-azure-open-ai-service
+223. https://www.microsoft.com/en/customers/story/1646266241611394912-project-gutenberg-nonprofit-azure-synapse-analytics-azure-ai-services
+224. https://www.microsoft.com/en/customers/story/1649841387718808111-accenture-professional-services-power-platform
+225. https://www.microsoft.com/en/customers/story/1650519804730300378-berlitz-language-azure-ai-speech-usa
+226. https://www.microsoft.com/en/customers/story/1653127518144887835-symphonyai-partner-professional-services-azure
+227. https://www.microsoft.com/en/customers/story/1653678788412771617-inspireenvironmental-sustainability-azure-en-us
+228. https://www.microsoft.com/en/customers/story/1653848287801805901-commerce-ai-partner-professional-services-azure-openai-service
+229. https://www.microsoft.com/en/customers/story/1655187821653342085-jacobs-microsoft-fabric-power-bi-partner-professional-services-usa
+230. https://www.microsoft.com/en/customers/story/1655714713994650971-laliga-media-and-entertainment-microsoft-azure
+231. https://www.microsoft.com/en/customers/story/1657407824531643938-deepbrain-ai-azure-unitedstates
+232. https://www.microsoft.com/en/customers/story/1657472830189903034-callminer_professionalservices_azure
+233. https://www.microsoft.com/en/customers/story/1658486964887528100-datadog_professionalservices_azure
+234. https://www.microsoft.com/en/customers/story/1662731177894407321-atera-professional-services-azure-en-israel
+235. https://www.microsoft.com/en/customers/story/1666598146786087377-inflection-ai-partner-professional-services-azure-ai-infrastructure
+236. https://www.microsoft.com/en/customers/story/1673383839776405740-agmc-automotive-azure-en-united-arab-emirates
+237. https://www.microsoft.com/en/customers/story/1676387802275519024-arthurdlittle_professionalservices_azureAI
+238. https://www.microsoft.com/en/customers/story/1678301371114052648-omers-capital-markets-microsoft-en-canada
+239. https://www.microsoft.com/en/customers/story/1685696409285197342-heineken-consumer-goods-azure-ai
+240. https://www.microsoft.com/en/customers/story/1686305052830906008-pldthome-telecommunications-azure-en-philippines
+241. https://www.microsoft.com/en/customers/story/1688446815041870508-uipath-professional-services-azure-en-romania
+242. https://www.microsoft.com/en/customers/story/1693712644049090392-kry-azure-open-ai-service-sweden
+243. https://www.microsoft.com/en/customers/story/1696226224176623241-page-professional-services-azure-en-united-kingdom
+244. https://www.microsoft.com/en/customers/story/1696260864197179412-dotdigital-professional-services-azure-en-united-kingdom
+245. https://www.microsoft.com/en/customers/story/1696991983571554024-ecs-federal-ai-builder-united-states
+246. https://www.microsoft.com/en/customers/story/1698113064434230412-pangaeadata-azure-openai-service-us
+247. https://www.microsoft.com/en/customers/story/1698365434338807911-ipg-azure-ai-customer-story
+248. https://www.microsoft.com/en/customers/story/1700854587537724864-kpmg-australia-azure-ai-professional-services
+249. https://www.microsoft.com/en/customers/story/1700954751530838723-lucy-azure-united-states
+250. https://www.microsoft.com/en/customers/story/1701081907918320989-wichita-public-schools-azure-k12-edu-en-united-states
+251. https://www.microsoft.com/en/customers/story/1701145862385074059-cuberm-azure-partner-professional-services-en-greece
+252. https://www.microsoft.com/en/customers/story/1701277959463876710-datarobot-forddirect-azure-generative-ai-usa
+253. https://www.microsoft.com/en/customers/story/1701368894713278675-the-world-bank-azure-arc-united-states
+254. https://www.microsoft.com/en/customers/story/1701944358715641785-perplexity-ai-azure-partner-professional-services-usa
+255. https://www.microsoft.com/en/customers/story/1702038069968225912-milliman-microsoft-fabric-insurance-us-en
+256. https://www.microsoft.com/en/customers/story/1703072526234095751-ey-azure-microsoft-fabric-professional-services-usa
+257. https://www.microsoft.com/en/customers/story/1703120647074644538-degreesofchange-nonprofit-power-platform
+258. https://www.microsoft.com/en/customers/story/1703157436656300547-ey_professionalservices_copilot
+259. https://www.microsoft.com/en/customers/story/1703499442875711080-siemens-digital-industries-software-microsoft-azure-ai-germany
+260. https://www.microsoft.com/en/customers/story/1703669067334366976-wtw-insurance-microsoft-security-copilot
+261. https://www.microsoft.com/en/customers/story/1703814256939529124-volvo-group-automotive-azure-ai-services
+262. https://www.microsoft.com/en/customers/story/1705644076562905842-laqo-azure-insurance-en-croatia
+263. https://www.microsoft.com/en/customers/story/1706422185795423548-eduvos-azure-higher-education-en-south-africa
+264. https://www.microsoft.com/en/customers/story/1709299867574522716-intertech-azure-professional-services-en-turkiye
+265. https://www.microsoft.com/en/customers/story/1710544856389676066-coatsdigital-azure-manufacturing-en-united-states
+266. https://www.microsoft.com/en/customers/story/1718724737952044088-team-rubicon-dynamics-365-customer-insights-copilot-united-states
+267. https://www.microsoft.com/en/customers/story/1721508916179227001-standard-bank-of-south-africa-banking-power-platform-south-africa
+268. https://www.microsoft.com/en/customers/story/1723224354510754315-repsmate-azure-openai-service-professionalservice-en-romania
+269. https://www.microsoft.com/en/customers/story/1723479475853502943-moneta-azure-banking-en-czechia
+270. https://www.microsoft.com/en/customers/story/1723743698890283553-troutman-relativity-professional-services-azure-openai
+271. https://www.microsoft.com/en/customers/story/1725778377710136622-vocalls-azure-telecommunications-en-czechia
+272. https://www.microsoft.com/en/customers/story/1727184266538014508-sompocanopius-azure-vmware-solution-financial-services-en-united-kingdom
+273. https://www.microsoft.com/en/customers/story/1728829430186194098-nsure-power-platform-insurance-usa
+274. https://www.microsoft.com/en/customers/story/1729595843821189195-space-and-time-microsoft-azure-open-ai-united-states
+275. https://www.microsoft.com/en/customers/story/1731378110725864602-jausa-power-bi-non-profit-en-united-states
+276. https://www.microsoft.com/en/customers/story/1736247733970863057-onenz-powerbi-telecommunications-en-new-zealand
+277. https://www.microsoft.com/en/customers/story/1739407694993501688-asc-azure-openai-en
+278. https://www.microsoft.com/en/customers/story/1739745344311781322-kodakalaris-dynamics-365-discrete-manufacturing-en-united-states
+279. https://www.microsoft.com/en/customers/story/1741186295807491714-ottogroup-azure-openai-service-retailers-en-germany
+280. https://www.microsoft.com/en/customers/story/1741358024158386060-pttgcgroup-azure-energy-en-thailand
+281. https://www.microsoft.com/en/customers/story/1741983097193425795-agape-source-microsoft-365-nonprofit-en-united-states
+282. https://www.microsoft.com/en/customers/story/1742331877394146486-iwilltherapy-azure-openai-service-health-provider-en-india
+283. https://www.microsoft.com/en/customers/story/1743938628089055931-sanlam-azure-devops-insurance-en-south-africa
+284. https://www.microsoft.com/en/customers/story/1744347882634056119-roquette-azure-openai-service-retailers-en-france
+285. https://www.microsoft.com/en/customers/story/1747330384796486050-oregon-state-university-microsoft-security-copilot-higher-education-en-united-states
+286. https://www.microsoft.com/en/customers/story/1750032942675701224-aurizon-microsoft-fabric-travel-and-transportation-en-australia
+287. https://www.microsoft.com/en/customers/story/1751701319789621671-south-australia-department-of-education-azure-ai-content-safety-higher-education-en-australia
+288. https://www.microsoft.com/en/customers/story/1751743814947802722-dener-motorsport-producose-ltd-azure-service-fabric-other-en-brazil
+289. https://www.microsoft.com/en/customers/story/1752451948864129472-veradigm-azure-openai-service-health-provider-en-united-states
+290. https://www.microsoft.com/en/customers/story/1755056065057326115-lexmark-international-inc-azure-compute-other-en-united-states
+291. https://www.microsoft.com/en/customers/story/1755085937562470921-pwc-azure-professional-services-en-united-states
+292. https://www.microsoft.com/en/customers/story/1755232377641168461-casasbahia-power-bi-retailers-en-brazil
+293. https://www.microsoft.com/en/customers/story/1756857946254477192-wuerth-it-gmbh-microsoft-365-discrete-manufacturing-en-germany
+294. https://www.microsoft.com/en/customers/story/1757809975190587443-sunrise-outlook-telecommunications-en-switzerland
+295. https://www.microsoft.com/en/customers/story/1757835892038397352-ey-global-dynamics-365-professional-services-en-united-states
+296. https://www.microsoft.com/en/customers/story/1757917432379027584-flagstoneim-microsoft-365-banking-and-capital-markets-en-united-kingdom
+297. https://www.microsoft.com/en/customers/story/1761681704321508161-atos-microsoft-365-copilot-professional-services-en-france
+298. https://www.microsoft.com/en/customers/story/1761800262933786065-multichoice-microsoft-copilot-media-and-entertainment-en-south-africa
+299. https://www.microsoft.com/en/customers/story/1762135872701615281-mt-pharma-azure-pharmaceuticals-en-japan
+300. https://www.microsoft.com/en/customers/story/1762150085964970175-enerjisa-uretim-microsoft-copilot-energy-en-turkiye
+301. https://www.microsoft.com/en/customers/story/1763927195672636703-opap-microsoft-365-gaming-en-greece
+302. https://www.microsoft.com/en/customers/story/1765090070873727497-cielo-sa-microsoft-defender-for-office-365-p1-banking-and-capital-markets-en-brazil
+303. https://www.microsoft.com/en/customers/story/1766926388528074549-kepak-group-dynamics-365-consumer-goods-en-ireland
+304. https://www.microsoft.com/en/customers/story/1767395222127336377-swecogroup-azure-ai-services-professional-services-en-sweden
+305. https://www.microsoft.com/en/customers/story/1767477780302809137-cpaxtra-microsoft-copilot-for-microsoft-365-consumer-goods-en-thailand
+306. https://www.microsoft.com/en/customers/story/1767870399913734058-avocadosfrommexico-power-bi-consumer-goods-en-united-states
+307. https://www.microsoft.com/en/customers/story/1769492127061046263-avanade-azure-synapse-analytics-professional-services-en-united-states
+308. https://www.microsoft.com/en/customers/story/1770210113193905694-bdo-power-bi-professional-services-en-belgium
+309. https://www.microsoft.com/en/customers/story/1770317375595733395-hp-github-professional-services-en-united-states
+310. https://www.microsoft.com/en/customers/story/1770346240728000716-elcome-microsoft-copilot-consumer-goods-en-united-arab-emirates
+311. https://www.microsoft.com/en/customers/story/1770536569687978092-visier-solutions-azure-openai-service-professional-services-en-canada
+312. https://www.microsoft.com/en/customers/story/1771984633872247465-ap-pension-azure-databricks-insurance-en-denmark
+313. https://www.microsoft.com/en/customers/story/1772440092589208261-alltech-azure-other-en-united-states
+314. https://www.microsoft.com/en/customers/story/1772711772972978046-kpmg-llp-azure-service-fabric-professional-services-en-united-states
+315. https://www.microsoft.com/en/customers/story/1773116194448771349-floww-microsoft-copilot-for-microsoft-365-banking-and-capital-markets-en-united-kingdom
+316. https://www.microsoft.com/en/customers/story/1775645348335316408-centrica-azure-application-insights-energy-en-united-kingdom
+317. https://www.microsoft.com/en/customers/story/1776634128491268261-stavanger-azure-openai-service-national-government-en-norway
+318. https://www.microsoft.com/en/customers/story/1777343160210162671-eshopworld-azure-other-unsegmented-en-ireland
+319. https://www.microsoft.com/en/customers/story/1777780179509111168-servicetitan-azure-machine-learning-national-government-en-united-states
+320. https://www.microsoft.com/en/customers/story/1777919811736226727-age-uk-azure-ai-services-nonprofit-en-united-kingdom
+321. https://www.microsoft.com/en/customers/story/1778147923888814642-pwc-azure-ai-document-intelligence-professional-services-en-united-states
+322. https://www.microsoft.com/en/customers/story/1779144753409953376-alstom-azure-openai-service-travel-and-transportation-en-france
+323. https://www.microsoft.com/en/customers/story/1780443211662273433-bemo-azure-ai-professional-services-en-united-states
+324. https://www.microsoft.com/en/customers/story/1780503635998577611-arapahoe-libraries-copilot-for-microsoft-365-nonprofit-en-united-states
+325. https://www.microsoft.com/en/customers/story/1781804873110601091-national-australia-bank-microsoft-edge-banking-and-capital-markets-en-australia
+326. https://www.microsoft.com/en/customers/story/1782023295346525585-care-power-bi-nonprofit-en-united-states
+327. https://www.microsoft.com/en/customers/story/1782380069861708732-profisee-azure-application-insights-other-unsegmented-en-united-states
+328. https://www.microsoft.com/en/customers/story/1782861855573136086-oslo-kommune-power-apps-national-government-en-norway
+329. https://www.microsoft.com/en/customers/story/1784062354779116638-furnas-azure-energy-en-brazil
+330. https://www.microsoft.com/en/customers/story/1784144855580651969-slcagricola-azure-forestry-and-fishing-en-brazil
+331. https://www.microsoft.com/en/customers/story/1784942163474264775-houseofhr-microsoft-sentinel-professional-services-en-belgium
+332. https://www.microsoft.com/en/customers/story/1785788806559352474-cdiscount-azure-openai-service-retailers-en-france
+333. https://www.microsoft.com/en/customers/story/1786976982328092426-accenture-azure-professional-services-en-united-states
+334. https://www.microsoft.com/en/customers/story/1787232539191932705-ls-electric-microsoft-cloud-for-manufacturing-discrete-manufacturing-en-korea
+335. https://www.microsoft.com/en/customers/story/1790119689031635867-trace3-microsoft-365-professional-services-en-united-states
+336. https://www.microsoft.com/en/customers/story/1795836141096013038-virgin-money-dynamics-365-customer-service-banking-and-capital-markets-en-united-kingdom
+337. https://www.microsoft.com/en/customers/story/1797704796946869974-qnet-microsoft-copilot-for-security-retailers-en-hong-kong-sar
+338. https://www.microsoft.com/en/customers/story/1797709165933196148-insight-canada-microsoft-copilot-for-microsoft-365-other-en-united-states
+339. https://www.microsoft.com/en/customers/story/1798075568757336532-fractal-azure-ai-studio-retailers-en-india
+340. https://www.microsoft.com/en/customers/story/1799655855897894802-rentingcolombia-azure-ai-services-travel-and-transportation-en-colombia
+341. https://www.microsoft.com/en/customers/story/1800083927641955886-chinesetest-azure-ai-speech-higher-education-en-china
+342. https://www.microsoft.com/en/customers/story/1800238731998879113-oncoclinicas-azure-ai-services-health-provider-en-brazil
+343. https://www.microsoft.com/en/customers/story/1800598946211744899-nflpa-azure-ai-services-nonprofit-en-united-states
+344. https://www.microsoft.com/en/customers/story/1800989144516637330-aegea-saneamento-azure-ai-services-other-en-brazil
+345. https://www.microsoft.com/en/customers/story/1800997609031912803-dibanka-azure-ai-custom-vision-banking-and-capital-markets-en-colombia
+346. https://www.microsoft.com/en/customers/story/1802017730982552224-uniper-se-microsoft-copilot-for-microsoft-365-energy-en-germany
+347. https://www.microsoft.com/en/customers/story/1802451863854093400-inter-azure-ai-services-banking-and-capital-markets-en-brazil
+348. https://www.microsoft.com/en/customers/story/1802756598954587083-access-holdings-plc-microsoft-365-banking-and-capital-markets-en-nigeria
+349. https://www.microsoft.com/en/customers/story/1802842951607118817-eastman-microsoft-defender-other-en-united-states
+350. https://www.microsoft.com/en/customers/story/1804528563383903958-florida-crystals-corporation-microsoft-teams-phone-manufacturing-en-united-states
+351. https://www.microsoft.com/en/customers/story/1804597267941884304-baptistcare-sharepoint-nonprofit-en-australia
+352. https://www.microsoft.com/en/customers/story/1804968308500747501-sultan-microsoft-copilot-health-provider-en-kuwait
+353. https://www.microsoft.com/en/customers/story/18701-jersey-business-microsoft-copilot-for-microsoft-365
+354. https://www.microsoft.com/en/customers/story/18703-microsoft-microsoft-fabric
+355. https://www.microsoft.com/en/customers/story/18732-finastra-microsoft-viva-engage
+356. https://www.microsoft.com/en/customers/story/18745-intesa-sanpaolo-group-microsoft-copilot-for-security
+357. https://www.microsoft.com/en/customers/story/18754-city-of-burlington-microsoft-power-platform
+358. https://www.microsoft.com/en/customers/story/18757-bmw-group-azure
+359. https://www.microsoft.com/en/customers/story/18782-national-grid-azure
+360. https://www.microsoft.com/en/customers/story/18800-digi-rogaland-azure
+361. https://www.microsoft.com/en/customers/story/18814-hitachi-solutions-microsoft-fabric
+362. https://www.microsoft.com/en/customers/story/18816-british-columbia-investment-management-corporation-microsoft-365-copilot
+363. https://www.microsoft.com/en/customers/story/18830-cummins-microsoft-365-e5
+364. https://www.microsoft.com/en/customers/story/18851-midcontinent-independent-system-operator-microsoft-purview
+365. https://www.microsoft.com/en/customers/story/18899-leviatan-design-srl-d-microsoft-365
+366. https://www.microsoft.com/en/customers/story/18916-amref-health-africa-azure
+367. https://www.microsoft.com/en/customers/story/18955-accenture-microsoft-fabric
+368. https://www.microsoft.com/en/customers/story/18987-aberdeen-city-council-microsoft-365-copilot
+369. https://www.microsoft.com/en/customers/story/18989-syensqo-azure-open-ai-service
+370. https://www.microsoft.com/en/customers/story/19092-zakladni-skola-as-hlavkova-microsoft-365-copilot
+371. https://www.microsoft.com/en/customers/story/19095-agricover-azure
+372. https://www.microsoft.com/en/customers/story/19096-ministry-of-human-resources-and-emiratization-microsoft-intune
+373. https://www.microsoft.com/en/customers/story/19097-anadolu-efes-microsoft-365-e5
+374. https://www.microsoft.com/en/customers/story/19148-permodalan-nasional-berhad-microsoft-365-copilot
+375. https://www.microsoft.com/en/customers/story/19179-sony-semiconductor-solutions-corporation-azure-ai-studio
+376. https://www.microsoft.com/en/customers/story/19201-rackspace-technology-azure-arc
+377. https://www.microsoft.com/en/customers/story/19241-university-of-manchester-microsoft-copilot
+378. https://www.microsoft.com/en/customers/story/19280-acentra-health-azure
+379. https://www.microsoft.com/en/customers/story/19346-vodafone-microsoft-365-copilot
+380. https://www.microsoft.com/en/customers/story/19399-school-district-no-43-coquitlam-microsoft-copilot
+381. https://www.microsoft.com/en/customers/story/19451-wetransact-azure-open-ai-service
+382. https://www.microsoft.com/en/customers/story/19575-ch-robinson-azure-ai-studio
+383. https://www.microsoft.com/en/customers/story/19578-daiichi-sankyo-azure
+384. https://www.microsoft.com/en/customers/story/19642-ust-microsoft-fabric
+385. https://www.microsoft.com/en/customers/story/19643-the-rider-firm-microsoft-365-business
+386. https://www.microsoft.com/en/customers/story/19684-hype-dynamics-365-customer-service
+387. https://www.microsoft.com/en/customers/story/19754-abn-amro-bank-microsoft-copilot-studio
+388. https://www.microsoft.com/en/customers/story/19755-microsoft-microsoft-copilot
+389. https://www.microsoft.com/en/customers/story/19769-bmw-ag-azure-app-service
+390. https://www.microsoft.com/en/customers/story/19796-ubs-azure
+391. https://www.microsoft.com/en/customers/story/19825-emirates-global-aluminium-azure-arc
+392. https://www.microsoft.com/en/customers/story/19828-pointclickcare-windows-server
+393. https://www.microsoft.com/en/customers/story/19912-softcat-microsoft-365-copilot
+394. https://www.microsoft.com/en/customers/story/19922-dairy-farmers-of-america-microsoft-365-copilot
+395. https://www.microsoft.com/en/customers/story/19924-babson-college-azure-open-ai-service
+396. https://www.microsoft.com/en/customers/story/19986-properstar-azure-open-ai-service
+397. https://www.microsoft.com/en/customers/story/20028-pz-cussons-international-microsoft-fabric
+398. https://www.microsoft.com/en/customers/story/20134-seduc-azure-open-ai-service
+399. https://www.microsoft.com/en/customers/story/20135-open-grid-europe-gmbh-azure-marketplace
+400. https://www.microsoft.com/en/customers/story/20191-kuwait-finance-house-azure-ai-services
+401. https://www.microsoft.com/en/customers/story/20211-nagase-corporation-azure
+402. https://www.microsoft.com/en/customers/story/20284-universitas-terbuka-azure-blob-storage
+403. https://www.microsoft.com/en/customers/story/20297-sensei-microsoft-365
+404. https://www.microsoft.com/en/customers/story/20308-hellenic-cadastre-azure-open-ai-service
+405. https://www.microsoft.com/en/customers/story/20323-eani-microsoft-copilot
+406. https://www.microsoft.com/en/customers/story/20324-centrica-azure
+407. https://www.microsoft.com/en/customers/story/20355-crediclub-azure-cosmos-db
+408. https://www.microsoft.com/en/customers/story/20380-eclinicalworks-azure-ai-services
+409. https://www.microsoft.com/en/customers/story/20383-ntt-communications-microsoft-security-copilot
+410. https://www.microsoft.com/en/customers/story/20385-schaeffler-microsoft-fabric
+411. https://www.microsoft.com/en/customers/story/20457-virbe-azure-open-ai-service
+412. https://www.microsoft.com/en/customers/story/20560-xp-microsoft-365
+413. https://www.microsoft.com/en/customers/story/20596-aditya-birla-financial-shared-services-azure-open-ai-service
+414. https://www.microsoft.com/en/customers/story/20597-wrtn-azure
+415. https://www.microsoft.com/en/customers/story/20600-us-venture-microsoft-365-copilot-for-finance
+416. https://www.microsoft.com/en/customers/story/20648-sanabil-investments-microsoft-365-copilot
+417. https://www.microsoft.com/en/customers/story/20669-kovai-limited-biztalk360-azure
+418. https://www.microsoft.com/en/customers/story/20670-environmental-systems-research-institute-azure-virtual-machines
+419. https://www.microsoft.com/en/customers/story/20672-hevolus-innovation-azure
+420. https://www.microsoft.com/en/customers/story/20703-mitsui-and-co-ltd-microsoft-365-e5
+421. https://www.microsoft.com/en/customers/story/20729-bank-of-queensland-azure
+422. https://www.microsoft.com/en/customers/story/20836-michelin-azure-open-ai-service
+423. https://www.microsoft.com/en/customers/story/20838-gojob-azure-open-ai-service
+424. https://www.microsoft.com/en/customers/story/20845-aydem-energy-azure-open-ai-service
+425. https://www.microsoft.com/en/customers/story/21012-visual-comfort-and-co-dynamics-365
+426. https://www.microsoft.com/en/customers/story/21034-square-enix-co-ltd-azure-ai-search
+427. https://www.microsoft.com/en/customers/story/21035-dynamic-health-systems-azure
+428. https://www.microsoft.com/en/customers/story/21037-arcare-microsoft-fabric
+429. https://www.microsoft.com/en/customers/story/21059-majid-al-futtaim-retail-azure-open-ai-service
+430. https://www.microsoft.com/en/customers/story/21061-staffbase-azure-open-ai-service
+431. https://www.microsoft.com/en/customers/story/21062-aia-group-dynamics-365-customer-service
+432. https://www.microsoft.com/en/customers/story/21150-telefonica-group-spain-azure-ai-and-machine-learning
+433. https://www.microsoft.com/en/customers/story/21168-mci-group-microsoft-365-copilot
+434. https://www.microsoft.com/en/customers/story/21221-welcome-account-azure-open-ai-service
+435. https://www.microsoft.com/en/customers/story/21224-sc-ventures-azure-open-ai-service
+436. https://www.microsoft.com/en/customers/story/21341-peace-parks-foundation-power-bi
+437. https://www.microsoft.com/en/customers/story/21343-blip-azure-open-ai-service
+438. https://www.microsoft.com/en/customers/story/21393-legal-i-azure-open-ai-service
+439. https://www.microsoft.com/en/customers/story/21403-de-alliantie-azure-open-ai-service
+440. https://www.microsoft.com/en/customers/story/21405-tekion-corp-azure
+441. https://www.microsoft.com/en/customers/story/21406-raiffeisen-bank-international-azure
+442. https://www.microsoft.com/en/customers/story/21514-maaden-microsoft-365-copilot
+443. https://www.microsoft.com/en/customers/story/21539-allplan-microsoft-fabric
+444. https://www.microsoft.com/en/customers/story/21551-lloyds-banking-group-microsoft-power-platform
+445. https://www.microsoft.com/en/customers/story/21596-government-of-the-city-of-buenos-aires-azure-open-ai-service
+446. https://www.microsoft.com/en/customers/story/21598-the-university-of-hong-kong-microsoft-365-copilot
+447. https://www.microsoft.com/en/customers/story/21623-shueisha-microsoft-copilot-for-security
+448. https://www.microsoft.com/en/customers/story/21715-artificial-linux-on-azure
+449. https://www.microsoft.com/en/customers/story/21768-arla-foods-azure-open-ai-service
+450. https://www.microsoft.com/en/customers/story/21863-head-start-homes-microsoft-365-copilot
+451. https://www.microsoft.com/en/customers/story/21885-fujitsu-azure-ai-foundry
+452. https://www.microsoft.com/en/customers/story/22158-allpay-github-copilot
+453. https://www.microsoft.com/en/customers/story/22211-acwa-power-azure
+454. https://www.microsoft.com/en/customers/story/22220-verne-azure
+455. https://www.microsoft.com/en/customers/story/22306-microsoft-microsoft-copilot-studio
+456. https://www.microsoft.com/en/customers/story/22354-mitie-azure
+457. https://www.microsoft.com/en/customers/story/22427-dwf-microsoft-365-copilot
+458. https://www.microsoft.com/en/customers/story/22433-bdo-colombia-microsoft-copilot-studio
+459. https://www.microsoft.com/en/customers/story/22437-continental-ag-azure-ai-services
+460. https://www.microsoft.com/en/customers/story/22439-solutionhealth-azure
+461. https://www.microsoft.com/en/customers/story/22441-university-of-oslo-azure
+462. https://www.microsoft.com/en/customers/story/22488-beth-israel-lahey-health-azure-open-ai-service
+463. https://www.microsoft.com/en/customers/story/22489-super-hosokawa-co-ltd-azure
+464. https://www.microsoft.com/en/customers/story/22495-tradeledger-github-copilot
+465. https://www.microsoft.com/en/customers/story/22496-recordsure-azure
+466. https://www.microsoft.com/en/customers/story/22498-hypercinema-international-ltd-azure-open-ai-service
+467. https://www.microsoft.com/en/customers/story/22558-syneos-health-azure-open-ai-service
+468. https://www.microsoft.com/en/customers/story/22559-heritage-grocers-group-microsoft-fabric
+469. https://www.microsoft.com/en/customers/story/22560-ey-global-azure-open-ai-service
+470. https://www.microsoft.com/en/customers/story/22620-minster-law-azure
+471. https://www.microsoft.com/en/customers/story/22668-coca-cola-company-azure-ai-and-machine-learning
+472. https://www.microsoft.com/en/customers/story/22686-eneco-microsoft-copilot-studio
+473. https://www.microsoft.com/en/customers/story/22699-somerset-council-microsoft-365-copilot
+474. https://www.microsoft.com/en/customers/story/22701-intermountain-health-azure-open-ai-service
+475. https://www.microsoft.com/en/customers/story/22705-educational-foundation-freiburg-azure-ai-foundry
+476. https://www.microsoft.com/en/customers/story/22708-tata-projects-microsoft-security-copilot
+477. https://www.microsoft.com/en/customers/story/22718-nfu-mutual-dynamics-365-customer-service
+478. https://www.microsoft.com/en/customers/story/22734-ece-group-azure-data-factory
+479. https://www.microsoft.com/en/customers/story/22740-international-institute-for-management-development-imd-microsoft-365
+480. https://www.microsoft.com/en/customers/story/22743-harting-cloud-for-manufacturing
+481. https://www.microsoft.com/en/customers/story/22793-pko-leasing-azure-communication-services
+482. https://www.microsoft.com/en/customers/story/22803-hero-ai-azure-open-ai-service
+483. https://www.microsoft.com/en/customers/story/22830-neuroblast-azure
+484. https://www.microsoft.com/en/customers/story/22840-bank-centercredit-microsoft-fabric
+485. https://www.microsoft.com/en/customers/story/22911-kilimo-azure-virtual-network
+486. https://www.microsoft.com/en/customers/story/22961-ubs-ag-azure-ai-search
+487. https://www.microsoft.com/en/customers/story/22963-maryvit-school-education-center-azure-open-ai-service
+488. https://www.microsoft.com/en/customers/story/22964-temasek-polytechnic-microsoft-copilot-studio
+489. https://www.microsoft.com/en/customers/story/22965-sandvik-azure-open-ai-service
+490. https://www.microsoft.com/en/customers/story/22967-acumen-group-microsoft-365-business-premium
+491. https://www.microsoft.com/en/customers/story/23024-textron-aviation-azure-open-ai-service#other-stories-section
+492. https://www.microsoft.com/en/customers/story/23040-yamashita-ltd-azure
+493. https://www.microsoft.com/en/customers/story/23047-bridgestone-emea-microsoft-fabric
+494. https://www.microsoft.com/en/customers/story/23048-newmans-own-microsoft-365-copilot
+495. https://www.microsoft.com/en/customers/story/23063-opportunity-international-azure
+496. https://www.microsoft.com/en/customers/story/23065-puratos-azure-open-ai-service
+497. https://www.microsoft.com/en/customers/story/23066-montgomery-county-azure-open-ai-service
+498. https://www.microsoft.com/en/customers/story/23067-malteser-microsoft-365
+499. https://www.microsoft.com/en/customers/story/23068-national-zakat-foundation-microsoft-copilot-studio
+500. https://www.microsoft.com/en/customers/story/23070-international-workplace-group-iwg-microsoft-fabric
+501. https://www.microsoft.com/en/customers/story/23073-iceland-foods-microsoft-fabric
+502. https://www.microsoft.com/en/customers/story/23087-t-mobile-usa-microsoft-copilot-studio
+503. https://www.microsoft.com/en/customers/story/23105-tupras-microsoft-365-copilot
+504. https://www.microsoft.com/en/customers/story/23109-telefonica-brasil-azure-open-ai-service
+505. https://www.microsoft.com/en/customers/story/23123-toshiba-corporation-microsoft-viva-insights
+506. https://www.microsoft.com/en/customers/story/23132-epiq-global-microsoft-power-platform
+507. https://www.microsoft.com/en/customers/story/23133-centracare-azure
+508. https://www.microsoft.com/en/customers/story/23170-cancercenterai-azure
+509. https://www.microsoft.com/en/customers/story/23171-legora-azure-openai
+510. https://www.microsoft.com/en/customers/story/23191-fater-power-bi
+511. https://www.microsoft.com/en/customers/story/23192-public-investment-corporation-pic-azure
+512. https://www.microsoft.com/en/customers/story/23193-dtek-azure-ai-search
+513. https://www.microsoft.com/en/customers/story/23194-pegasus-airlines-azure-ai-services
+514. https://www.microsoft.com/en/customers/story/23201-rolls-royce-azure-databricks
+515. https://www.microsoft.com/en/customers/story/23209-architecht-azure-ai-bot-service
+516. https://www.microsoft.com/en/customers/story/23210-jones-lang-lasalle-azure-databricks
+517. https://www.microsoft.com/en/customers/story/23233-bucher-industries-azure-open-ai-service
+518. https://www.microsoft.com/en/customers/story/23237-quilter-microsoft-365-copilot
+519. https://www.microsoft.com/en/customers/story/23240-husch-blackwell-microsoft-copilot
+520. https://www.microsoft.com/en/customers/story/23264-anaqua-azure
+521. https://www.microsoft.com/en/customers/story/23284-miami-dade-college-microsoft-365-copilot
+522. https://www.microsoft.com/en/customers/story/23308-nationwide-building-society-microsoft-commercial-marketplace
+523. https://www.microsoft.com/en/customers/story/23309-michael-morse-law-firm-microsoft-365
+524. https://www.microsoft.com/en/customers/story/23332-games-global-microsoft-copilot-studio
+525. https://www.microsoft.com/en/customers/story/23344-members-1st-federal-credit-union-microsoft-fabric
+526. https://www.microsoft.com/en/customers/story/23374-public-trust-dynamics-365-contact-center
+527. https://www.microsoft.com/en/customers/story/23393-region-sud-microsoft-365-copilot
+528. https://www.microsoft.com/en/customers/story/23396-toastmasters-international-dynamics-365-customer-service
+529. https://www.microsoft.com/en/customers/story/23397-city-of-hope-azure-open-ai-service
+530. https://www.microsoft.com/en/customers/story/23452-zurich-schweiz-microsoft-365-copilot-for-sales
+531. https://www.microsoft.com/en/customers/story/23483-globo-microsoft-365-copilot
+532. https://www.microsoft.com/en/customers/story/23516-sayvant-azure-open-ai-service
+533. https://www.microsoft.com/en/customers/story/23518-the-craneware-group-azure-ai-foundry
+534. https://www.microsoft.com/en/customers/story/23569-neo4j-microsoft-commercial-marketplace
+535. https://www.microsoft.com/en/customers/story/23595-onedigital-azure-open-ai-service
+536. https://www.microsoft.com/en/customers/story/23596-theodora-azure-open-ai-service
+537. https://www.microsoft.com/en/customers/story/23610-fpt-software-linkedin
+538. https://www.microsoft.com/en/customers/story/23613-la-poste-microsoft-365-copilot
+539. https://www.microsoft.com/en/customers/story/23617-roland-berger-azure-open-ai-service
+540. https://www.microsoft.com/en/customers/story/23618-mondra-global-limited-azure-sql-database
+541. https://www.microsoft.com/en/customers/story/23623-fellowmind-microsoft-fabric
+542. https://www.microsoft.com/en/customers/story/23639-skylark-holdings-co-ltd-azure-ai-content-safety
+543. https://www.microsoft.com/en/customers/story/23653-gemeente-breda-microsoft-copilot
+544. https://www.microsoft.com/en/customers/story/23654-ntt-data-azure-ai-agent-service
+545. https://www.microsoft.com/en/customers/story/23680-mediatek-azure-ai-model-catalog
+546. https://www.microsoft.com/en/customers/story/23681-spotfire-azure-ai-foundry
+547. https://www.microsoft.com/en/customers/story/23688-dar-azure-open-ai-service
+548. https://www.microsoft.com/en/customers/story/23690-unifonic-microsoft-365-e5
+549. https://www.microsoft.com/en/customers/story/23691-ricoh-dynamics-365-sales
+550. https://www.microsoft.com/en/customers/story/23693-ramp-azure-ai-services
+551. https://www.microsoft.com/en/customers/story/23695-llamaindex-azure-open-ai-service
+552. https://www.microsoft.com/en/customers/story/23789-johor-corporation-azure
+553. https://www.microsoft.com/en/customers/story/23792-centro-de-la-familia-power-apps
+554. https://www.microsoft.com/en/customers/story/23797-fulton-county-schools-microsoft-365-copilot
+555. https://www.microsoft.com/en/customers/story/23821-carilion-clinic-azure
+556. https://www.microsoft.com/en/customers/story/23838-brisbane-catholic-education-microsoft-365-copilot-chat
+557. https://www.microsoft.com/en/customers/story/23850-intralox-microsoft-365-copilot-for-sales
+558. https://www.microsoft.com/en/customers/story/23866-avepoint-microsoft-365-copilot
+559. https://www.microsoft.com/en/customers/story/23869-now-optics-dynamics-365-supply-chain-management
+560. https://www.microsoft.com/en/customers/story/23870-shelo-nabel-dynamics-365
+561. https://www.microsoft.com/en/customers/story/23885-parana-bank-dynamics-365-customer-insights
+562. https://www.microsoft.com/en/customers/story/23886-ecovadis-azure-open-ai-service
+563. https://www.microsoft.com/en/customers/story/23906-chu-de-montpellier-azure
+564. https://www.microsoft.com/en/customers/story/23907-ntt-data-azure-ai-foundry
+565. https://www.microsoft.com/en/customers/story/23910-adecco-dynamics-365-finance
+566. https://www.microsoft.com/en/customers/story/23911-make-a-wish-azure
+567. https://www.microsoft.com/en/customers/story/23912-healow-azure-ai-foundry
+568. https://www.microsoft.com/en/customers/story/23918-draftwise-azure-ai-foundry
+569. https://www.microsoft.com/en/customers/story/23920-ca-county-of-kern-microsoft-purview
+570. https://www.microsoft.com/en/customers/story/23921-assembly-software-azure-ai-foundry
+571. https://www.microsoft.com/en/customers/story/23943-global-travel-collection-azure-ai-foundry
+572. https://www.microsoft.com/en/customers/story/23944-pixel-lab-azure-ai-foundry
+573. https://www.microsoft.com/en/customers/story/23947-writesonic-azure-database-for-postgresql#project-details-section
+574. https://www.microsoft.com/en/customers/story/23952-carvana-azure-kubernetes-service
+575. https://www.microsoft.com/en/customers/story/23953-accenture-azure-ai-foundry#project-details-section
+576. https://www.microsoft.com/en/customers/story/23954-nfl-combine-azure-ai-foundry
+577. https://www.microsoft.com/en/customers/story/23955-seegene-medical-foundation-azure
+578. https://www.microsoft.com/en/customers/story/23957-pacers-sports-and-entertainment-azure-ai-foundry
+579. https://www.microsoft.com/en/customers/story/23958-young-williams-azure-ai-agent-service
+580. https://www.microsoft.com/en/customers/story/23971-ece-group-microsoft-365-copilot
+581. https://www.microsoft.com/en/customers/story/23977-basevision-ag-microsoft-365-e5
+582. https://www.microsoft.com/en/customers/story/23991-lumen-microsoft-fabric
+583. https://www.microsoft.com/en/customers/story/24003-faros-ai-github-copilot
+584. https://www.microsoft.com/en/customers/story/24004-terra-mater-studios-azure-ai-foundry#project-details-section
+585. https://www.microsoft.com/en/customers/story/24010-husqvarna-hq-azure
+586. https://www.microsoft.com/en/customers/story/24028-costar-group-inc-azure-ai-foundry
+587. https://www.microsoft.com/en/customers/story/24030-the-odp-corporation-azure-ai-foundry
+588. https://www.microsoft.com/en/customers/story/24051-mews-microsoft-sentinel
+589. https://www.microsoft.com/en/customers/story/24070-infosys-microsoft-purview
+590. https://www.microsoft.com/en/customers/story/24081-sabanci-holding-microsoft-fabric
+591. https://www.microsoft.com/en/customers/story/24082-zurich-dynamics-365-contact-center
+592. https://www.microsoft.com/en/customers/story/24107-ey-global-services-limited-microsoft-purview
+593. https://www.microsoft.com/en/customers/story/24120-volkswagen-microsoft-copilot
+594. https://www.microsoft.com/en/customers/story/24130-peoplecert-hellas-ae-azure-openai
+595. https://www.microsoft.com/en/customers/story/24140-outokumpu-intelligent-data-platform
+596. https://www.microsoft.com/en/customers/story/24162-voltas-limited-azure-vmware-solution
+597. https://www.microsoft.com/en/customers/story/24169-talan-microsoft-365-copilot
+598. https://www.microsoft.com/en/customers/story/24176-d-id-azure-api-management
+599. https://www.microsoft.com/en/customers/story/24177-university-of-venda-microsoft-365-a5
+600. https://www.microsoft.com/en/customers/story/24201-capacity-azure-phi
+601. https://www.microsoft.com/en/customers/story/24205-dept-azure-ai-foundry
+602. https://www.microsoft.com/en/customers/story/24262-cognition-ai-azure
+603. https://www.microsoft.com/en/customers/story/24274-wpp-azure-openai
+604. https://www.microsoft.com/en/customers/story/24281-banco-de-la-ciudad-de-buenos-aires-microsoft-365-copilot
+605. https://www.microsoft.com/en/customers/story/24299-commonwealth-bank-of-australia-microsoft-365-copilot
+606. https://www.microsoft.com/en/customers/story/24300-hughes-azure-ai-foundry
+607. https://www.microsoft.com/en/customers/story/24302-arup-group-microsoft-entra-verified-id
+608. https://www.microsoft.com/en/customers/story/24303-hexagon-azure
+609. https://www.microsoft.com/en/customers/story/24324-art-basel-azure-ai-foundry
+610. https://www.microsoft.com/en/customers/story/24328-kvl-bauconsult-microsoft-teams
+611. https://www.microsoft.com/en/customers/story/24329-bkw-fmb-energie-ag-azure-ai-foundry
+612. https://www.microsoft.com/en/customers/story/24333-bupa-apac-microsoft-365-copilot
+613. https://www.microsoft.com/en/customers/story/24336-winwire-technologies-azure
+614. https://www.microsoft.com/en/customers/story/24341-commercial-bank-of-dubai-microsoft-365-copilot
+615. https://www.microsoft.com/en/customers/story/24350-capita-microsoft-365-copilot
+616. https://www.microsoft.com/en/customers/story/24352-geographic-solutions-azure-openai
+617. https://www.microsoft.com/en/customers/story/24359-upgrad-education-private-limited-microsoft-365-copilot
+618. https://www.microsoft.com/en/customers/story/24372-koninklijke-ahold-delhaize-azure-openai
+619. https://www.microsoft.com/en/customers/story/24385-worten-azure-openai
+620. https://www.microsoft.com/en/customers/story/24386-central-provident-fund-board-azure-databricks
+621. https://www.microsoft.com/en/customers/story/24387-skema-business-school-microsoft-365-copilot
+622. https://www.microsoft.com/en/customers/story/24389-saxo-bank-github-copilot
+623. https://www.microsoft.com/en/customers/story/24412-nexj-health-azure-ai-foundry
+624. https://www.microsoft.com/en/customers/story/24454-sanoma-azure-ai-speech
+625. https://www.microsoft.com/en/customers/story/24455-generali-github-copilot
+626. https://www.microsoft.com/en/customers/story/24525-cleverit-group-azure-ai-foundry
+627. https://www.microsoft.com/en/customers/story/24526-kuka-azure-ai-foundry-models
+628. https://www.microsoft.com/en/customers/story/24530-layerx-azure-ai-foundry
+629. https://www.microsoft.com/en/customers/story/24557-mediamarktsaturn-azure-openai
+630. https://www.microsoft.com/en/customers/story/24561-bradesco-bank-azure-openai
+631. https://www.microsoft.com/en/customers/story/24577-catrion-microsoft-power-platform
+632. https://www.microsoft.com/en/customers/story/24579-kuwait-credit-bank-microsoft-intune
+633. https://www.microsoft.com/en/customers/story/24581-sandia-national-laboratories-azure
+634. https://www.microsoft.com/en/customers/story/24583-vail-health-azure
+635. https://www.microsoft.com/en/customers/story/24604-aker-bp-microsoft-365-copilot
+636. https://www.microsoft.com/en/customers/story/24612-teamsystem-microsoft-power-platform
+637. https://www.microsoft.com/en/customers/story/24613-indiana-universitys-kelley-school-of-business-microsoft-365-copilot
+638. https://www.microsoft.com/en/customers/story/24628-capitaland-investment-cli-azure-devops
+639. https://www.microsoft.com/en/customers/story/24629-national-gallery-singapore-azure-openai
+640. https://www.microsoft.com/en/customers/story/24639-british-medical-association-azure
+641. https://www.microsoft.com/en/customers/story/24641-rau-consultants-microsoft-365-copilot
+642. https://www.microsoft.com/en/customers/story/24650-ballard-spahr-azure-openai
+643. https://www.microsoft.com/en/customers/story/24663-disparti-law-group-microsoft-365
+644. https://www.microsoft.com/en/customers/story/24667-prague-airport-microsoft-365-copilot
+645. https://www.microsoft.com/en/customers/story/24670-helleniq-energy-microsoft-365-copilot
+646. https://www.microsoft.com/en/customers/story/24678-ifs-microsoft-fabric
+647. https://www.microsoft.com/en/customers/story/24709-la-redoute-azure-openai
+648. https://www.microsoft.com/en/customers/story/719345-minsur-artifical-intelligence-azure-cognitive-services-machine-learning-mining-oil-arkano-peru
+649. https://www.microsoft.com/en/customers/story/753060-lowell-banking-capital-markets-azure-cognitive-services
+650. https://www.microsoft.com/en/customers/story/754836-bbc-media-entertainment-azure
+651. https://www.microsoft.com/en/customers/story/838350-vodafone-telecom-azure-cognitive-services
+652. https://www.microsoft.com/ja-jp/customers/story/18738-konica-minolta-azure-open-ai-service
+653. https://www.microsoft.com/ko-kr/customers/story/19276-kt-onedrive
+654. https://www.microsoft.com/ko-kr/customers/story/19277-krafton-microsoft-365
+655. https://www.microsoft.com/ko-kr/customers/story/20335-law-and-company-azure-functions
+656. https://www.microsoft.com/zh-cn/customers/story/1791859496343328428-joyson-microsoft-copilot-for-microsoft-365-discrete-manufacturing-zh-china

@@ -35,6 +35,10 @@ if __name__ == "__main__":
                     interface.show_technology_usage()
             elif command == 'outcomes':
                 interface.show_business_outcomes()
+            elif command == 'languages':
+                # Import and show language statistics
+                from src.utils.language_stats import print_language_statistics
+                print_language_statistics()
             else:
                 print("Usage: python query_stories.py [command] [args]")
                 print("\nCommands:")
@@ -43,6 +47,7 @@ if __name__ == "__main__":
                 print("  customer <name>      - Show customer details")
                 print("  tech [technology]    - Show technology usage")
                 print("  outcomes             - Show business outcomes")
+                print("  languages            - Show language distribution statistics")
                 print("  dedup                - Run deduplication analysis")
                 print("\nOr run without arguments for interactive mode")
         else:

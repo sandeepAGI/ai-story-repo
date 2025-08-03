@@ -19,12 +19,14 @@ This project scrapes, processes, and analyzes AI customer stories to provide com
 - **Claude AI Integration**: Automated extraction of structured data from raw content
 - **4-Dimensional Gen AI Classification**: Superpowers, Business Impacts, Adoption Enablers, Business Functions
 - **Content Quality Scoring**: Automated assessment of story completeness and detail
+- **Language Detection System**: Automated detection of story language with confidence scoring
 - **Deduplication System**: Two-tiered approach with URL-based insertion prevention and post-processing analysis
 
 ### 📊 **Rich Analytics**
 - **Business Outcomes Tracking**: Quantified metrics (cost savings, time reduction, productivity gains)
 - **Technology Usage Patterns**: AI services and tools mentioned across stories
 - **Industry Analysis**: Sector-specific AI adoption trends
+- **Language Distribution Analytics**: Multi-language story analysis with confidence metrics
 - **Competitive Intelligence**: Cross-provider comparison and analysis
 
 ### 🛠️ **Production-Ready Architecture**
@@ -76,19 +78,23 @@ python query_stories.py search "machine learning"
 
 # Show detailed analytics
 python show_stories.py --analytics
+
+# View language distribution statistics
+python query_stories.py languages
 ```
 
 ## Database Schema
 
 ### Core Tables
 - **`sources`**: AI provider information and scraping metadata
-- **`customer_stories`**: Main stories with full content and extracted data
+- **`customer_stories`**: Main stories with full content, extracted data, and language information
 - **`technologies`**: AI services and tools mentioned in stories
 - **`story_metrics`**: Quantified business outcomes and metrics
 
 ### Advanced Features
 - **Full-text search** with PostgreSQL tsvector
 - **JSONB storage** for flexible raw content and extracted data
+- **Language detection** with URL pattern analysis and content-based detection
 - **Cross-source customer profiling** for competitive analysis
 - **Publication date estimation** with confidence levels
 
@@ -100,17 +106,52 @@ python show_stories.py --analytics
 3. **Adoption Enablers** (Prerequisites): Data & Digital, Innovation Culture, Ecosystem Partners, Policy & Governance, Risk Management
 4. **Business Function** (Context): Marketing, Sales, Production, Distribution, Service, Finance & Accounting
 
+## Language Detection System
+
+### Detection Methods
+1. **URL Pattern Analysis** (High Confidence: 0.95)
+   - Microsoft: `/ja-jp/`, `/ko-kr/`, `/zh-cn/` patterns
+   - Other providers: Similar locale-based URL patterns
+
+2. **Content Analysis** (Medium Confidence: 0.70)
+   - Character range detection for CJK languages
+   - Unicode block analysis for East Asian characters
+
+3. **Default Assignment** (Low Confidence: 0.30)
+   - English default for undetectable cases
+   - Maintains backward compatibility
+
+### Language Statistics Command
+```bash
+# View comprehensive language distribution
+python query_stories.py languages
+```
+
+**Sample Output**:
+- Overall distribution by language with percentages
+- Language breakdown by AI provider source
+- Top non-English stories with confidence scores
+- Language detection method statistics
+
+### Database Integration
+- **Language Fields**: `detected_language`, `language_detection_method`, `language_confidence`
+- **Automatic Processing**: All new stories get language detection
+- **Query Support**: Filter and analyze stories by language
+- **Analytics Integration**: Language distribution in dashboard
+
 ## Current Database Stats
 
-- **900+ High-Quality Stories** across all 5 major AI providers (with Phase 5 Microsoft enhancement)
+- **850+ High-Quality Stories** across all 5 major AI providers (with Phase 5 Microsoft enhancement)
 - **100% Data Completeness** with zero missing critical fields
 - **Average Quality Score**: 0.863 (range: 0.70-0.90)
+- **Multi-Language Support**: Language detection with 5 non-English stories identified
 - **Rich Business Outcomes**: All stories contain quantified metrics
 - **Date Range**: 2016-2025 with transparent estimated vs. actual dates
 
 ### Enhanced Microsoft Collection (Phase 5)
 - **Pre-Phase 5**: 60 Microsoft stories
-- **Post-Phase 5**: ~700 Microsoft stories (10x improvement)
+- **Post-Phase 5**: 648 Microsoft stories (10x improvement)
+- **Multi-Language Stories**: 5 non-English stories (3 Korean, 1 Japanese, 1 Chinese)
 - **Source**: Microsoft's official 1000+ AI stories blog post
 - **Method**: Pre-collected URL approach with smart fallback
 
@@ -151,6 +192,8 @@ ai_customer_stories/
 │   ├── scrapers/          # Provider-specific scrapers
 │   ├── ai_integration/    # Claude AI processing
 │   └── utils/             # Utilities and helpers
+│       ├── language_detection.py    # Language detection system
+│       └── language_stats.py        # Language analytics
 ├── tests/                 # Test frameworks
 ├── query_stories.py       # Interactive query interface
 ├── update_all_databases.py # Management utility
@@ -188,6 +231,7 @@ This project uses a modular architecture with clear separation between scraping,
 - ✅ **Phase 3**: Gen AI classification enhancement (completed)
 - ✅ **Phase 4**: Web dashboard (completed)
 - ✅ **Phase 5**: Enhanced Microsoft collection - 10x improvement (completed)
+- ✅ **Phase 6**: Language detection system integration (completed)
 
 ## License
 

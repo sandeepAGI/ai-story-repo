@@ -1,3 +1,45 @@
+GEN_AI_DETERMINATION_PROMPT = """
+Analyze this AI customer story and determine if it describes Generative AI or Traditional AI technology.
+
+**Generative AI (GenAI) indicators:**
+- Large Language Models: ChatGPT, Claude, GPT-4, Gemini, LLaMA, PaLM, etc.
+- Content generation: AI writing, image generation, code generation, creative content
+- Conversational AI: Natural language chatbots, AI assistants, voice interfaces
+- Text-to-X generation: Text-to-image (DALL-E, Midjourney, Stable Diffusion), text-to-code, text-to-speech
+- AI coding tools: GitHub Copilot, Code Whisperer, Cursor, etc.
+- Creative AI: Music generation, video generation, art creation
+- Timeline: Typically technologies available 2022+ (though some earlier)
+- Key terms: "generate", "create", "write", "prompt", "foundation models", "transformer", "generative"
+
+**Traditional AI (Classical ML/AI) indicators:**
+- Machine Learning: Supervised learning, unsupervised learning, reinforcement learning
+- Computer Vision: Object detection, image classification, OCR (without generative aspects)
+- Predictive Analytics: Forecasting, demand prediction, risk scoring
+- Recommendation Systems: Product recommendations, content filtering
+- Process Automation: RPA, workflow automation (non-generative)
+- Data Analytics: Business intelligence, data mining, statistical analysis
+- Speech Recognition: Speech-to-text (without generation)
+- Timeline: Technologies commonly available pre-2022
+- Key terms: "predict", "classify", "detect", "recommend", "automate", "analyze"
+
+**Decision Guidelines:**
+- If story mentions LLMs, content generation, or conversational AI → GenAI
+- If story focuses on prediction, classification, or traditional automation → Traditional AI
+- Mixed cases: Choose based on the PRIMARY technology/use case described
+- When in doubt: Look at publish date - post-2022 stories are more likely GenAI
+
+**Story content to analyze:**
+{story_content}
+
+**Return only a JSON object:**
+{{
+  "is_gen_ai": true/false,
+  "confidence": 0.0-1.0,
+  "reasoning": "Brief explanation of the determination",
+  "key_indicators": ["List of specific technologies, terms, or concepts that influenced the decision"]
+}}
+"""
+
 EXTRACTION_PROMPT = """
 Analyze this AI customer story and extract structured information. Return a valid JSON object with the following structure:
 
@@ -43,7 +85,8 @@ Analyze this AI customer story and extract structured information. Return a vali
     "enablers": 0.0-1.0,
     "function": 0.0-1.0
   }},
-  "last_processed": "timestamp"
+  "last_processed": "timestamp",
+  "ai_type": "generative"
 }}
 
 Guidelines for extraction:
@@ -65,30 +108,30 @@ Guidelines for extraction:
    - medium: Technology timeline or contextual clues provide reasonable estimate
    - low: Vague indicators or educated guess based on technology maturity
 
-10. Gen AI Classification Guidelines:
+10. Gen AI Classification Guidelines (Aileron GenAI SuperPowers Framework):
     **Superpowers** - What AI capabilities are being used:
-    - code: Programming, software development, code generation/review
-    - create_content: Text, images, videos, marketing materials, documentation
-    - automate_with_agents: AI agents, workflows, process automation
-    - find_data_insights: Analytics, pattern recognition, data discovery, recommendations
-    - research: Information gathering, market research, literature review
-    - brainstorm: Ideation, creative thinking, problem solving
-    - natural_language: Conversational AI, language understanding, translation
+    - code: Design, develop, test and deploy working applications using GenAI tools like Claude Code and GitHub CoPilot to write, understand, test, and optimize code across the software development lifecycle
+    - create_content: Write, illustrate, and produce original or derivative works, such as emails, articles, ads, videos, and graphics, using GenAI tools
+    - automate_with_agents: Train AI agents to autonomously perform repetitive and manual tasks, make intelligent recommendations, and apply contextual judgment at scale - leveraging natural language, learning capabilities, and low-code/no-code visual tools for seamless integration and control
+    - find_data_insights: Explore your data using natural language prompts to search, summarize, analyze and create dynamic reports and graphics to represent new insights
+    - research: Guide AI Agents to structure, conduct, synthesize and validate research using curated sources of information or the resources of the internet - while maintaining relevance, reliability, and transparency
+    - brainstorm: Use AI as a thought partner to explore challenging problems or ideas - quickly generating hypotheses, testing them with public or private data, and designing a systematic path to informed decisions
+    - natural_language: GenAI tools increasingly offer the ability to add a natural language interface to almost any technology or experience. If you can say it, you can probably get AI to help you do it
     
     **Business Impacts** - What outcomes were achieved:
-    - innovation: New products, services, or breakthrough capabilities
-    - efficiency: Streamlined processes, reduced waste, optimized operations
-    - speed: Faster time-to-market, accelerated processes, quick responses
-    - quality: Improved accuracy, better outcomes, enhanced standards
-    - client_satisfaction: Better customer experience, satisfaction scores
-    - risk_reduction: Lower risks, better compliance, improved security
+    - innovation: Create new revenue streams by developing novel products, services, or business models. Enhance delivery capabilities to support rapid scale and differentiated value
+    - efficiency: Lower the cost of delivering products and services through automation, simplification, scalable operations, and optimized resource allocation
+    - speed: Accelerate time to value by enabling faster decision-making, shortening cycle times, and automating key processes
+    - quality: Improve the consistency and reliability of deliverables through enhanced review, validation, and quality assurance mechanisms
+    - client_satisfaction: Enhance client satisfaction by delivering more personalized, responsive, and high-value experiences across products and services
+    - risk_reduction: Reduce business and operational risk by improving the design, execution, and real-time monitoring of processes, performance, and controls
     
     **Adoption Enablers** - What organizational factors enabled success:
-    - data_and_digital: Data infrastructure, digital maturity, tech stack
-    - innovation_culture: Change readiness, experimentation mindset, leadership support
-    - ecosystem_partners: Vendor relationships, system integrators, consultants
-    - policy_and_governance: Guidelines, standards, approval processes
-    - risk_management: Security measures, compliance frameworks, risk controls
+    - data_and_digital: Understanding your data estate, making it secure and accessible to clients and employees via digital tools and channels is often a prerequisite to AI excellence. Perfection is often the enemy of the good, though
+    - innovation_culture: AI innovation thrives on experimentation and experiential learning. Teams and Individuals must be empowered to explore new ideas, take calculated risks, and learn from failure in a supportive environment
+    - ecosystem_partners: The wide and expanding range of AI solutions and service providers is overwhelming, and progress often depends on making a few key decisions about the tools and resources you will need to transform your business. Managing vendor risk and relationships is becoming more critical every day
+    - policy_and_governance: Clear policies and governance frameworks are essential to guide responsible AI use. From defining acceptable use and data handling standards to managing transparency and accountability, strong governance builds trust and protects the business
+    - risk_management: Adopting AI at scale requires reevaluating risks across data privacy, model bias, regulatory compliance, and operational integrity. Robust risk management not only ensures effective AI outcomes, but is also essential for building and maintaining trust with all key stakeholders
     
     **Business Function** - Which department/area benefited (choose PRIMARY):
     - marketing: Brand, campaigns, content marketing, market research
@@ -119,6 +162,69 @@ Guidelines for extraction:
     - 0.7-0.9: Strong indicators and context clues
     - 0.4-0.6: Some evidence but requires interpretation
     - 0.0-0.3: Weak evidence or educated guess
+
+Story content to analyze:
+
+{story_content}
+
+Return only the JSON object, no additional text or explanation.
+"""
+
+TRADITIONAL_AI_EXTRACTION_PROMPT = """
+Analyze this Traditional AI customer story and extract structured information. Return a valid JSON object with the following structure:
+
+{{
+  "customer_name": "Company name",
+  "industry": "Industry sector (e.g., healthcare, finance, technology, retail, manufacturing, etc.)",
+  "company_size": "startup, mid-market, enterprise, or government",  
+  "summary": "2-3 sentence summary of the story",
+  "problem_statement": "What challenge or problem did the customer face?",
+  "solution_description": "How did AI/ML/cloud services solve the problem?",
+  "technologies_used": ["List of specific AI services, models, or technologies mentioned"],
+  "business_outcomes": [
+    {{
+      "type": "cost_reduction|time_savings|revenue_increase|productivity_gain|efficiency_improvement|accuracy_improvement|other",
+      "value": numeric_value_if_available,
+      "unit": "percent|dollars|hours|minutes|days|x_times_faster|other",
+      "description": "Detailed description of the outcome"
+    }}
+  ],
+  "use_cases": ["List of AI use case categories like customer_service, document_processing, automation, analytics, etc."],
+  "key_quote": "Most impactful customer quote from the story (if available)",
+  "implementation_timeline": "How long implementation took (if mentioned)",
+  "company_info": {{
+    "estimated_size": "startup|mid-market|enterprise|government",
+    "industry_sector": "More specific industry classification", 
+    "geography": "Geographic region if mentioned (e.g., north_america, europe, asia, global)"
+  }},
+  "content_quality_score": 0.0-1.0,
+  "estimated_publish_date": "YYYY-MM-DD or null if no date context available",
+  "date_confidence": "high|medium|low - confidence in estimated date",
+  "date_reasoning": "Brief explanation of how date was estimated",
+  "ai_type": "traditional",
+  "last_processed": "timestamp"
+}}
+
+Guidelines for extraction:
+1. Focus on extracting specific, quantified business outcomes and metrics
+2. If numeric values are mentioned (like "50% reduction" or "$2M savings"), include them in business_outcomes
+3. Be conservative with company_size estimation - use available context clues
+4. For content_quality_score: 1.0 = very detailed with specific metrics, 0.5 = moderate detail, 0.0 = vague or minimal content
+5. If information is not available, use null or empty arrays appropriately
+6. Extract ALL technologies mentioned, including specific AI models, cloud services, databases, etc.
+7. Use lowercase with underscores for categorical values (e.g., "customer_service" not "Customer Service")
+8. For estimated_publish_date: Look for date clues in content like:
+   - "In 2023, we implemented..." or "Since early 2024..."
+   - Technology releases mentioned (e.g., "using TensorFlow" suggests 2015+, "PyTorch" suggests 2016+)
+   - Events referenced (conferences, product launches, etc.)
+   - Business context (pandemic references suggest 2020-2022, etc.)
+   - If no date context exists, use null
+9. Date confidence levels:
+   - high: Explicit dates or clear time references in content
+   - medium: Technology timeline or contextual clues provide reasonable estimate
+   - low: Vague indicators or educated guess based on technology maturity
+10. This is a Traditional AI story - do NOT include Gen AI superpowers or Aileron framework fields
+11. Focus on traditional AI/ML capabilities: prediction, classification, automation, analytics, etc.
 
 Story content to analyze:
 

@@ -50,6 +50,11 @@ class CustomerStory:
     publish_date_estimated: bool = False
     publish_date_confidence: Optional[str] = None  # 'high', 'medium', 'low'
     publish_date_reasoning: Optional[str] = None
+    is_gen_ai: Optional[bool] = None
+    # Language detection fields  
+    detected_language: Optional[str] = 'English'
+    language_detection_method: Optional[str] = 'default'
+    language_confidence: Optional[float] = 0.30
     # Gen AI Classification fields (not stored in DB yet - only in extracted_data)
     gen_ai_superpowers: Optional[List[str]] = None
     superpowers_other: Optional[str] = None
@@ -90,8 +95,9 @@ class DatabaseOperations:
             source_id, customer_name, title, url, content_hash,
             industry, company_size, use_case_category,
             raw_content, extracted_data, publish_date,
-            publish_date_estimated, publish_date_confidence, publish_date_reasoning
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            publish_date_estimated, publish_date_confidence, publish_date_reasoning,
+            is_gen_ai, detected_language, language_detection_method, language_confidence
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
         """
         
@@ -109,7 +115,11 @@ class DatabaseOperations:
             story.publish_date,
             story.publish_date_estimated,
             story.publish_date_confidence,
-            story.publish_date_reasoning
+            story.publish_date_reasoning,
+            story.is_gen_ai,
+            story.detected_language,
+            story.language_detection_method,
+            story.language_confidence
         )
         
         with self.db.get_cursor() as cursor:
@@ -138,7 +148,8 @@ class DatabaseOperations:
                     extracted_data=row['extracted_data'],
                     scraped_date=row['scraped_date'],
                     last_updated=row['last_updated'],
-                    publish_date=row['publish_date']
+                    publish_date=row['publish_date'],
+                    is_gen_ai=row.get('is_gen_ai')
                 )
             return None
     
@@ -150,6 +161,50 @@ class DatabaseOperations:
                 (json.dumps(extracted_data), story_id)
             )
             logger.info(f"Updated extracted data for story ID: {story_id}")
+    
+    def update_story_gen_ai_flag(self, story_id: int, is_gen_ai: bool):
+        """Update is_gen_ai boolean field for a story"""
+        with self.db.get_cursor() as cursor:
+            cursor.execute(
+                "UPDATE customer_stories SET is_gen_ai = %s, last_updated = CURRENT_TIMESTAMP WHERE id = %s",
+                (is_gen_ai, story_id)
+            )
+            logger.info(f"Updated is_gen_ai flag to {is_gen_ai} for story ID: {story_id}")
+    
+    def get_all_stories_for_reprocessing(self) -> List[Dict]:
+        """Get all stories that need reprocessing with new Gen AI classification"""
+        with self.db.get_cursor() as cursor:
+            cursor.execute("""
+                SELECT id, customer_name, title, raw_content, extracted_data, publish_date, is_gen_ai
+                FROM customer_stories 
+                WHERE raw_content IS NOT NULL
+                ORDER BY id
+            """)
+            return cursor.fetchall()
+    
+    def remove_gen_ai_fields_from_traditional_ai(self, story_id: int, extracted_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Remove Gen AI specific fields from Traditional AI stories"""
+        # Fields that should only exist in Gen AI stories
+        gen_ai_only_fields = [
+            'gen_ai_superpowers', 'superpowers_other',
+            'business_impacts', 'impacts_other', 
+            'adoption_enablers', 'enablers_other',
+            'business_function', 'function_other',
+            'classification_confidence'
+        ]
+        
+        cleaned_data = extracted_data.copy()
+        removed_fields = []
+        
+        for field in gen_ai_only_fields:
+            if field in cleaned_data:
+                del cleaned_data[field]
+                removed_fields.append(field)
+        
+        if removed_fields:
+            logger.info(f"Removed Gen AI fields from Traditional AI story {story_id}: {removed_fields}")
+        
+        return cleaned_data
     
     def check_story_exists(self, url: str) -> bool:
         """Check if story already exists by URL"""
@@ -301,7 +356,11 @@ class DatabaseOperations:
             extracted_data=row['extracted_data'],
             scraped_date=row['scraped_date'],
             last_updated=row['last_updated'],
-            publish_date=row['publish_date']
+            publish_date=row['publish_date'],
+            is_gen_ai=row.get('is_gen_ai'),
+            detected_language=row.get('detected_language', 'English'),
+            language_detection_method=row.get('language_detection_method', 'default'),
+            language_confidence=row.get('language_confidence', 0.30)
         )
     
     def _row_to_discovered_url(self, row: Dict) -> DiscoveredUrl:

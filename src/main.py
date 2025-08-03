@@ -4,6 +4,7 @@ from typing import List, Dict, Any
 from src.config import Config
 from src.database.connection import DatabaseConnection
 from src.database.models import DatabaseOperations, CustomerStory
+from src.utils.language_detection import detect_story_language
 from src.scrapers.anthropic_scraper import AnthropicScraper
 # OpenAI scraper removed - handled by process_openai_html.py
 from src.scrapers.microsoft_scraper import MicrosoftScraper
@@ -214,6 +215,9 @@ class AIStoriesProcessor:
                 # Extract data from Claude processing
                 extracted_data = story.get('extracted_data', {})
                 
+                # Extract is_gen_ai flag from extracted data
+                is_gen_ai = extracted_data.get('is_gen_ai', None)
+                
                 # Convert publish_date string to date object if available
                 publish_date = None
                 publish_date_estimated = False
@@ -257,8 +261,21 @@ class AIStoriesProcessor:
                     publish_date=publish_date,
                     publish_date_estimated=publish_date_estimated,
                     publish_date_confidence=publish_date_confidence,
-                    publish_date_reasoning=publish_date_reasoning
+                    publish_date_reasoning=publish_date_reasoning,
+                    is_gen_ai=is_gen_ai
                 )
+                
+                # Detect language for the story
+                language_info = detect_story_language(
+                    story['url'], 
+                    story.get('title', ''),
+                    story.get('raw_content', {}).get('text', '')
+                )
+                
+                # Update customer_story with language information
+                customer_story.detected_language = language_info['normalized']
+                customer_story.language_detection_method = language_info['method']
+                customer_story.language_confidence = language_info['confidence']
                 
                 # Save to database
                 story_id = self.db_ops.insert_customer_story(customer_story)

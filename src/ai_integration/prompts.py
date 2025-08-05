@@ -1,43 +1,83 @@
 GEN_AI_DETERMINATION_PROMPT = """
 Analyze this AI customer story and determine if it describes Generative AI or Traditional AI technology.
 
-**Generative AI (GenAI) indicators:**
-- Large Language Models: ChatGPT, Claude, GPT-4, Gemini, LLaMA, PaLM, etc.
-- Content generation: AI writing, image generation, code generation, creative content
-- Conversational AI: Natural language chatbots, AI assistants, voice interfaces
-- Text-to-X generation: Text-to-image (DALL-E, Midjourney, Stable Diffusion), text-to-code, text-to-speech
-- AI coding tools: GitHub Copilot, Code Whisperer, Cursor, etc.
-- Creative AI: Music generation, video generation, art creation
-- Timeline: Typically technologies available 2022+ (though some earlier)
-- Key terms: "generate", "create", "write", "prompt", "foundation models", "transformer", "generative"
+**CRITICAL: Use evidence-based classification, not just keywords**
 
-**Traditional AI (Classical ML/AI) indicators:**
-- Machine Learning: Supervised learning, unsupervised learning, reinforcement learning
-- Computer Vision: Object detection, image classification, OCR (without generative aspects)
-- Predictive Analytics: Forecasting, demand prediction, risk scoring
-- Recommendation Systems: Product recommendations, content filtering
-- Process Automation: RPA, workflow automation (non-generative)
-- Data Analytics: Business intelligence, data mining, statistical analysis
-- Speech Recognition: Speech-to-text (without generation)
-- Timeline: Technologies commonly available pre-2022
-- Key terms: "predict", "classify", "detect", "recommend", "automate", "analyze"
+**DEFINITIVE Generative AI (GenAI) indicators:**
+- **LLM Platforms**: Vertex AI, Gemini, GPT-4/3.5, Claude, ChatGPT, Bard, PaLM, LLaMA
+- **Generative Technologies**: Large Language Models, Foundation Models, Transformer Models
+- **Generative Capabilities**: Content generation, text generation, code generation, creative writing, natural language generation
+- **Modern GenAI Services**: Vertex AI Search, Gemini API, Document AI with generation, AI-powered content creation
 
-**Decision Guidelines:**
-- If story mentions LLMs, content generation, or conversational AI → GenAI
-- If story focuses on prediction, classification, or traditional automation → Traditional AI
-- Mixed cases: Choose based on the PRIMARY technology/use case described
-- When in doubt: Look at publish date - post-2022 stories are more likely GenAI
+**DEFINITIVE Traditional AI indicators:**
+- **Classic ML**: AutoML Tables, supervised learning models, classification/regression only, clustering
+- **Rule-based Systems**: Decision trees, if-then logic, scripted responses, keyword matching
+- **Traditional Analytics**: BigQuery analytics, data warehousing, business intelligence dashboards
+- **Traditional Services**: Cloud Vision OCR, Speech-to-Text API, basic recommendation engines
+
+**AMBIGUOUS terms requiring evidence (DO NOT auto-classify):**
+- **Virtual Assistant**: Could be rule-based (Traditional) OR LLM-powered (GenAI)
+- **Chatbot**: Could be scripted (Traditional) OR conversational AI (GenAI)  
+- **Document Processing**: Could be OCR (Traditional) OR AI generation (GenAI)
+- **Speech Recognition**: Could be basic STT (Traditional) OR conversational (GenAI)
+- **Personalization**: Could be basic recommendations (Traditional) OR AI-generated content (GenAI)
+
+**For ambiguous terms, look for EVIDENCE:**
+
+*GenAI Evidence:*
+- Mentions LLM platforms (Vertex AI, Gemini, GPT, etc.)
+- Generative capabilities (creates content, writes text, generates responses)
+- Natural conversation, contextual understanding, creative responses
+- Modern timeframe (2023+) with advanced AI features
+- Terms: "prompt engineering", "foundation models", "conversational AI", "generates"
+
+*Traditional AI Evidence:*
+- Rule-based logic, predefined responses, decision trees
+- Classification/prediction only, no content generation
+- Keyword matching, template responses, scripted interactions
+- Statistical analysis, pattern matching, supervised learning
+- Terms: "rule-based", "scripted", "predefined", "classification model"
+
+**Decision Framework:**
+1. **Check for definitive indicators first** → Classify immediately
+2. **If ambiguous terms found** → Look for supporting evidence
+3. **Strong evidence present** → Classify with medium confidence
+4. **Insufficient evidence** → Mark as unclear/requires human review
+
+**Timeline Context:**
+- Pre-2022: Likely Traditional AI unless definitive GenAI evidence
+- 2023+: Could be either, examine specific technologies mentioned
+- Don't assume recency = GenAI without supporting evidence
 
 **Story content to analyze:**
 {story_content}
 
-**Return only a JSON object:**
+**Return only a valid JSON object with proper formatting:**
+
+CRITICAL JSON FORMATTING RULES:
+- All array elements must be quoted strings only
+- No unquoted parenthetical comments in arrays  
+- No trailing commas
+- Use proper JSON syntax throughout
+
 {{
   "is_gen_ai": true/false,
   "confidence": 0.0-1.0,
-  "reasoning": "Brief explanation of the determination",
-  "key_indicators": ["List of specific technologies, terms, or concepts that influenced the decision"]
+  "classification_method": "definitive_genai|definitive_traditional|evidence_based_genai|evidence_based_traditional|insufficient_evidence",
+  "reasoning": "Detailed explanation of the determination with specific evidence cited",
+  "key_indicators": ["Technology 1", "Technology 2", "Capability 3"],
+  "ambiguous_terms_found": ["AI", "Virtual Assistant", "Chatbot"],
+  "supporting_evidence": ["Evidence 1", "Evidence 2", "Evidence 3"],
+  "confidence_factors": {{
+    "definitive_indicators": ["Indicator 1", "Indicator 2"],
+    "supporting_context": ["Context 1", "Context 2"],
+    "uncertainty_factors": ["Uncertainty 1", "Uncertainty 2"]
+  }}
 }}
+
+EXAMPLE - Correct array formatting:
+✅ CORRECT: "ambiguous_terms_found": ["AI", "Virtual Assistant"]
+❌ INCORRECT: "ambiguous_terms_found": ["AI" (generic mention), "Virtual Assistant"]
 """
 
 EXTRACTION_PROMPT = """

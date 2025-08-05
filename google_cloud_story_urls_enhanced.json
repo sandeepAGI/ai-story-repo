@@ -1,0 +1,156 @@
+{
+  "customer_story_urls": [
+    "https://cloud.google.com/customers/featured/target",
+    "https://cloud.google.com/customers/bbva",
+    "https://cloud.google.com/customers/spotify",
+    "https://cloud.google.com/customers/featured/carrefour",
+    "https://cloud.google.com/customers/wellsfargo",
+    "https://cloud.google.com/customers/etsy",
+    "https://cloud.google.com/customers/intesasanpaolo",
+    "https://cloud.google.com/customers/tim",
+    "https://cloud.google.com/customers/leroy-merlin",
+    "https://cloud.google.com/customers/millennium-bcp",
+    "https://cloud.google.com/customers/super-pharm",
+    "https://cloud.google.com/customers/box",
+    "https://cloud.google.com/customers/globo",
+    "https://cloud.google.com/customers/radisson",
+    "https://cloud.google.com/customers/carrefour",
+    "https://cloud.google.com/customers/bestbuy",
+    "https://cloud.google.com/customers/bancobv",
+    "https://cloud.google.com/customers/city-of-memphis",
+    "https://cloud.google.com/customers/toyota",
+    "https://cloud.google.com/customers/fenc",
+    "https://cloud.google.com/customers/wayfair"
+  ],
+  "blog_story_urls": [
+    "https://cloud.google.com/blog/products/ai-machine-learning/snap-inc-uses-google-cloud-tpu-for-deep-learning-recommendation-models/",
+    "https://cloud.google.com/blog/topics/hybrid-cloud/toyota-ai-platform-manufacturing-efficiency",
+    "https://cloud.google.com/blog/products/storage-data-transfer/toyota-cuts-ai-training-time-with-cloud-storage-fuse-file-cache/",
+    "https://cloud.google.com/blog/products/ai-machine-learning/how-vertex-ai-helps-wayfair-achieve-real-time-model-serving/",
+    "https://cloud.google.com/blog/products/ai-machine-learning/wayfair-accelerating-mlops-to-power-great-experiences-at-scale",
+    "https://cloud.google.com/blog/transform/reinventing-personal-finance-customer-experience-wells-fargo-fargo-chat",
+    "https://cloud.google.com/blog/transform/bayer-life-sciences-gen-ai-healthcare-efficiency-interview"
+  ],
+  "company_partnerships": [
+    {
+      "company": "Target",
+      "url": "https://cloud.google.com/customers/featured/target",
+      "description": "AI-powered retail solutions, personalized experiences, 25% annual revenue growth"
+    },
+    {
+      "company": "BBVA", 
+      "url": "https://cloud.google.com/customers/bbva",
+      "description": "Banking AI transformation, Google Workspace with Gemini, 100,000+ employees worldwide"
+    },
+    {
+      "company": "Spotify",
+      "url": "https://cloud.google.com/customers/spotify", 
+      "description": "Machine learning personalization, BigQuery for data analysis, 248M users"
+    },
+    {
+      "company": "Samsung",
+      "partnership_type": "Multi-year AI partnership",
+      "description": "Gemini Pro and Imagen 2 on Galaxy S24 series, first Google Cloud partner to deploy these models"
+    },
+    {
+      "company": "Carrefour",
+      "url": "https://cloud.google.com/customers/featured/carrefour",
+      "description": "Retail AI optimization, supply chain automation, 40% cost reduction, 45% energy reduction"
+    },
+    {
+      "company": "Wells Fargo",
+      "url": "https://cloud.google.com/customers/wellsfargo",
+      "description": "Fargo virtual assistant powered by Dialogflow, 245M+ interactions in 2024"
+    },
+    {
+      "company": "Character.ai",
+      "partnership_type": "Strategic cloud infrastructure partnership", 
+      "description": "Conversational AI platform using Google Cloud generative AI infrastructure"
+    },
+    {
+      "company": "Wayfair",
+      "blog_stories": "Multiple Google Cloud blog posts",
+      "description": "Vertex AI for 80 data science teams, 50% productivity improvement, real-time model serving"
+    },
+    {
+      "company": "Snap",
+      "blog_stories": "Multiple Google Cloud AI implementations",
+      "description": "Gemini on Vertex AI for My AI chatbot, TPUs for ML, 2.5x engagement increase"
+    },
+    {
+      "company": "Bell Canada",
+      "partnership_type": "Strategic 5G and AI partnership",
+      "description": "AI-powered network operations, 75% software delivery productivity increase, 25% issue reduction"
+    },
+    {
+      "company": "Bayer",
+      "blog_stories": "Multiple Google Cloud healthcare AI stories",
+      "description": "Drug discovery acceleration with TPUs, AI radiology solutions, quantum chemistry calculations"
+    },
+    {
+      "company": "Intesa Sanpaolo",
+      "url": "https://cloud.google.com/customers/intesasanpaolo",
+      "description": "Democratic Data Lab on Google Cloud, risk management AI, Project Skyrocket cloud regions"
+    },
+    {
+      "company": "Hiscox",
+      "partnership_type": "AI underwriting collaboration",
+      "description": "GenAI underwriting model, reduces quote time from 3 days to 3 minutes, 50% productivity improvement"
+    },
+    {
+      "company": "ThoughtSpot",
+      "partnership_type": "Google Cloud Technology Partner of the Year",
+      "description": "AI-powered analytics platform, named Google Cloud Partner of the Year for Data-BI"
+    },
+    {
+      "company": "TIM Brasil",
+      "url": "https://cloud.google.com/customers/tim",
+      "description": "Telecom digital transformation, cloud infrastructure migration, TIM Academy training platform"
+    },
+    {
+      "company": "Etsy",
+      "url": "https://cloud.google.com/customers/etsy",
+      "description": "Vertex AI for search optimization, ML platform migration, 50% reduction in experiment time"
+    },
+    {
+      "company": "Best Buy",
+      "partnership_type": "AI customer service partnership",
+      "description": "Google Cloud Contact Center AI, generative AI virtual assistant, Vertex AI and Gemini models"
+    },
+    {
+      "company": "Box",
+      "partnership_type": "Strategic AI content management partnership",
+      "description": "Gemini 2.0 Flash integration, AI extract agents, Google Cloud Marketplace availability"
+    },
+    {
+      "company": "Toyota",
+      "url": "https://cloud.google.com/customers/toyota",
+      "description": "AI Platform for manufacturing, 10,000+ man-hours saved annually, Woven autonomous driving partnership"
+    },
+    {
+      "company": "PwC",
+      "partnership_type": "Consulting partner for Google Cloud AI solutions",
+      "description": "AI strategy consulting, Vertex AI implementation, infrastructure automation"
+    },
+    {
+      "company": "Rivian",
+      "partnership_type": "Google Maps navigation partnership", 
+      "description": "Rivian Navigation with Google Maps, primarily uses AWS but partners with Google for specific services"
+    }
+  ],
+  "metadata": {
+    "extraction_date": "2025-08-03T16:30:00.000Z",
+    "total_customer_story_urls": 21,
+    "total_blog_story_urls": 7,
+    "total_company_partnerships": 22,
+    "enhancement_method": "WebSearch with company names and AI context",
+    "improvement_vs_original": "21 URLs vs 17 original direct construction (24% increase)",
+    "coverage_vs_google_claim": "28 total stories vs 101+ claimed (approaching 30% coverage)",
+    "sources_processed": [
+      "use_cases_blog",
+      "websearch_customer_stories", 
+      "websearch_blog_posts",
+      "websearch_partnerships"
+    ]
+  }
+}

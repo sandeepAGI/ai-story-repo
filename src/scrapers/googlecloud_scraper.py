@@ -1,4 +1,6 @@
 import re
+import json
+import os
 import logging
 from typing import List, Dict, Any, Optional
 from bs4 import BeautifulSoup
@@ -50,32 +52,67 @@ class GoogleCloudScraper(BaseScraper):
             "https://cloud.google.com/customers/seaart"
         ]
     
+    def _load_pre_collected_urls(self) -> List[str]:
+        """Load pre-collected URLs from extraction utility (similar to Microsoft approach)"""
+        try:
+            # Check for pre-collected URLs file in the project root
+            urls_file = 'google_cloud_story_urls_urls_only.json'
+            if os.path.exists(urls_file):
+                with open(urls_file, 'r', encoding='utf-8') as f:
+                    urls = json.load(f)
+                    if isinstance(urls, list) and urls:
+                        logger.info(f"Loaded {len(urls)} pre-collected URLs from {urls_file}")
+                        return urls
+                    else:
+                        logger.warning(f"Invalid format or empty URLs list in {urls_file}")
+            else:
+                logger.debug(f"Pre-collected URLs file {urls_file} not found")
+        except Exception as e:
+            logger.warning(f"Error loading pre-collected URLs: {e}")
+        
+        return []
+    
+    def _is_pre_collected_url(self, url: str) -> bool:
+        """Check if URL is from pre-collected list (no AI filtering needed)"""
+        # Cache pre-collected URLs for performance
+        if not hasattr(self, '_pre_collected_urls_cache'):
+            self._pre_collected_urls_cache = set(self._load_pre_collected_urls())
+        return url in self._pre_collected_urls_cache
+    
     def get_customer_story_urls(self) -> List[str]:
         """Get list of Google Cloud AI/ML customer story URLs"""
         logger.info(f"Fetching customer story URLs from Google Cloud")
         
         all_story_urls = []
         
-        # Strategy 1: Start with known AI customer URLs
-        logger.info(f"Adding {len(self.known_ai_customers)} known AI customer URLs")
-        for url in self.known_ai_customers:
-            if url not in all_story_urls:
-                all_story_urls.append(url)
-        
-        # Strategy 2: Try to discover additional URLs from listing pages
-        urls_to_check = [self.base_url] + self.secondary_urls
-        for url in urls_to_check:
-            logger.info(f"Checking URL for additional discoveries: {url}")
-            response = self.make_request(url)
-            if not response:
-                continue
+        # Strategy 1: Load pre-collected URLs from extraction utility (similar to Microsoft approach)
+        pre_collected_urls = self._load_pre_collected_urls()
+        if pre_collected_urls:
+            logger.info(f"Loaded {len(pre_collected_urls)} pre-collected URLs from extraction")
+            all_story_urls.extend(pre_collected_urls)
+        else:
+            logger.info("No pre-collected URLs found, using fallback discovery methods")
             
-            soup = self.parse_html(response.text)
-            story_urls = self._extract_urls_from_page(soup, response.text)
+            # Fallback Strategy 1: Start with known AI customer URLs
+            logger.info(f"Adding {len(self.known_ai_customers)} known AI customer URLs")
+            for url in self.known_ai_customers:
+                if url not in all_story_urls:
+                    all_story_urls.append(url)
             
-            for story_url in story_urls:
-                if story_url not in all_story_urls:
-                    all_story_urls.append(story_url)
+            # Fallback Strategy 2: Try to discover additional URLs from listing pages
+            urls_to_check = [self.base_url] + self.secondary_urls
+            for url in urls_to_check:
+                logger.info(f"Checking URL for additional discoveries: {url}")
+                response = self.make_request(url)
+                if not response:
+                    continue
+                
+                soup = self.parse_html(response.text)
+                story_urls = self._extract_urls_from_page(soup, response.text)
+                
+                for story_url in story_urls:
+                    if story_url not in all_story_urls:
+                        all_story_urls.append(story_url)
         
         logger.info(f"Found {len(all_story_urls)} total Google Cloud story URLs")
         return all_story_urls
@@ -134,27 +171,42 @@ class GoogleCloudScraper(BaseScraper):
         return story_urls
     
     def _is_valid_story_url(self, url: str) -> bool:
-        """Check if URL is a valid Google Cloud customer story"""
-        if not url or not url.startswith('https://cloud.google.com/customers/'):
+        """Check if URL is a valid Google Cloud customer story (expanded for web search results)"""
+        if not url or not url.startswith('https://cloud.google.com/'):
+            return False
+            
+        # Accept broader range of content types (for web search enhancement)
+        valid_patterns = [
+            '/customers/',
+            '/blog/',
+            '/solutions/',
+            '/case-studies/',
+            '/success-stories/'
+        ]
+        
+        if not any(pattern in url for pattern in valid_patterns):
             return False
             
         # Exclude listing pages and non-story URLs
         exclusions = [
-            '/customers?',      # Query parameters usually indicate listing pages
-            '/customers#',      # Fragment identifiers usually indicate sections
-            '/customers/',      # Base customers page
-            '/search',          # Search pages
-            '/browse',          # Browse pages
+            '/customers?', '/customers#', '/search', '/browse', '/filter', 
+            '/category', '/industry', '/size', '/tag',
+            'cloud.google.com/blog/rss', 'cloud.google.com/blog/feed'
         ]
+        
+        # Special case: exclude base pages
+        if url.endswith('/customers') or url.endswith('/customers/') or url.endswith('/blog') or url.endswith('/blog/'):
+            return False
         
         for exclusion in exclusions:
             if url.endswith(exclusion) or exclusion + '?' in url:
                 return False
         
-        # Must have a customer name/slug after /customers/
-        parts = url.replace('https://cloud.google.com/customers/', '').strip('/')
-        if not parts or '/' in parts:  # Should be just the customer slug
-            return False
+        # For customer URLs, must have a customer name/slug after /customers/
+        if '/customers/' in url:
+            parts = url.replace('https://cloud.google.com/customers/', '').strip('/')
+            if not parts or '/' in parts:  # Should be just the customer slug
+                return False
             
         return True
     
@@ -172,11 +224,15 @@ class GoogleCloudScraper(BaseScraper):
         title = self._extract_title(soup)
         customer_name = self._extract_customer_name(soup, url)
         
-        # Skip non-AI stories based on content filtering
-        full_text = soup.get_text().lower()
-        if not self._is_ai_story(full_text):
-            logger.info(f"Skipping non-AI story: {url}")
-            return None
+        # Smart AI filtering: skip for discovered URLs but not for pre-collected URLs
+        # (similar to Microsoft approach - pre-collected URLs are verified AI stories)
+        if not self._is_pre_collected_url(url):
+            full_text = soup.get_text().lower()
+            if not self._is_ai_story(full_text):
+                logger.info(f"Skipping non-AI story: {url}")
+                return None
+        else:
+            logger.debug(f"Pre-collected URL - skipping AI content filter: {url}")
         
         # Extract other metadata
         publish_date = self._extract_publish_date(soup)

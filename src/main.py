@@ -156,9 +156,9 @@ class AIStoriesProcessor:
         logger.info(f"Successfully scraped {len(scraped_stories)} new stories")
         return scraped_stories
     
-    def scrape_googlecloud_stories(self, limit: int = None) -> List[Dict[str, Any]]:
-        """Scrape Google Cloud AI customer stories"""
-        logger.info(f"Starting Google Cloud scraping (limit: {limit})")
+    def scrape_googlecloud_stories(self, limit: int = None, batch_size: int = 5) -> List[Dict[str, Any]]:
+        """Scrape Google Cloud AI customer stories with batch processing"""
+        logger.info(f"Starting Google Cloud scraping (limit: {limit}, batch_size: {batch_size})")
         
         scraper = GoogleCloudScraper()
         
@@ -170,24 +170,53 @@ class AIStoriesProcessor:
         
         logger.info(f"Found {len(story_urls)} story URLs to scrape")
         
-        # Scrape stories
-        scraped_stories = []
-        for i, url in enumerate(story_urls):
-            logger.info(f"Scraping story {i+1}/{len(story_urls)}: {url}")
-            
-            # Check if story already exists
-            if self.db_ops.check_story_exists(url):
-                logger.info(f"Story already exists, skipping: {url}")
-                continue
-            
-            story_data = scraper.scrape_story(url)
-            if story_data:
-                scraped_stories.append(story_data)
-            else:
-                logger.warning(f"Failed to scrape: {url}")
+        # Process URLs in batches
+        all_scraped_stories = []
+        total_batches = (len(story_urls) + batch_size - 1) // batch_size
         
-        logger.info(f"Successfully scraped {len(scraped_stories)} new stories")
-        return scraped_stories
+        for batch_num in range(total_batches):
+            start_idx = batch_num * batch_size
+            end_idx = min(start_idx + batch_size, len(story_urls))
+            batch_urls = story_urls[start_idx:end_idx]
+            
+            logger.info(f"Processing batch {batch_num + 1}/{total_batches} ({len(batch_urls)} URLs)")
+            
+            # Scrape stories in current batch
+            batch_stories = []
+            for i, url in enumerate(batch_urls):
+                global_idx = start_idx + i + 1
+                logger.info(f"Scraping story {global_idx}/{len(story_urls)}: {url}")
+                
+                # Check if story already exists
+                if self.db_ops.check_story_exists(url):
+                    logger.info(f"Story already exists, skipping: {url}")
+                    continue
+                
+                story_data = scraper.scrape_story(url)
+                if story_data:
+                    batch_stories.append(story_data)
+                else:
+                    logger.warning(f"Failed to scrape: {url}")
+            
+            # Process and save current batch if we have stories
+            if batch_stories:
+                logger.info(f"Processing batch {batch_num + 1} with {len(batch_stories)} stories")
+                
+                # Process with Claude
+                processed_stories = self.process_stories_with_claude(batch_stories)
+                
+                # Save to database
+                if processed_stories:
+                    saved_ids = self.save_stories_to_database(processed_stories, "Google Cloud")
+                    logger.info(f"Batch {batch_num + 1} complete: saved {len(saved_ids)} stories to database")
+                    all_scraped_stories.extend(processed_stories)
+                else:
+                    logger.warning(f"No stories processed successfully in batch {batch_num + 1}")
+            else:
+                logger.info(f"Batch {batch_num + 1} had no new stories to process")
+        
+        logger.info(f"All batches complete: {len(all_scraped_stories)} total stories processed")
+        return all_scraped_stories
     
     def process_stories_with_claude(self, stories: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Process scraped stories with Claude for data extraction"""
@@ -308,8 +337,18 @@ class AIStoriesProcessor:
                 scraped_stories = self.scrape_aws_stories(limit)
                 source_name = "AWS"
             elif source.lower() == "googlecloud":
+                # Google Cloud uses integrated batch processing (scraping, processing, and saving in batches)
                 scraped_stories = self.scrape_googlecloud_stories(limit)
                 source_name = "Google Cloud"
+                
+                # For Google Cloud, processing and saving is already done in batches
+                # Just print summary of what was processed
+                if scraped_stories:
+                    logger.info(f"Pipeline completed successfully. Processed {len(scraped_stories)} stories in batches.")
+                    self.print_pipeline_summary(scraped_stories, [])
+                else:
+                    logger.info("No new stories to process")
+                return
             else:
                 scraped_stories = self.scrape_anthropic_stories(limit)
                 source_name = "Anthropic"
@@ -318,14 +357,14 @@ class AIStoriesProcessor:
                 logger.info("No new stories to process")
                 return
             
-            # Step 2: Process with Claude
+            # Step 2: Process with Claude (not needed for Google Cloud - already done in batches)
             processed_stories = self.process_stories_with_claude(scraped_stories)
             
             if not processed_stories:
                 logger.warning("No stories successfully processed by Claude")
                 return
             
-            # Step 3: Save to database
+            # Step 3: Save to database (not needed for Google Cloud - already done in batches)
             saved_ids = self.save_stories_to_database(processed_stories, source_name)
             
             logger.info(f"Pipeline completed successfully. Saved {len(saved_ids)} stories.")

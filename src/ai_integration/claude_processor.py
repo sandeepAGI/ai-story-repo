@@ -4,6 +4,7 @@ import time
 from typing import Dict, Any, Optional
 from datetime import datetime
 import anthropic
+from anthropic import APITimeoutError, APIConnectionError, RateLimitError
 from src.config import Config
 from src.ai_integration.prompts import (
     GEN_AI_DETERMINATION_PROMPT, 
@@ -12,18 +13,73 @@ from src.ai_integration.prompts import (
     COMPANY_NORMALIZATION_PROMPT, 
     DEDUPLICATION_PROMPT
 )
+from src.classification.enhanced_classifier import EnhancedClassifier
 
 logger = logging.getLogger(__name__)
 
 class ClaudeProcessor:
     def __init__(self, api_key: str = None):
         self.client = anthropic.Anthropic(
-            api_key=api_key or Config.ANTHROPIC_API_KEY
+            api_key=api_key or Config.ANTHROPIC_API_KEY,
+            timeout=60.0  # 60 second timeout for API calls
         )
         self.model = "claude-3-5-sonnet-20241022"  # Latest Claude model
+        self.enhanced_classifier = EnhancedClassifier()
+        
+        # Retry configuration
+        self.max_retries = 3
+        self.base_delay = 1.0  # Base delay for exponential backoff
+    
+    def _make_claude_request_with_retry(self, messages, max_tokens=1500, temperature=0.1):
+        """Make Claude API request with retry logic and timeout handling"""
+        last_error = None
+        
+        for attempt in range(self.max_retries):
+            try:
+                logger.debug(f"Claude API attempt {attempt + 1}/{self.max_retries}")
+                
+                response = self.client.messages.create(
+                    model=self.model,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    messages=messages
+                )
+                
+                logger.debug(f"Claude API request successful on attempt {attempt + 1}")
+                return response
+                
+            except (APITimeoutError, APIConnectionError) as e:
+                last_error = e
+                wait_time = self.base_delay * (2 ** attempt)  # Exponential backoff
+                logger.warning(f"Claude API timeout/connection error on attempt {attempt + 1}: {e}")
+                
+                if attempt < self.max_retries - 1:
+                    logger.info(f"Retrying in {wait_time} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    logger.error(f"All {self.max_retries} attempts failed")
+                    
+            except RateLimitError as e:
+                last_error = e
+                wait_time = self.base_delay * (3 ** attempt)  # Longer wait for rate limits
+                logger.warning(f"Claude API rate limit on attempt {attempt + 1}: {e}")
+                
+                if attempt < self.max_retries - 1:
+                    logger.info(f"Rate limited - waiting {wait_time} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    logger.error(f"Rate limit persists after {self.max_retries} attempts")
+                    
+            except Exception as e:
+                # For other errors, don't retry
+                logger.error(f"Claude API error (no retry): {e}")
+                raise e
+        
+        # If we get here, all retries failed
+        raise last_error
         
     def determine_gen_ai_classification(self, raw_content: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Determine if story is about Generative AI or Traditional AI"""
+        """Enhanced Gen AI classification using 4-tier system with Claude fallback"""
         try:
             story_text = raw_content.get('text', '')
             
@@ -31,46 +87,181 @@ class ClaudeProcessor:
                 logger.warning("Story content too short for Gen AI classification")
                 return None
             
+            # Use enhanced classifier first (much faster and often accurate)
+            analysis = self.enhanced_classifier.classify_story(
+                story_id=0,  # Dummy ID for new stories
+                title=raw_content.get('title', ''),
+                url=raw_content.get('url', ''),
+                customer='',  # Will be extracted later
+                raw_content=story_text
+            )
+            
+            # If enhanced classifier can determine classification confidently, use it
+            if not analysis['requires_claude']:
+                is_gen_ai = analysis['recommendation'] == 'GenAI'
+                logger.info(f"Enhanced classifier result: {analysis['recommendation']} "
+                           f"(method: {analysis['method']}, confidence: {analysis['confidence']:.2f})")
+                
+                return {
+                    'is_gen_ai': is_gen_ai,
+                    'confidence': analysis['confidence'],
+                    'reasoning': analysis['reasoning'],
+                    'key_indicators': analysis['evidence'],
+                    'method': analysis['method'],
+                    'classification_source': 'enhanced_classifier'
+                }
+            
+            # Fall back to Claude analysis for unclear cases
+            logger.info("Enhanced classifier requires Claude analysis - using Claude fallback")
+            return self._claude_gen_ai_classification(raw_content)
+                
+        except Exception as e:
+            logger.error(f"Error in enhanced Gen AI classification: {e}")
+            # Fall back to Claude on any error
+            return self._claude_gen_ai_classification(raw_content)
+    
+    def _claude_gen_ai_classification(self, raw_content: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Original Claude-only classification as fallback"""
+        try:
+            story_text = raw_content.get('text', '')
+            
             # Limit content length for classification
             if len(story_text) > 16000:  # Shorter limit for classification
                 story_text = story_text[:16000] + "... [content truncated]"
             
             prompt = GEN_AI_DETERMINATION_PROMPT.format(story_content=story_text)
             
-            logger.info("Determining Gen AI classification with Claude")
+            logger.info("Using Claude API for Gen AI classification")
             
-            response = self.client.messages.create(
-                model=self.model,
-                max_tokens=500,
-                temperature=0.1,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ]
+            messages = [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+            
+            response = self._make_claude_request_with_retry(
+                messages=messages,
+                max_tokens=1500,
+                temperature=0.1
             )
             
             response_text = response.content[0].text.strip()
             
             try:
-                classification_result = json.loads(response_text)
+                # Clean response text to handle common JSON formatting issues
+                cleaned_response = response_text.strip()
+                
+                # Try to fix common JSON issues
+                if not cleaned_response.startswith('{'):
+                    # Extract JSON from text that might have extra content
+                    import re
+                    json_match = re.search(r'\{.*\}', cleaned_response, re.DOTALL)
+                    if json_match:
+                        cleaned_response = json_match.group(0)
+                
+                classification_result = json.loads(cleaned_response)
                 
                 # Validate classification result
                 if 'is_gen_ai' not in classification_result:
                     logger.error("Classification result missing 'is_gen_ai' field")
                     return None
                 
-                logger.info(f"Gen AI classification: {classification_result['is_gen_ai']} (confidence: {classification_result.get('confidence', 'unknown')})")
+                # Add metadata about classification source
+                classification_result['classification_source'] = 'claude_api'
+                
+                # Handle both old and new JSON response formats
+                # New format has 'key_indicators', old format might not
+                if 'key_indicators' not in classification_result:
+                    classification_result['key_indicators'] = []
+                
+                logger.info(f"Claude Gen AI classification: {classification_result['is_gen_ai']} "
+                           f"(confidence: {classification_result.get('confidence', 'unknown')})")
                 return classification_result
                 
             except json.JSONDecodeError as e:
-                logger.error(f"Failed to parse Gen AI classification response as JSON: {e}")
-                logger.error(f"Raw response: {response_text[:500]}...")
-                return None
+                logger.error(f"Failed to parse Claude classification response as JSON: {e}")
+                logger.error(f"Raw response length: {len(response_text)} characters")
+                logger.error(f"Full raw response: {response_text}")
+                
+                # Check if response was truncated
+                if not response_text.rstrip().endswith('}'):
+                    logger.error("Response appears to be truncated - missing closing brace")
+                
+                # Enhanced fallback parsing with regex
+                try:
+                    import re
+                    
+                    # For truncated JSON, try to fix it by completing the structure
+                    if not response_text.rstrip().endswith('}'):
+                        logger.info("Attempting to fix truncated JSON response")
+                        # Add missing closing braces/brackets
+                        fixed_response = response_text.rstrip()
+                        # Count open vs closed braces and brackets
+                        open_braces = fixed_response.count('{') 
+                        closed_braces = fixed_response.count('}')
+                        open_brackets = fixed_response.count('[')
+                        closed_brackets = fixed_response.count(']')
+                        
+                        # Add missing closures
+                        if open_brackets > closed_brackets:
+                            fixed_response += ']' * (open_brackets - closed_brackets)
+                        if open_braces > closed_braces:
+                            fixed_response += '}' * (open_braces - closed_braces)
+                        
+                        # Try parsing the fixed JSON
+                        try:
+                            classification_result = json.loads(fixed_response)
+                            logger.info("Successfully parsed fixed JSON response")
+                            
+                            if 'is_gen_ai' in classification_result:
+                                classification_result['classification_source'] = 'claude_api_fixed'
+                                return classification_result
+                        except json.JSONDecodeError:
+                            logger.debug("Fixed JSON still couldn't be parsed, falling back to regex")
+                    
+                    # Extract is_gen_ai value using regex
+                    gen_ai_match = re.search(r'"is_gen_ai":\s*(true|false)', response_text, re.IGNORECASE)
+                    if not gen_ai_match:
+                        logger.error("Could not extract is_gen_ai from malformed response")
+                        return None
+                    
+                    is_gen_ai = gen_ai_match.group(1).lower() == 'true'
+                    
+                    # Extract confidence if available
+                    confidence_match = re.search(r'"confidence":\s*([0-9.]+)', response_text)
+                    confidence = float(confidence_match.group(1)) if confidence_match else 0.7
+                    
+                    # Extract reasoning if available (handle truncated text)
+                    reasoning_match = re.search(r'"reasoning":\s*"([^"]*)', response_text)
+                    reasoning = reasoning_match.group(1) if reasoning_match else 'Extracted from malformed JSON response'
+                    if reasoning and not reasoning.endswith('.'):
+                        reasoning += '... [truncated]'
+                    
+                    # Extract key indicators if available (handle partial arrays)
+                    key_indicators = []
+                    indicators_match = re.search(r'"key_indicators":\s*\[(.*?)(?:\]|$)', response_text, re.DOTALL)
+                    if indicators_match:
+                        indicators_text = indicators_match.group(1)
+                        # Simple extraction of quoted strings
+                        key_indicators = re.findall(r'"([^"]*)"', indicators_text)
+                    
+                    logger.info(f"Successfully extracted from malformed JSON: is_gen_ai={is_gen_ai}, confidence={confidence}")
+                    
+                    return {
+                        'is_gen_ai': is_gen_ai,
+                        'confidence': confidence,
+                        'reasoning': reasoning,
+                        'key_indicators': key_indicators,
+                        'classification_source': 'claude_api_fallback'
+                    }
+                    
+                except Exception as fallback_error:
+                    logger.error(f"Fallback parsing also failed: {fallback_error}")
+                    return None
                 
         except Exception as e:
-            logger.error(f"Error in Gen AI classification: {e}")
+            logger.error(f"Error in Claude Gen AI classification: {e}")
             return None
     
     def extract_story_data(self, raw_content: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -104,16 +295,17 @@ class ClaudeProcessor:
                 prompt = TRADITIONAL_AI_EXTRACTION_PROMPT.format(story_content=story_text)
                 logger.info("Using Traditional AI extraction prompt (no Aileron framework)")
             
-            response = self.client.messages.create(
-                model=self.model,
+            messages = [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+            
+            response = self._make_claude_request_with_retry(
+                messages=messages,
                 max_tokens=2000,
-                temperature=0.1,  # Low temperature for consistent extraction
-                messages=[
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ]
+                temperature=0.1
             )
             
             response_text = response.content[0].text.strip()
@@ -190,7 +382,7 @@ class ClaudeProcessor:
             
             response = self.client.messages.create(
                 model=self.model,
-                max_tokens=500,
+                max_tokens=1000,  # Increased for enhanced JSON response format
                 temperature=0.1,
                 messages=[
                     {

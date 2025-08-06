@@ -482,6 +482,27 @@ class ClaudeProcessor:
         
         return True
     
+    def validate_is_gen_ai_consistency(self, extracted_data: Dict[str, Any], story_identifier: str = "") -> Dict[str, Any]:
+        """
+        Validate and fix consistency between is_gen_ai field and ai_type classification.
+        Returns the corrected extracted_data dictionary.
+        """
+        is_gen_ai = extracted_data.get('is_gen_ai')
+        ai_type = extracted_data.get('ai_type')
+        
+        if is_gen_ai is not None and ai_type is not None:
+            expected_ai_type = 'generative' if is_gen_ai else 'traditional'
+            if ai_type != expected_ai_type:
+                logger.warning(f"Consistency issue detected for {story_identifier}: "
+                             f"is_gen_ai={is_gen_ai} but ai_type='{ai_type}'. "
+                             f"Using ai_type as authoritative source.")
+                # Use ai_type as the authoritative source and update is_gen_ai accordingly
+                corrected_is_gen_ai = (ai_type == 'generative')
+                extracted_data['is_gen_ai'] = corrected_is_gen_ai
+                logger.info(f"Corrected is_gen_ai: {is_gen_ai} -> {corrected_is_gen_ai} for {story_identifier}")
+        
+        return extracted_data
+    
     def batch_process_stories(self, stories: list, delay: float = 1.0) -> list:
         """Process multiple stories with rate limiting"""
         processed_stories = []

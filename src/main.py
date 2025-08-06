@@ -244,8 +244,20 @@ class AIStoriesProcessor:
                 # Extract data from Claude processing
                 extracted_data = story.get('extracted_data', {})
                 
-                # Extract is_gen_ai flag from extracted data
+                # Extract is_gen_ai flag from extracted data with consistency validation
                 is_gen_ai = extracted_data.get('is_gen_ai', None)
+                ai_type = extracted_data.get('ai_type')
+                
+                # Ensure consistency between is_gen_ai field and ai_type classification
+                if is_gen_ai is not None and ai_type is not None:
+                    expected_ai_type = 'generative' if is_gen_ai else 'traditional'
+                    if ai_type != expected_ai_type:
+                        logger.warning(f"Consistency issue detected for story {story.get('url', 'unknown')}: "
+                                     f"is_gen_ai={is_gen_ai} but ai_type='{ai_type}'. "
+                                     f"Using ai_type as authoritative source.")
+                        # Use ai_type as the authoritative source and update is_gen_ai accordingly
+                        is_gen_ai = (ai_type == 'generative')
+                        extracted_data['is_gen_ai'] = is_gen_ai
                 
                 # Convert publish_date string to date object if available
                 publish_date = None

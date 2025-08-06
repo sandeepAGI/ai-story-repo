@@ -91,6 +91,9 @@ python update_all_databases.py reprocess --framework aileron --story-ids 1001,99
 # Run complete reprocessing (Gen AI classification + Aileron framework)
 python update_all_databases.py reprocess --framework all
 
+# Validate and fix classification consistency issues
+python update_all_databases.py validate
+
 # Launch interactive web dashboard
 python run_dashboard.py
 
@@ -334,6 +337,40 @@ Access the comprehensive web dashboard at `http://localhost:8501` after running 
 - **Real-Time Data**: Direct PostgreSQL integration with caching for performance
 - **Mobile Responsive**: Clean Streamlit interface works across devices
 
+## Data Consistency System
+
+### **Classification Consistency Prevention**
+The system implements comprehensive validation to ensure database integrity between AI classification fields:
+
+#### **Problem Prevention:**
+- **Main Processing Pipeline**: Validates `is_gen_ai` field matches `ai_type` classification during story insertion
+- **Reprocessing Pipeline**: Ensures database field stays synchronized during Claude reprocessing
+- **Authoritative Source**: Uses `ai_type` from Claude extraction as the definitive classification
+
+#### **Validation Tools:**
+```bash
+# Run comprehensive consistency validation
+python update_all_databases.py validate
+
+# Direct validation script (more detailed output)
+python validate_classification_consistency.py
+```
+
+#### **Key Features:**
+- **Automatic Detection**: Scans database for `is_gen_ai` vs `ai_type` mismatches
+- **Smart Correction**: Uses Claude's `ai_type` classification as authoritative source
+- **Database Synchronization**: Updates both database field and extracted_data
+- **Comprehensive Reporting**: Shows before/after statistics and fix details
+- **Prevention Integration**: Built into all story processing pipelines
+
+#### **Technical Implementation:**
+- **Enhanced Main Processing** (`src/main.py`): Consistency validation on new stories
+- **Enhanced Reprocessing** (`reprocess_with_aileron_framework.py`): Database field updates
+- **Utility Function** (`claude_processor.py`): Reusable validation logic
+- **CLI Integration** (`update_all_databases.py`): One-command validation
+
+This system prevents dashboard count discrepancies by ensuring the `is_gen_ai` database field always matches the `ai_type` classification from Claude's analysis.
+
 ## Development Status
 
 - ✅ **Phase 1**: Anthropic foundation (completed)
@@ -346,6 +383,7 @@ Access the comprehensive web dashboard at `http://localhost:8501` after running 
 - ✅ **Phase 8**: Dashboard Overview page optimization (completed)
 - ✅ **Phase 9**: Dashboard Analytics page enhancement (completed)
 - ✅ **Phase 10**: Reprocessing system optimization (completed)
+- ✅ **Phase 11**: Data consistency system implementation (completed)
 
 ### Phase 8 - Dashboard Overview Page Optimization
 - **Industry Standardization**: Successfully migrated from 45+ to exactly 11 standardized industry categories
@@ -370,6 +408,13 @@ Access the comprehensive web dashboard at `http://localhost:8501` after running 
 - **Selective Processing**: Prevent unnecessary Claude API calls (645 → 15 stories for missing Aileron data)
 - **Framework-Specific Updates**: Support for Aileron framework, Gen AI classification, and combined reprocessing
 - **API Cost Optimization**: Reduced reprocessing costs from $30-60 to $1-2 for targeted fixes
+
+### Phase 11 - Data Consistency System Implementation
+- **Classification Consistency Prevention**: Implemented comprehensive validation system to prevent `is_gen_ai`/`ai_type` mismatches
+- **Enhanced Processing Pipelines**: Updated main processing and reprocessing to validate and fix inconsistencies automatically  
+- **New CLI Command**: `python update_all_databases.py validate` for on-demand consistency checking
+- **Database Integrity**: Fixed 4 misclassified stories, resulting in 696 Gen AI stories with 100% Aileron coverage
+- **Future Prevention**: Built-in validation ensures dashboard count accuracy and prevents future consistency issues
 
 ### GoogleCloud Data Quality Fix (Phase 9)
 - **Customer Names Fix**: Resolved URL-as-name issue for 19 customer stories

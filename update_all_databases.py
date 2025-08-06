@@ -29,7 +29,7 @@ def run_command(cmd: list, description: str = None) -> bool:
 
 def main():
     parser = argparse.ArgumentParser(description='AI Customer Stories Database Manager - Wrapper for existing utilities')
-    parser.add_argument('command', choices=['status', 'update', 'dedup', 'purge', 'reprocess'], 
+    parser.add_argument('command', choices=['status', 'update', 'dedup', 'purge', 'reprocess', 'validate'], 
                        help='Command to execute')
     parser.add_argument('--source', choices=['anthropic', 'microsoft', 'aws', 'googlecloud', 'openai', 'all'],
                        help='Source to update (for update command)')
@@ -193,6 +193,13 @@ def main():
         print("2. Run: DELETE FROM customer_stories; (in SQL)")
         print("3. Run: python update_all_databases.py update --source all")
         return 1
+        
+    elif args.command == 'validate':
+        # Run classification consistency validation
+        success = run_command(['python', 'validate_classification_consistency.py'], 
+                            "Validating classification consistency...")
+        if not success:
+            return 1
     
     # Show final status using existing utility
     print("\n" + "="*70)

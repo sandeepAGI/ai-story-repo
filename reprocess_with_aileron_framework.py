@@ -92,8 +92,28 @@ def reprocess_all_stories(story_ids=None):
                 updated_data['last_processed'] = datetime.now().isoformat()
                 updated_data['reprocessed_with_aileron_framework'] = True
                 
-                # Update in database
+                # Ensure consistency between is_gen_ai field and ai_type classification
+                is_gen_ai = updated_data.get('is_gen_ai')
+                ai_type = updated_data.get('ai_type')
+                current_db_is_gen_ai = story.get('is_gen_ai')
+                
+                if is_gen_ai is not None and ai_type is not None:
+                    expected_ai_type = 'generative' if is_gen_ai else 'traditional'
+                    if ai_type != expected_ai_type:
+                        logger.warning(f"Consistency issue detected for story {story_id}: "
+                                     f"is_gen_ai={is_gen_ai} but ai_type='{ai_type}'. "
+                                     f"Using ai_type as authoritative source.")
+                        # Use ai_type as the authoritative source and update is_gen_ai accordingly
+                        is_gen_ai = (ai_type == 'generative')
+                        updated_data['is_gen_ai'] = is_gen_ai
+                
+                # Update extracted data in database
                 db_ops.update_story_extracted_data(story_id, updated_data)
+                
+                # Update is_gen_ai database field if it changed
+                if is_gen_ai is not None and is_gen_ai != current_db_is_gen_ai:
+                    logger.info(f"Updating is_gen_ai field: {current_db_is_gen_ai} -> {is_gen_ai} for story {story_id}")
+                    db_ops.update_story_gen_ai_flag(story_id, is_gen_ai)
                 processed_count += 1
                 
                 # Log classification results

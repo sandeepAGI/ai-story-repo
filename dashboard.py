@@ -160,6 +160,87 @@ def create_download_data(df: pd.DataFrame, format_type: str) -> bytes:
     elif format_type == 'json':
         return df.to_json(orient='records', indent=2).encode('utf-8')
 
+def format_chart_title(title: str, max_length: int = 50) -> str:
+    """Format chart title with word wrapping for long titles"""
+    if len(title) <= max_length:
+        return title
+    
+    # Split into words and create wrapped lines
+    words = title.split()
+    lines = []
+    current_line = []
+    current_length = 0
+    
+    for word in words:
+        # Check if adding this word would exceed max_length
+        word_length = len(word) + (1 if current_line else 0)  # +1 for space
+        
+        if current_length + word_length <= max_length:
+            current_line.append(word)
+            current_length += word_length
+        else:
+            # Start new line
+            if current_line:
+                lines.append(' '.join(current_line))
+            current_line = [word]
+            current_length = len(word)
+    
+    # Add the last line
+    if current_line:
+        lines.append(' '.join(current_line))
+    
+    # Join lines with HTML line breaks for Plotly
+    return '<br>'.join(lines)
+
+def apply_chart_formatting(fig, title: str):
+    """Apply consistent formatting to charts: centered, wrapped titles"""
+    formatted_title = format_chart_title(title)
+    fig.update_layout(
+        title=dict(
+            text=formatted_title,
+            x=0.5,  # Center the title
+            xanchor='center',
+            font=dict(size=16)
+        )
+    )
+
+def get_filtered_aileron_data(df_filtered: pd.DataFrame) -> Dict:
+    """Get Aileron framework analytics for filtered dataset"""
+    # SuperPowers distribution
+    superpowers = {}
+    impacts = {}
+    enablers = {}
+    functions = {}
+    
+    for _, row in df_filtered.iterrows():
+        if isinstance(row['extracted_data'], dict):
+            # SuperPowers
+            story_powers = row['extracted_data'].get('gen_ai_superpowers', [])
+            for power in story_powers:
+                superpowers[power] = superpowers.get(power, 0) + 1
+            
+            # Business Impacts
+            story_impacts = row['extracted_data'].get('business_impacts', [])
+            for impact in story_impacts:
+                impacts[impact] = impacts.get(impact, 0) + 1
+            
+            # Adoption Enablers
+            story_enablers = row['extracted_data'].get('adoption_enablers', [])
+            for enabler in story_enablers:
+                enablers[enabler] = enablers.get(enabler, 0) + 1
+            
+            # Business Function
+            story_function = row['extracted_data'].get('business_function')
+            if story_function:
+                functions[story_function] = functions.get(story_function, 0) + 1
+    
+    return {
+        'superpowers': superpowers,
+        'impacts': impacts,
+        'enablers': enablers,
+        'functions': functions
+    }
+
 def main():
     """Main dashboard application"""
     
@@ -260,9 +341,9 @@ def show_overview(df: pd.DataFrame, source_stats: Dict):
             x='Source', 
             y='Stories',
             color='Type',
-            color_discrete_map=PLOTLY_COLOR_SCHEMES['gen_ai_colors'],
-            title="Story Count by AI Provider (Gen AI vs Non Gen AI breakdown)"
+            color_discrete_map=PLOTLY_COLOR_SCHEMES['gen_ai_colors']
         )
+        apply_chart_formatting(fig, "Story Count by AI Provider")
         fig.update_layout(get_plotly_theme()['layout'])
         fig.update_layout(height=400)
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': True})
@@ -451,41 +532,123 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
         st.warning(f"No stories found for '{ai_filter}' filter. Please select a different filter.")
         return
     
-    # Industry analysis
-    st.subheader("Industry Distribution")
+    # Industry analysis with improved labeling
+    st.subheader(f"Industry Distribution{filter_suffix}")
     industry_counts = df_filtered['industry'].value_counts().head(10)
     
-    fig = px.pie(
-        values=industry_counts.values,
-        names=industry_counts.index,
-        title=f"Top 10 Industries{filter_suffix}",
-        color_discrete_sequence=PLOTLY_COLOR_SCHEMES['diverse_discrete']
-    )
-    fig.update_layout(get_plotly_theme()['layout'])
-    st.plotly_chart(fig, use_container_width=True)
+    # Add chart options for better space utilization
+    col1, col2 = st.columns([3, 1])
+    
+    with col2:
+        st.markdown("**Display Options:**")
+        label_style = st.selectbox(
+            "Labels:", 
+            options=["Direct on chart", "Compact legend", "Bottom legend", "No legend"],
+            index=2,  # Default to "Bottom legend"
+            key="industry_labels"
+        )
+    
+    with col1:
+        fig = px.pie(
+            values=industry_counts.values,
+            names=industry_counts.index,
+            color_discrete_sequence=PLOTLY_COLOR_SCHEMES['diverse_discrete']
+        )
+        # Apply centered, wrapped title formatting
+        apply_chart_formatting(fig, "Top 10 Industries")
+        
+        # Apply different labeling strategies
+        if label_style == "Direct on chart":
+            # Show labels directly on pie slices - most space efficient
+            fig.update_traces(
+                textposition='inside',
+                textinfo='label+percent',
+                textfont_size=10
+            )
+            fig.update_layout(showlegend=False)
+        
+        elif label_style == "Compact legend":
+            # Small legend on right with shortened labels
+            fig.update_traces(textinfo='percent')
+            shortened_names = [name[:15] + "..." if len(name) > 15 else name for name in industry_counts.index]
+            fig.data[0].labels = shortened_names
+            fig.update_layout(
+                legend=dict(
+                    font=dict(size=9),
+                    itemwidth=30
+                )
+            )
+        
+        elif label_style == "Bottom legend":
+            # Legend at bottom in horizontal orientation - saves horizontal space
+            fig.update_traces(textinfo='percent')
+            fig.update_layout(
+                legend=dict(
+                    orientation="h",
+                    yanchor="top",
+                    y=-0.1,
+                    xanchor="center",
+                    x=0.5,
+                    font=dict(size=10)
+                ),
+                margin=dict(b=100)  # Add bottom margin for legend
+            )
+        
+        else:  # "No legend"
+            # Just percentages, rely on hover for industry names
+            fig.update_traces(
+                textinfo='percent',
+                hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
+            )
+            fig.update_layout(showlegend=False)
+    
+        fig.update_layout(get_plotly_theme()['layout'])
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Add summary table for "No legend" option
+        if label_style == "No legend":
+            st.markdown("**Industry Breakdown:**")
+            summary_df = pd.DataFrame({
+                'Industry': industry_counts.index,
+                'Count': industry_counts.values,
+                'Percentage': [f"{(v/industry_counts.sum()*100):.1f}%" for v in industry_counts.values]
+            })
+            st.dataframe(summary_df, use_container_width=True, hide_index=True)
     
     # Company size and Use Case analysis
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("Company Size Distribution")
+        st.subheader(f"Company Size Distribution{filter_suffix}")
         size_counts = df_filtered['company_size'].value_counts()
-        fig = px.bar(x=size_counts.index, y=size_counts.values, title=f"Stories by Company Size{filter_suffix}",
+        fig = px.bar(x=size_counts.index, y=size_counts.values,
                     color=size_counts.values, color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'])
+        # Apply centered, wrapped title formatting
+        apply_chart_formatting(fig, "Stories by Company Size")
         fig.update_layout(get_plotly_theme()['layout'])
+        # Remove redundant axis labels, set colorbar title to "Count"
+        fig.update_xaxes(title_text="")
+        fig.update_yaxes(title_text="")
+        fig.update_coloraxes(colorbar_title="Count")
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
-        st.subheader("Use Case Categories")
+        st.subheader(f"Use Case Categories{filter_suffix}")
         use_case_counts = df_filtered['use_case_category'].value_counts().head(8)
         fig = px.bar(x=use_case_counts.values, y=use_case_counts.index, 
-                    orientation='h', title=f"Top AI Use Cases{filter_suffix}",
-                    color=use_case_counts.values, color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'])
+                    orientation='h', color=use_case_counts.values, 
+                    color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'])
+        # Apply centered, wrapped title formatting
+        apply_chart_formatting(fig, "Top AI Use Cases")
         fig.update_layout(get_plotly_theme()['layout'])
+        # Remove redundant axis labels, set colorbar title to "Count"
+        fig.update_xaxes(title_text="")
+        fig.update_yaxes(title_text="")
+        fig.update_coloraxes(colorbar_title="Count")
         st.plotly_chart(fig, use_container_width=True)
     
     # Technology usage by source - Multiple alternatives
-    st.subheader("Technology Usage Analysis")
+    st.subheader(f"Technology Usage Analysis{filter_suffix}")
     
     # Extract technologies with source attribution
     tech_source_data = []
@@ -548,12 +711,17 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
             x=overall_tech_counts.values,
             y=overall_tech_counts.index,
             orientation='h',
-            title=f"Top 15 Technologies Mentioned{filter_suffix}",
             color=overall_tech_counts.values,
             color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues']
         )
+        # Apply centered, wrapped title formatting
+        apply_chart_formatting(fig, "Top 15 Technologies Mentioned")
         fig.update_layout(get_plotly_theme()['layout'])
         fig.update_layout(height=500, showlegend=False)
+        # Remove redundant axis labels, set colorbar title to "Count"
+        fig.update_xaxes(title_text="")
+        fig.update_yaxes(title_text="")
+        fig.update_coloraxes(colorbar_title="Count")
         st.plotly_chart(fig, use_container_width=True)
         
     else:
@@ -750,9 +918,9 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                         range_counts,
                         path=['Range', 'Achievement'],
                         values='Count',
-                        title=f"Financial Outcomes: Value Ranges → Achievement Types{filter_suffix}",
                         color_discrete_sequence=PLOTLY_COLOR_SCHEMES['diverse_discrete']
                     )
+                    apply_chart_formatting(fig, "Financial Outcomes: Value Ranges → Achievement Types")
                     fig.update_layout(get_plotly_theme()['layout'])
                     st.plotly_chart(fig, use_container_width=True)
         
@@ -813,9 +981,9 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                         x=pivot_matrix.columns,
                         y=pivot_matrix.index,
                         color_continuous_scale='Blues',
-                        title="Use Case vs Outcome Type Matrix",
                         labels=dict(color="Story Count")
                     )
+                    apply_chart_formatting(fig, "Use Case vs Outcome Type Matrix")
                     fig.update_layout(get_plotly_theme()['layout'])
                     fig.update_layout(height=400)
                     st.plotly_chart(fig, use_container_width=True)
@@ -911,9 +1079,9 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                 x=cross_tab.columns,
                 y=cross_tab.index,
                 color_continuous_scale='Blues',
-                title=f"Story Count: Industry vs Company Size Matrix{filter_suffix}",
                 labels=dict(x="Company Size", y="Industry", color="Story Count")
             )
+            apply_chart_formatting(fig, "Industry vs Company Size Matrix")
             fig.update_layout(get_plotly_theme()['layout'])
             fig.update_layout(height=600)
             st.plotly_chart(fig, use_container_width=True)
@@ -926,17 +1094,59 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
     """Display Aileron framework insights"""
     st.title("🎯 Aileron GenAI SuperPowers Framework")
     st.markdown("*Aileron Group's tool for generating and prioritizing opportunities*")
+    
+    # Microsoft filter toggle
+    st.markdown("### 🔍 Microsoft Analysis Filter")
+    microsoft_filter = st.radio(
+        "Analyze stories from:",
+        ["All Gen AI Stories", "Microsoft Only", "Non-Microsoft Only"],
+        horizontal=True,
+        help="Filter analysis to focus on Microsoft AI implementations vs other providers"
+    )
+    
+    # Apply Microsoft filter to dataframe
+    if microsoft_filter == "Microsoft Only":
+        df_filtered = df[(df['is_gen_ai'] == True) & (df['source_name'] == 'Microsoft')].copy()
+        filter_suffix = " (Microsoft Only)"
+    elif microsoft_filter == "Non-Microsoft Only":
+        df_filtered = df[(df['is_gen_ai'] == True) & (df['source_name'] != 'Microsoft')].copy()
+        filter_suffix = " (Non-Microsoft Only)"
+    else:
+        df_filtered = df[df['is_gen_ai'] == True].copy()
+        filter_suffix = ""
+    
+    # Show current filter stats
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Filtered Stories", len(df_filtered), f"of {len(df[df['is_gen_ai'] == True])} Gen AI total")
+    with col2:
+        if len(df_filtered) > 0:
+            providers = df_filtered['source_name'].nunique()
+            st.metric("AI Providers", providers)
+    with col3:
+        if len(df_filtered) > 0:
+            companies = df_filtered['customer_name'].nunique()
+            st.metric("Unique Companies", companies)
+    
     st.markdown("---")
     
-    if not any(aileron_data.values()):
-        st.warning("No Aileron framework data found. Stories may need reprocessing with updated framework.")
+    # Check if we have data after filtering
+    if len(df_filtered) == 0:
+        st.warning(f"No Gen AI stories found for '{microsoft_filter}' filter.")
+        return
+        
+    # Recalculate aileron_data based on filtered dataset
+    filtered_aileron_data = get_filtered_aileron_data(df_filtered)
+    
+    if not any(filtered_aileron_data.values()):
+        st.warning("No Aileron framework data found for the selected filter.")
         return
     
     # SuperPowers analysis with icons
     st.subheader("🔗 SuperPowers (Drive) - AI Capabilities Being Used")
     st.markdown("*What AI capabilities are being deployed*")
     
-    if aileron_data['superpowers']:
+    if filtered_aileron_data['superpowers']:
         # Add icons and better labels for SuperPowers
         superpower_icons = {
             'code': '🔗 Code',
@@ -948,7 +1158,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             'natural_language': '💬 Use Natural Language'
         }
         
-        powers_df = pd.DataFrame(list(aileron_data['superpowers'].items()), 
+        powers_df = pd.DataFrame(list(filtered_aileron_data['superpowers'].items()), 
                                 columns=['SuperPower', 'Count'])
         powers_df['Display_Name'] = powers_df['SuperPower'].map(
             lambda x: superpower_icons.get(x, f"❓ {x.replace('_', ' ').title()}")
@@ -959,12 +1169,13 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             x='Display_Name',
             y='Count',
             color='Count',
-            color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'],
-            title="SuperPowers Distribution - What AI Capabilities Are Used"
+            color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues']
         )
+        apply_chart_formatting(fig, "SuperPowers Distribution")
         fig.update_layout(get_plotly_theme()['layout'])
-        fig.update_xaxes(tickangle=45)
-        fig.update_layout(xaxis_title="AI SuperPowers", yaxis_title="Number of Stories")
+        fig.update_xaxes(tickangle=45, title_text="")
+        fig.update_yaxes(title_text="")
+        fig.update_coloraxes(colorbar_title="Count")
         st.plotly_chart(fig, use_container_width=True)
     
     # Business Impacts and Functions
@@ -974,7 +1185,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
         st.subheader("🚀 Business Impacts (Constrain) - Outcomes Achieved")
         st.markdown("*What business value is being delivered*")
         
-        if aileron_data['impacts']:
+        if filtered_aileron_data['impacts']:
             # Add icons for business impacts
             impact_icons = {
                 'innovation': '🚀 Innovation',
@@ -985,15 +1196,15 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
                 'risk_reduction': '⚠️ Risk Reduction'
             }
             
-            impacts_df = pd.DataFrame(list(aileron_data['impacts'].items()),
+            impacts_df = pd.DataFrame(list(filtered_aileron_data['impacts'].items()),
                                     columns=['Impact', 'Count'])
             impacts_df['Display_Name'] = impacts_df['Impact'].map(
                 lambda x: impact_icons.get(x, f"📈 {x.replace('_', ' ').title()}")
             )
             
-            fig = px.pie(impacts_df, values='Count', names='Display_Name', 
-                        title="Business Impacts Distribution",
+            fig = px.pie(impacts_df, values='Count', names='Display_Name',
                         color_discrete_sequence=PLOTLY_COLOR_SCHEMES['qualitative_set3'])
+            apply_chart_formatting(fig, "Business Impacts Distribution")
             fig.update_layout(get_plotly_theme()['layout'])
             st.plotly_chart(fig, use_container_width=True)
     
@@ -1001,7 +1212,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
         st.subheader("🏢 Business Value Chain - Functions Benefiting")
         st.markdown("*Which departments are seeing AI benefits*")
         
-        if aileron_data['functions']:
+        if filtered_aileron_data['functions']:
             # Add icons for business functions
             function_icons = {
                 'marketing': '📱 Marketing',
@@ -1012,15 +1223,15 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
                 'finance_and_accounting': '📊 Finance & Accounting'
             }
             
-            functions_df = pd.DataFrame(list(aileron_data['functions'].items()),
+            functions_df = pd.DataFrame(list(filtered_aileron_data['functions'].items()),
                                       columns=['Function', 'Count'])
             functions_df['Display_Name'] = functions_df['Function'].map(
                 lambda x: function_icons.get(x, f"🏢 {x.replace('_', ' ').title()}")
             )
             
             fig = px.pie(functions_df, values='Count', names='Display_Name',
-                        title="Business Functions Distribution",
                         color_discrete_sequence=PLOTLY_COLOR_SCHEMES['qualitative_set1'])
+            apply_chart_formatting(fig, "Business Functions Distribution")
             fig.update_layout(get_plotly_theme()['layout'])
             st.plotly_chart(fig, use_container_width=True)
     
@@ -1028,7 +1239,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
     st.subheader("🛡️ Adoption Enablers - Organizational Success Factors")
     st.markdown("*What organizational capabilities enable AI success*")
     
-    if aileron_data['enablers']:
+    if filtered_aileron_data['enablers']:
         # Add icons for adoption enablers
         enabler_icons = {
             'data_and_digital': '💾 Data and Digital',
@@ -1038,7 +1249,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             'risk_management': '🛡️ Risk Management'
         }
         
-        enablers_df = pd.DataFrame(list(aileron_data['enablers'].items()),
+        enablers_df = pd.DataFrame(list(filtered_aileron_data['enablers'].items()),
                                  columns=['Enabler', 'Count'])
         enablers_df['Display_Name'] = enablers_df['Enabler'].map(
             lambda x: enabler_icons.get(x, f"🔧 {x.replace('_', ' ').title()}")
@@ -1049,23 +1260,23 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             x='Display_Name',
             y='Count',
             color='Count',
-            color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'],
-            title="Adoption Enablers Distribution"
+            color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues']
         )
+        apply_chart_formatting(fig, "Adoption Enablers Distribution")
         fig.update_layout(get_plotly_theme()['layout'])
-        fig.update_xaxes(tickangle=45)
-        fig.update_layout(xaxis_title="Organizational Enablers", yaxis_title="Number of Stories")
+        fig.update_xaxes(tickangle=45, title_text="")
+        fig.update_yaxes(title_text="")
+        fig.update_coloraxes(colorbar_title="Count")
         st.plotly_chart(fig, use_container_width=True)
     
     # Cross-analysis matrix
     st.subheader("🔄 Cross-Analysis: SuperPowers → Business Impacts")
     st.markdown("*How AI capabilities drive business outcomes across customer stories*")
     
-    # Create cross-tabulation with icons - only for Gen AI stories
+    # Create cross-tabulation with icons - using filtered dataset
     cross_data = []
-    for idx, row in df.iterrows():
-        if (row.get('is_gen_ai') == True and 
-            isinstance(row['extracted_data'], dict)):
+    for idx, row in df_filtered.iterrows():
+        if isinstance(row['extracted_data'], dict):
             powers = row['extracted_data'].get('gen_ai_superpowers', [])
             impacts = row['extracted_data'].get('business_impacts', [])
             
@@ -1083,15 +1294,13 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             x=[impact_icons.get(col, col.replace('_', ' ').title()) for col in pivot_table.columns],
             y=[superpower_icons.get(idx, idx.replace('_', ' ').title()) for idx in pivot_table.index],
             color_continuous_scale='RdYlBu_r',
-            title="SuperPowers → Business Impacts Cross-Analysis Matrix",
             labels=dict(x="Business Impacts (Outcomes)", y="SuperPowers (Capabilities)", color="Stories Count")
         )
+        apply_chart_formatting(fig, "SuperPowers → Business Impacts Cross-Analysis")
         fig.update_layout(get_plotly_theme()['layout'])
-        fig.update_layout(
-            height=600,
-            xaxis_title="Business Impacts Achieved",
-            yaxis_title="AI SuperPowers Used"
-        )
+        fig.update_layout(height=600)
+        fig.update_xaxes(title_text="")
+        fig.update_yaxes(title_text="")
         st.plotly_chart(fig, use_container_width=True)
         
         # Summary insights
@@ -1114,50 +1323,49 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
     st.markdown("---")
     st.markdown("### 📊 Aileron Framework Summary")
     
-    # Calculate Gen AI stories with complete Aileron data
-    gen_ai_stories = len([row for idx, row in df.iterrows() if row.get('is_gen_ai') == True])
+    # Calculate filtered stories with complete Aileron data
+    total_filtered_stories = len(df_filtered)
     
     total_stories_with_aileron = len([
-        row for idx, row in df.iterrows()
-        if row.get('is_gen_ai') == True and 
-        isinstance(row.get('extracted_data'), dict) and 
+        row for idx, row in df_filtered.iterrows()
+        if isinstance(row.get('extracted_data'), dict) and 
         row['extracted_data'].get('gen_ai_superpowers')
     ])
     
-    missing_aileron = gen_ai_stories - total_stories_with_aileron
+    missing_aileron = total_filtered_stories - total_stories_with_aileron
     
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         st.metric(
-            "Gen AI Stories Analyzed", 
+            f"Stories Analyzed{filter_suffix}", 
             total_stories_with_aileron,
-            f"of {gen_ai_stories} Gen AI"
+            f"of {total_filtered_stories} filtered"
         )
         if missing_aileron > 0:
             st.warning(f"⚠️ {missing_aileron} Gen AI stories missing Aileron data")
     
     with col2:
-        if aileron_data['superpowers']:
+        if filtered_aileron_data['superpowers']:
             st.metric(
                 "Unique SuperPowers", 
-                len(aileron_data['superpowers']),
+                len(filtered_aileron_data['superpowers']),
                 "AI capabilities identified"
             )
     
     with col3:
-        if aileron_data['impacts']:
+        if filtered_aileron_data['impacts']:
             st.metric(
                 "Business Impacts", 
-                len(aileron_data['impacts']),
+                len(filtered_aileron_data['impacts']),
                 "outcome types measured"
             )
     
     with col4:
-        if aileron_data['enablers']:
+        if filtered_aileron_data['enablers']:
             st.metric(
                 "Success Enablers", 
-                len(aileron_data['enablers']),
+                len(filtered_aileron_data['enablers']),
                 "organizational factors"
             )
 

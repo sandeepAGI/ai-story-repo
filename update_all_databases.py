@@ -29,10 +29,14 @@ def run_command(cmd: list, description: str = None) -> bool:
 
 def main():
     parser = argparse.ArgumentParser(description='AI Customer Stories Database Manager - Wrapper for existing utilities')
-    parser.add_argument('command', choices=['status', 'update', 'dedup', 'purge'], 
+    parser.add_argument('command', choices=['status', 'update', 'dedup', 'purge', 'reprocess'], 
                        help='Command to execute')
     parser.add_argument('--source', choices=['anthropic', 'microsoft', 'aws', 'googlecloud', 'openai', 'all'],
                        help='Source to update (for update command)')
+    parser.add_argument('--framework', choices=['aileron', 'gen-ai', 'all'],
+                       help='Framework to reprocess (for reprocess command)')
+    parser.add_argument('--story-ids', type=str,
+                       help='Comma-separated list of story IDs to reprocess (for reprocess command)')
     parser.add_argument('--limit', type=int, help='Limit number of stories to process')
     parser.add_argument('--test', action='store_true', help='Test mode - process limited data')
     parser.add_argument('--confirm', action='store_true', help='Skip confirmation prompts')
@@ -112,6 +116,51 @@ def main():
         # Use existing query_stories.py deduplication
         success = run_command(['python', 'query_stories.py', 'dedup'], 
                             "Running deduplication analysis...")
+        if not success:
+            return 1
+            
+    elif args.command == 'reprocess':
+        if not args.framework:
+            print("Error: --framework required for reprocess command")
+            print("Available frameworks: aileron, gen-ai, all") 
+            return 1
+        
+        # Build reprocess command
+        if args.framework == 'aileron':
+            cmd = ['python', 'reprocess_with_aileron_framework.py']
+            description = "Reprocessing stories with Aileron GenAI SuperPowers framework..."
+        elif args.framework == 'gen-ai':
+            cmd = ['python', 'reprocess_all_with_gen_ai_classification.py']
+            description = "Reprocessing stories with Gen AI classification..."
+        elif args.framework == 'all':
+            # Run both frameworks in sequence
+            print("Running complete reprocessing with all frameworks...")
+            
+            # First Gen AI classification
+            success1 = run_command(['python', 'reprocess_all_with_gen_ai_classification.py'], 
+                                 "Step 1: Gen AI Classification...")
+            if not success1:
+                print("❌ Gen AI classification failed, stopping reprocessing")
+                return 1
+            
+            # Then Aileron framework  
+            success2 = run_command(['python', 'reprocess_with_aileron_framework.py'],
+                                 "Step 2: Aileron Framework...")
+            if not success2:
+                print("❌ Aileron framework processing failed")
+                return 1
+            
+            print("✅ Complete reprocessing finished successfully!")
+            return 0
+        
+        # Add story IDs if specified
+        if args.story_ids:
+            story_ids = args.story_ids.split(',')
+            print(f"🎯 Targeting specific stories: {len(story_ids)} IDs")
+            cmd.extend(['--story-ids', args.story_ids])
+        
+        # Run the reprocess command
+        success = run_command(cmd, description)
         if not success:
             return 1
             

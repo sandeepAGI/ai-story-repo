@@ -85,7 +85,7 @@ Analyze this AI customer story and extract structured information. Return a vali
 
 {{
   "customer_name": "Company name",
-  "industry": "Industry sector (e.g., healthcare, finance, technology, retail, manufacturing, etc.)",
+  "industry": "Industry sector from standardized list: technology, financial_services, healthcare, retail_ecommerce, manufacturing, government_public_sector, media_communications, energy_utilities, transportation_logistics, professional_services, other",
   "company_size": "startup, mid-market, enterprise, or government",  
   "summary": "2-3 sentence summary of the story",
   "problem_statement": "What challenge or problem did the customer face?",
@@ -207,6 +207,33 @@ Story content to analyze:
 
 {story_content}
 
+**INDUSTRY CLASSIFICATION GUIDELINES:**
+Use ONLY the standardized industry categories below. Map customer companies to the BEST FIT category:
+
+• **technology**: Software companies, SaaS platforms, IT services, cloud providers, cybersecurity firms, AI/ML companies, tech startups
+• **financial_services**: Banks, insurance companies, fintech, payment processors, investment firms, credit unions, financial advisors
+• **healthcare**: Hospitals, health systems, pharmaceuticals, medical device companies, biotechnology, health tech, telemedicine platforms
+• **retail_ecommerce**: Online/offline retailers, consumer goods brands, fashion companies, marketplace platforms, e-commerce sites
+• **manufacturing**: Industrial production, automotive, aerospace, chemicals, materials, food processing, supply chain companies
+• **government_public_sector**: Federal/state/local government, military, public agencies, schools, universities, non-profits
+• **media_communications**: Telecommunications, broadcasting, publishing, entertainment, advertising agencies, content creators
+• **energy_utilities**: Oil/gas companies, renewable energy, electric utilities, mining, environmental services, water companies
+• **transportation_logistics**: Airlines, shipping, delivery services, ride-sharing, freight, warehousing, automotive transportation
+• **professional_services**: Consulting firms, legal services, accounting, real estate agencies, architecture, HR services
+• **other**: Agriculture, hospitality, sports, unique cross-industry cases that don't fit above categories
+
+**Industry Mapping Examples:**
+- "Acme Bank" → financial_services
+- "TechCorp Software Solutions" → technology  
+- "Regional Medical Center" → healthcare
+- "Global Manufacturing Inc" → manufacturing
+- "City of Springfield" → government_public_sector
+- "Farm-to-Table Co-op" → other
+
+Story content to analyze:
+
+{story_content}
+
 Return only the JSON object, no additional text or explanation.
 """
 
@@ -215,7 +242,7 @@ Analyze this Traditional AI customer story and extract structured information. R
 
 {{
   "customer_name": "Company name",
-  "industry": "Industry sector (e.g., healthcare, finance, technology, retail, manufacturing, etc.)",
+  "industry": "Industry sector from standardized list: technology, financial_services, healthcare, retail_ecommerce, manufacturing, government_public_sector, media_communications, energy_utilities, transportation_logistics, professional_services, other",
   "company_size": "startup, mid-market, enterprise, or government",  
   "summary": "2-3 sentence summary of the story",
   "problem_statement": "What challenge or problem did the customer face?",
@@ -265,6 +292,29 @@ Guidelines for extraction:
    - low: Vague indicators or educated guess based on technology maturity
 10. This is a Traditional AI story - do NOT include Gen AI superpowers or Aileron framework fields
 11. Focus on traditional AI/ML capabilities: prediction, classification, automation, analytics, etc.
+
+**INDUSTRY CLASSIFICATION GUIDELINES:**
+Use ONLY the standardized industry categories below. Map customer companies to the BEST FIT category:
+
+• **technology**: Software companies, SaaS platforms, IT services, cloud providers, cybersecurity firms, AI/ML companies, tech startups
+• **financial_services**: Banks, insurance companies, fintech, payment processors, investment firms, credit unions, financial advisors
+• **healthcare**: Hospitals, health systems, pharmaceuticals, medical device companies, biotechnology, health tech, telemedicine platforms
+• **retail_ecommerce**: Online/offline retailers, consumer goods brands, fashion companies, marketplace platforms, e-commerce sites
+• **manufacturing**: Industrial production, automotive, aerospace, chemicals, materials, food processing, supply chain companies
+• **government_public_sector**: Federal/state/local government, military, public agencies, schools, universities, non-profits
+• **media_communications**: Telecommunications, broadcasting, publishing, entertainment, advertising agencies, content creators
+• **energy_utilities**: Oil/gas companies, renewable energy, electric utilities, mining, environmental services, water companies
+• **transportation_logistics**: Airlines, shipping, delivery services, ride-sharing, freight, warehousing, automotive transportation
+• **professional_services**: Consulting firms, legal services, accounting, real estate agencies, architecture, HR services
+• **other**: Agriculture, hospitality, sports, unique cross-industry cases that don't fit above categories
+
+**Industry Mapping Examples:**
+- "Acme Bank" → financial_services
+- "TechCorp Software Solutions" → technology  
+- "Regional Medical Center" → healthcare
+- "Global Manufacturing Inc" → manufacturing
+- "City of Springfield" → government_public_sector
+- "Farm-to-Table Co-op" → other
 
 Story content to analyze:
 

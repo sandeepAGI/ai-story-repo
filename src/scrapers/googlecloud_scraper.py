@@ -298,18 +298,36 @@ class GoogleCloudScraper(BaseScraper):
     
     def _extract_customer_name(self, soup: BeautifulSoup, url: str) -> str:
         """Extract customer name from content or URL"""
-        # Strategy 1: Extract from URL slug
-        slug = url.replace('https://cloud.google.com/customers/', '').strip('/')
-        if slug:
-            # Convert slug to proper name (e.g., 'doc-ai' -> 'doc.ai')
-            customer_name = slug.replace('-', '.').title()
-            # Special handling for AI company names
-            if customer_name.endswith('.Ai'):
-                customer_name = customer_name[:-3] + '.ai'
-            elif 'ai' in customer_name.lower():
-                # Keep AI capitalization for AI companies
-                customer_name = re.sub(r'\bAi\b', 'AI', customer_name)
-            return customer_name
+        
+        # Strategy 1: Handle different URL types
+        if '/customers/' in url:
+            # Customer page URLs: https://cloud.google.com/customers/company-name
+            slug = url.replace('https://cloud.google.com/customers/', '').strip('/')
+            if slug:
+                # Convert slug to proper name (e.g., 'doc-ai' -> 'doc.ai')
+                customer_name = slug.replace('-', '.').title()
+                # Special handling for AI company names
+                if customer_name.endswith('.Ai'):
+                    customer_name = customer_name[:-3] + '.ai'
+                elif 'ai' in customer_name.lower():
+                    # Keep AI capitalization for AI companies
+                    customer_name = re.sub(r'\bAi\b', 'AI', customer_name)
+                return customer_name
+        
+        elif '/blog/' in url:
+            # Blog URLs: https://cloud.google.com/blog/topics/retail/how-google-cloud-services-helped-lowes-transform-ecommerce
+            title = self._extract_title(soup)
+            
+            # Strategy 1a: Extract from title first (most reliable for blog posts)
+            if title:
+                extracted_name = self._extract_company_from_title(title)
+                if extracted_name:
+                    return extracted_name
+            
+            # Strategy 1b: Extract from URL patterns
+            extracted_name = self._extract_company_from_blog_url(url)
+            if extracted_name:
+                return extracted_name
         
         # Strategy 2: Look for customer name in content
         title = self._extract_title(soup)
@@ -338,6 +356,130 @@ class GoogleCloudScraper(BaseScraper):
         
         # Fallback: Use URL slug with basic cleanup
         return slug.replace('-', ' ').title() if slug else "Unknown Customer"
+    
+    def _extract_company_from_title(self, title: str) -> str:
+        """Extract company name from blog post title"""
+        if not title:
+            return None
+            
+        # Common patterns in GoogleCloud blog titles
+        patterns = [
+            # "How Lowe's improved incident response processes with SRE"
+            r"How\s+([A-Z][a-zA-Z.'&\s]+?)\s+(?:uses?|improved?|transforms?|leverages?|builds?|reduces?|collects?)",
+            # "Learn how Google Cloud Services helped Lowe's transform ecommerce"  
+            r"(?:how\s+Google\s+Cloud\s+(?:Services?\s+)?helped\s+)([A-Z][a-zA-Z.'&\s]+?)\s+(?:transform|improve|build|reduce)",
+            # "Coca-Cola Bottlers Japan collects insights from 700,000 vending machines"
+            r"^([A-Z][a-zA-Z.'&\s-]+?)\s+(?:uses?|collects?|builds?|reduces?|improves?|transforms?|leverages?)",
+            # "Ford reduces routine database management with Google Cloud"
+            r"^([A-Z][a-zA-Z.'&\s]+?)\s+reduces?",
+            # "The Home Depot uses Google Cloud to personalize"
+            r"^(The\s+[A-Z][a-zA-Z.'&\s]+?)\s+uses?",
+            # "Wells Fargo's head of tech infrastructure"
+            r"^([A-Z][a-zA-Z.'&\s]+?)'s\s+",
+            # Company name at start followed by action
+            r"^([A-Z][a-zA-Z.'&\s]+?)\s+(?:and|on|profile|\|)",
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, title, re.IGNORECASE)
+            if match:
+                company = match.group(1).strip()
+                
+                # Clean up the company name
+                company = self._clean_company_name(company)
+                
+                # Validate it's a reasonable company name
+                if self._is_valid_company_name(company):
+                    return company
+        
+        return None
+    
+    def _extract_company_from_blog_url(self, url: str) -> str:
+        """Extract company name from blog URL path"""
+        
+        # Common URL patterns in GoogleCloud blog URLs
+        patterns = [
+            # /how-google-cloud-services-helped-lowes-transform-ecommerce
+            r"/(?:how-)?(?:google-cloud-(?:services?-)?helped-)?([a-z]+(?:-[a-z]+)*)-(?:transform|improve|build|reduce|use)",
+            # /how-lowes-improved-incident-response-processes-with-sre
+            r"/how-([a-z]+(?:-[a-z]+)*)-(?:improved?|transforms?|builds?|reduces?|uses?)",
+            # /coca-cola-bottlers-japan-collects-insights
+            r"/([a-z]+(?:-[a-z]+)*)-(?:collects?|builds?|reduces?|uses?|transforms?)",
+            # /ford-reduces-routine-database-management
+            r"/([a-z]+(?:-[a-z]+)*)-reduces?",
+            # General pattern: company name followed by action
+            r"/([a-z]+(?:-[a-z]+)*)-(?:case-study|success|story|profile|winner)",
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                company_slug = match.group(1)
+                
+                # Convert slug to proper company name
+                company = company_slug.replace('-', ' ').title()
+                
+                # Clean up the company name
+                company = self._clean_company_name(company)
+                
+                # Validate it's a reasonable company name
+                if self._is_valid_company_name(company):
+                    return company
+        
+        return None
+    
+    def _clean_company_name(self, company: str) -> str:
+        """Clean and normalize company name"""
+        if not company:
+            return company
+            
+        # Remove common suffixes that might be included
+        company = re.sub(r'\s*\|\s*Google\s+Cloud.*$', '', company, flags=re.IGNORECASE)
+        company = re.sub(r'\s*-\s*Google\s+Cloud.*$', '', company, flags=re.IGNORECASE)
+        
+        # Handle special cases
+        company = company.strip()
+        
+        # Fix common company name patterns
+        if company.lower() == 'the home depot':
+            return 'The Home Depot'
+        elif company.lower() in ['coca cola', 'coca-cola']:
+            return 'Coca-Cola'
+        elif company.lower() == 'wells fargo':
+            return 'Wells Fargo'
+        elif 'lowes' in company.lower():
+            return "Lowe's"  # Add apostrophe
+        
+        return company
+    
+    def _is_valid_company_name(self, company: str) -> bool:
+        """Validate if the extracted text is a reasonable company name"""
+        if not company or len(company) < 2:
+            return False
+            
+        # Filter out common non-company words
+        invalid_words = {
+            'google', 'cloud', 'services', 'service', 'how', 'with', 'and', 'the', 
+            'to', 'of', 'for', 'in', 'on', 'at', 'by', 'from', 'up', 'about', 
+            'into', 'through', 'during', 'before', 'after', 'above', 'below',
+            'blog', 'topics', 'customers', 'products', 'solutions', 'case', 'study'
+        }
+        
+        company_lower = company.lower()
+        
+        # Don't accept if it's just a common word
+        if company_lower in invalid_words:
+            return False
+            
+        # Don't accept if it's too long (probably extracted too much text)
+        if len(company) > 50:
+            return False
+        
+        # Must start with a capital letter or number
+        if not company[0].isupper() and not company[0].isdigit():
+            return False
+            
+        return True
     
     def _extract_publish_date(self, soup: BeautifulSoup) -> Optional[datetime]:
         """Extract publication date from the story"""

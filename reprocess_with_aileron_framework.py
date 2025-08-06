@@ -29,22 +29,40 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def reprocess_all_stories():
-    """Reprocess all stories with updated Aileron GenAI SuperPowers framework"""
+def reprocess_all_stories(story_ids=None):
+    """Reprocess stories with updated Aileron GenAI SuperPowers framework"""
     
     db_ops = DatabaseOperations()
     processor = ClaudeProcessor()
     
-    # Get only stories that haven't been reprocessed with Aileron framework yet
-    with db_ops.db.get_cursor() as cursor:
-        cursor.execute("""
+    # Build query based on whether specific IDs are requested
+    if story_ids:
+        # Reprocess specific story IDs regardless of flags
+        placeholders = ','.join(['%s'] * len(story_ids))
+        query = f"""
+            SELECT id, customer_name, title, raw_content, extracted_data
+            FROM customer_stories 
+            WHERE id IN ({placeholders})
+            AND raw_content IS NOT NULL
+            ORDER BY id
+        """
+        query_params = story_ids
+        logger.info(f"Targeting specific {len(story_ids)} stories for Aileron reprocessing")
+    else:
+        # Get only stories that haven't been reprocessed with Aileron framework yet
+        query = """
             SELECT id, customer_name, title, raw_content, extracted_data
             FROM customer_stories 
             WHERE raw_content IS NOT NULL
             AND (extracted_data->>'reprocessed_with_aileron_framework' IS NULL 
                  OR extracted_data->>'reprocessed_with_aileron_framework' <> 'true')
             ORDER BY id
-        """)
+        """
+        query_params = []
+        logger.info("Reprocessing all stories without Aileron framework flag")
+    
+    with db_ops.db.get_cursor() as cursor:
+        cursor.execute(query, query_params)
         stories = cursor.fetchall()
     
     total_stories = len(stories)
@@ -165,14 +183,26 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Reprocess stories with Aileron framework')
     parser.add_argument('--verify-only', action='store_true', 
                        help='Only verify current classifications, do not reprocess')
+    parser.add_argument('--story-ids', type=str,
+                       help='Comma-separated list of story IDs to reprocess (e.g., 1001,995,978)')
     
     args = parser.parse_args()
     
     if args.verify_only:
         verify_classifications()
     else:
+        # Parse story IDs if provided
+        story_ids = None
+        if args.story_ids:
+            try:
+                story_ids = [int(id.strip()) for id in args.story_ids.split(',')]
+                print(f"🎯 Targeting specific stories: {story_ids}")
+            except ValueError:
+                print("❌ Error: Story IDs must be comma-separated integers (e.g., 1001,995,978)")
+                sys.exit(1)
+        
         # Run reprocessing
-        processed, errors = reprocess_all_stories()
+        processed, errors = reprocess_all_stories(story_ids)
         
         # Verify results
         print("\n" + "="*50)

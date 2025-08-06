@@ -25,7 +25,7 @@ This project scrapes, processes, and analyzes AI customer stories to provide com
 ### 📊 **Rich Analytics**
 - **Business Outcomes Tracking**: Quantified metrics (cost savings, time reduction, productivity gains)
 - **Technology Usage Patterns**: AI services and tools mentioned across stories
-- **Industry Analysis**: Sector-specific AI adoption trends
+- **Industry Analysis**: Sector-specific AI adoption trends with standardized taxonomy
 - **Language Distribution Analytics**: Multi-language story analysis with confidence metrics
 - **Competitive Intelligence**: Cross-provider comparison and analysis
 
@@ -81,6 +81,22 @@ python show_stories.py --analytics
 
 # View language distribution statistics
 python query_stories.py languages
+
+# Reprocess stories with Aileron GenAI framework (all missing stories)
+python update_all_databases.py reprocess --framework aileron
+
+# Reprocess specific stories by ID (cost-efficient for targeted fixes)
+python update_all_databases.py reprocess --framework aileron --story-ids 1001,995,978
+
+# Run complete reprocessing (Gen AI classification + Aileron framework)
+python update_all_databases.py reprocess --framework all
+
+# Launch interactive web dashboard
+python run_dashboard.py
+
+# Migrate to standardized industry taxonomy
+python migrate_industries_simple.py --analyze
+python migrate_industries_simple.py --migrate --execute
 ```
 
 ## Database Schema
@@ -105,6 +121,51 @@ python query_stories.py languages
 2. **Business Impacts** (Outcomes): Innovation, Efficiency, Speed, Quality, Client Satisfaction, Risk Reduction  
 3. **Adoption Enablers** (Prerequisites): Data & Digital, Innovation Culture, Ecosystem Partners, Policy & Governance, Risk Management
 4. **Business Function** (Context): Marketing, Sales, Production, Distribution, Service, Finance & Accounting
+
+## Industry Standardization System
+
+### Standardized Taxonomy (11 Categories)
+The system uses a consolidated industry taxonomy to reduce 130+ raw industry classifications down to 11 standardized categories:
+
+1. **technology** - Software, SaaS, IT services, cloud providers, cybersecurity, AI/ML companies
+2. **financial_services** - Banks, insurance, fintech, payments, investment services, credit
+3. **healthcare** - Hospitals, pharmaceuticals, medical devices, biotechnology, health tech
+4. **retail_ecommerce** - Online/offline retail, consumer goods, fashion, marketplace platforms
+5. **manufacturing** - Industrial production, automotive, aerospace, chemicals, materials
+6. **government_public_sector** - Federal/state/local government, military, education, non-profits
+7. **media_communications** - Telecommunications, broadcasting, publishing, entertainment, advertising  
+8. **energy_utilities** - Oil/gas, renewable energy, electric utilities, mining, environmental services
+9. **transportation_logistics** - Airlines, shipping, delivery, ride-sharing, freight, warehousing
+10. **professional_services** - Consulting, legal, accounting, real estate, architecture, HR
+11. **other** - Agriculture, hospitality, sports, unique cross-industry cases
+
+### Migration Features
+- **Intelligent Mapping**: Regex-based pattern matching with confidence scoring
+- **Safe Execution**: Dry-run mode with confidence thresholds (default: 0.3)
+- **Complete Analysis**: Shows before/after distribution and mapping details
+- **Database Integration**: Uses existing `DatabaseOperations` patterns
+
+### Migration Commands
+```bash
+# Analyze current industry distribution (130+ categories)
+python migrate_industries_simple.py --analyze
+
+# Create mapping plan showing proposed changes
+python migrate_industries_simple.py --plan
+
+# Execute migration with dry-run (safe preview)
+python migrate_industries_simple.py --migrate
+
+# Execute actual migration (updates database)
+python migrate_industries_simple.py --migrate --execute
+```
+
+### Migration Impact
+- **Before**: 130 unique industries across 911 stories
+- **After**: 11 standardized categories with clear business logic
+- **Updated Stories**: 55 stories consolidated in final migration
+- **Dashboard Impact**: Industry count standardized to exactly 11 manageable categories
+- **Status**: ✅ **COMPLETED** - Migration executed successfully
 
 ## Language Detection System
 
@@ -224,6 +285,55 @@ python update_all_databases.py update --source microsoft
 
 This project uses a modular architecture with clear separation between scraping, AI processing, and database operations. Each AI provider has its own specialized scraper following the common `BaseScraper` interface.
 
+## Web Dashboard
+
+### **Interactive Analytics Platform**
+Access the comprehensive web dashboard at `http://localhost:8501` after running `python run_dashboard.py`.
+
+### **Dashboard Pages:**
+
+#### **📊 Overview**
+- **Key Metrics**: Total stories, Gen AI vs Non Gen AI breakdown, quality scores
+- **Source Distribution**: Stories by AI provider with Gen AI classification  
+- **Recent Activity**: Latest 10 stories with customer names and links
+- **Industry Coverage**: Standardized 11-category industry taxonomy
+
+#### **🔍 Story Explorer** 
+- **Advanced Filtering**: Source, industry, company size, AI type (Gen AI/Non Gen AI)
+- **Full-Text Search**: Customer names, titles, industry keywords
+- **Detailed Story View**: Complete story details with business outcomes
+- **Technology Breakdown**: Specific AI services and tools mentioned
+
+#### **📈 Analytics Dashboard** *(Enhanced)*
+- **🔬 Gen AI Filter**: Toggle between All Stories, Gen AI Only, Non Gen AI Only
+- **Smart Technology Analysis**: Technology usage by AI provider (addresses Microsoft bias)
+- **Business Outcomes by Use Case**: Individual highlights vs averages
+- **🔄 Use Case → Outcome Flow**: Visual progress bars showing outcome percentages
+- **💰 Top Financial Achievements**: Individual customer highlights with values
+- **🚀 Operational Scale Metrics**: Trillion-scale achievements (events, users, sessions)
+- **📊 Value Distribution**: Sunburst charts and cross-analysis matrices
+- **🏷️ Word Cloud Alternatives**: Tag clouds, heatmaps, network visualizations
+
+#### **🎯 Aileron GenAI SuperPowers Framework** *(Gen AI Only)*
+- **SuperPowers Analysis**: 7 AI capabilities (code, create_content, automate_with_agents, etc.)
+- **Business Impacts**: 6 outcome categories (innovation, efficiency, speed, quality, etc.)
+- **Adoption Enablers**: 5 organizational success factors
+- **Business Functions**: Cross-departmental AI impact analysis
+- **Cross-Analysis Matrix**: SuperPowers → Business Impacts relationships
+- **Filtering**: Automatically filters to Gen AI stories only (700 stories)
+
+#### **💾 Data Export**
+- **Multiple Formats**: CSV, Excel, JSON export options
+- **Flexible Filtering**: Export all stories, filtered subsets, or summary statistics
+- **Downloadable Reports**: Pre-formatted datasets for external analysis
+
+### **Key Dashboard Features:**
+- **Consistent Gen AI Filtering**: Analytics page supports Gen AI/Non Gen AI toggle across all charts
+- **Individual Highlights**: Shows top achievements rather than diluted averages
+- **Cost-Optimized Processing**: Enhanced reprocessing commands prevent unnecessary Claude API calls
+- **Real-Time Data**: Direct PostgreSQL integration with caching for performance
+- **Mobile Responsive**: Clean Streamlit interface works across devices
+
 ## Development Status
 
 - ✅ **Phase 1**: Anthropic foundation (completed)
@@ -232,6 +342,60 @@ This project uses a modular architecture with clear separation between scraping,
 - ✅ **Phase 4**: Web dashboard (completed)
 - ✅ **Phase 5**: Enhanced Microsoft collection - 10x improvement (completed)
 - ✅ **Phase 6**: Language detection system integration (completed)
+- ✅ **Phase 7**: Industry standardization system (completed)
+- ✅ **Phase 8**: Dashboard Overview page optimization (completed)
+- ✅ **Phase 9**: Dashboard Analytics page enhancement (completed)
+- ✅ **Phase 10**: Reprocessing system optimization (completed)
+
+### Phase 8 - Dashboard Overview Page Optimization
+- **Industry Standardization**: Successfully migrated from 45+ to exactly 11 standardized industry categories
+- **Table Rendering Fix**: Replaced custom HTML table with native Streamlit components for better responsive design
+- **Data Accuracy**: All 911 stories properly categorized using intelligent industry mapping
+- **User Experience**: Overview page now displays clean, properly formatted data tables
+
+### Phase 9 - Dashboard Analytics Page Enhancement
+- **Gen AI Filter Toggle**: Added comprehensive filtering across all Analytics charts (All Stories/Gen AI Only/Non Gen AI Only)
+- **Enhanced Business Outcomes**: 
+  - Individual financial highlights vs diluted averages
+  - Use Case → Outcome Flow with visual progress bars
+  - Operational scale metrics separated from financial outcomes
+  - Fixed $1.44T outlier issue (FullStory's 1.44T events correctly categorized)
+- **Technology Analysis**: Source-aware technology usage charts (addresses Microsoft story bias)
+- **Advanced Visualizations**: Sunburst charts, heatmaps, network-style visualizations, tag clouds
+- **Word Cloud Alternatives**: Multiple visualization options for qualitative outcome analysis
+
+### Phase 10 - Reprocessing System Optimization
+- **Cost-Efficient Reprocessing**: Enhanced `reprocess_with_aileron_framework.py` with story ID targeting
+- **Integrated CLI Commands**: Added `reprocess` command to main `update_all_databases.py` interface
+- **Selective Processing**: Prevent unnecessary Claude API calls (645 → 15 stories for missing Aileron data)
+- **Framework-Specific Updates**: Support for Aileron framework, Gen AI classification, and combined reprocessing
+- **API Cost Optimization**: Reduced reprocessing costs from $30-60 to $1-2 for targeted fixes
+
+### GoogleCloud Data Quality Fix (Phase 9)
+- **Customer Names Fix**: Resolved URL-as-name issue for 19 customer stories
+  - Fixed blog URL parsing in scraper for future prevention
+  - Updated existing records: Lowe's, Ford, Toyota, Wayfair, Wells Fargo, etc.
+  - Remaining 8 non-customer posts (partnerships/awards/industry) intentionally left as-is
+
+## Known Issues & Future Work
+
+### Non-Customer Content Classification
+**Issue**: Some scraped content includes non-customer stories (partnerships, awards, industry posts) that get stored with URL-based names.
+
+**Scope**: Affects GoogleCloud and potentially other sources. Examples:
+- Partnership announcements ("Google Cloud and ServiceNow partnership")
+- Award announcements ("Winners of 2023 Customer Awards") 
+- Industry trend posts ("Google Cloud for Retail overview")
+
+**Current Status**: GoogleCloud customer stories fixed (19/27), non-customer posts remain as-is.
+
+**Future Enhancement**: Implement content type classification to:
+1. Detect non-customer content during scraping
+2. Flag or categorize differently (partnership/award/industry vs customer story)
+3. Apply consistent handling across all AI provider sources
+4. Consider excluding non-customer content or storing in separate tables
+
+**Priority**: Low - Does not affect customer story analysis, mainly a data cleanliness issue.
 
 ## License
 

@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from database.connection import DatabaseConnection
 from database.models import DatabaseOperations, CustomerStory
+from brand_styles import apply_brand_styling, BRAND_COLORS, PLOTLY_COLOR_SCHEMES, get_brand_color_discrete_map, get_plotly_theme
 
 # Configure Streamlit page
 st.set_page_config(
@@ -162,6 +163,9 @@ def create_download_data(df: pd.DataFrame, format_type: str) -> bytes:
 def main():
     """Main dashboard application"""
     
+    # Apply brand styling
+    apply_brand_styling()
+    
     # Sidebar navigation
     st.sidebar.title("🤖 AI Stories Dashboard")
     page = st.sidebar.selectbox(
@@ -256,9 +260,10 @@ def show_overview(df: pd.DataFrame, source_stats: Dict):
             x='Source', 
             y='Stories',
             color='Type',
-            color_discrete_map={'Gen AI': '#1f77b4', 'Non Gen AI': '#ff7f0e'},
+            color_discrete_map=PLOTLY_COLOR_SCHEMES['gen_ai_colors'],
             title="Story Count by AI Provider (Gen AI vs Non Gen AI breakdown)"
         )
+        fig.update_layout(get_plotly_theme()['layout'])
         fig.update_layout(height=400)
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': True})
     else:
@@ -453,8 +458,10 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
     fig = px.pie(
         values=industry_counts.values,
         names=industry_counts.index,
-        title=f"Top 10 Industries{filter_suffix}"
+        title=f"Top 10 Industries{filter_suffix}",
+        color_discrete_sequence=PLOTLY_COLOR_SCHEMES['diverse_discrete']
     )
+    fig.update_layout(get_plotly_theme()['layout'])
     st.plotly_chart(fig, use_container_width=True)
     
     # Company size and Use Case analysis
@@ -463,14 +470,18 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
     with col1:
         st.subheader("Company Size Distribution")
         size_counts = df_filtered['company_size'].value_counts()
-        fig = px.bar(x=size_counts.index, y=size_counts.values, title=f"Stories by Company Size{filter_suffix}")
+        fig = px.bar(x=size_counts.index, y=size_counts.values, title=f"Stories by Company Size{filter_suffix}",
+                    color=size_counts.values, color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'])
+        fig.update_layout(get_plotly_theme()['layout'])
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
         st.subheader("Use Case Categories")
         use_case_counts = df_filtered['use_case_category'].value_counts().head(8)
         fig = px.bar(x=use_case_counts.values, y=use_case_counts.index, 
-                    orientation='h', title=f"Top AI Use Cases{filter_suffix}")
+                    orientation='h', title=f"Top AI Use Cases{filter_suffix}",
+                    color=use_case_counts.values, color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'])
+        fig.update_layout(get_plotly_theme()['layout'])
         st.plotly_chart(fig, use_container_width=True)
     
     # Technology usage by source - Multiple alternatives
@@ -539,8 +550,9 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
             orientation='h',
             title=f"Top 15 Technologies Mentioned{filter_suffix}",
             color=overall_tech_counts.values,
-            color_continuous_scale='Blues'
+            color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues']
         )
+        fig.update_layout(get_plotly_theme()['layout'])
         fig.update_layout(height=500, showlegend=False)
         st.plotly_chart(fig, use_container_width=True)
         
@@ -738,8 +750,10 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                         range_counts,
                         path=['Range', 'Achievement'],
                         values='Count',
-                        title=f"Financial Outcomes: Value Ranges → Achievement Types{filter_suffix}"
+                        title=f"Financial Outcomes: Value Ranges → Achievement Types{filter_suffix}",
+                        color_discrete_sequence=PLOTLY_COLOR_SCHEMES['diverse_discrete']
                     )
+                    fig.update_layout(get_plotly_theme()['layout'])
                     st.plotly_chart(fig, use_container_width=True)
         
         else:
@@ -802,6 +816,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                         title="Use Case vs Outcome Type Matrix",
                         labels=dict(color="Story Count")
                     )
+                    fig.update_layout(get_plotly_theme()['layout'])
                     fig.update_layout(height=400)
                     st.plotly_chart(fig, use_container_width=True)
                 else:
@@ -899,6 +914,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                 title=f"Story Count: Industry vs Company Size Matrix{filter_suffix}",
                 labels=dict(x="Company Size", y="Industry", color="Story Count")
             )
+            fig.update_layout(get_plotly_theme()['layout'])
             fig.update_layout(height=600)
             st.plotly_chart(fig, use_container_width=True)
         else:
@@ -943,9 +959,10 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             x='Display_Name',
             y='Count',
             color='Count',
-            color_continuous_scale='Blues',
+            color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'],
             title="SuperPowers Distribution - What AI Capabilities Are Used"
         )
+        fig.update_layout(get_plotly_theme()['layout'])
         fig.update_xaxes(tickangle=45)
         fig.update_layout(xaxis_title="AI SuperPowers", yaxis_title="Number of Stories")
         st.plotly_chart(fig, use_container_width=True)
@@ -976,7 +993,8 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             
             fig = px.pie(impacts_df, values='Count', names='Display_Name', 
                         title="Business Impacts Distribution",
-                        color_discrete_sequence=px.colors.qualitative.Set3)
+                        color_discrete_sequence=PLOTLY_COLOR_SCHEMES['qualitative_set3'])
+            fig.update_layout(get_plotly_theme()['layout'])
             st.plotly_chart(fig, use_container_width=True)
     
     with col2:
@@ -1002,7 +1020,8 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             
             fig = px.pie(functions_df, values='Count', names='Display_Name',
                         title="Business Functions Distribution",
-                        color_discrete_sequence=px.colors.qualitative.Pastel)
+                        color_discrete_sequence=PLOTLY_COLOR_SCHEMES['qualitative_set1'])
+            fig.update_layout(get_plotly_theme()['layout'])
             st.plotly_chart(fig, use_container_width=True)
     
     # Adoption Enablers
@@ -1030,9 +1049,10 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             x='Display_Name',
             y='Count',
             color='Count',
-            color_continuous_scale='Greens',
+            color_continuous_scale=PLOTLY_COLOR_SCHEMES['single_metric_blues'],
             title="Adoption Enablers Distribution"
         )
+        fig.update_layout(get_plotly_theme()['layout'])
         fig.update_xaxes(tickangle=45)
         fig.update_layout(xaxis_title="Organizational Enablers", yaxis_title="Number of Stories")
         st.plotly_chart(fig, use_container_width=True)
@@ -1066,6 +1086,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
             title="SuperPowers → Business Impacts Cross-Analysis Matrix",
             labels=dict(x="Business Impacts (Outcomes)", y="SuperPowers (Capabilities)", color="Stories Count")
         )
+        fig.update_layout(get_plotly_theme()['layout'])
         fig.update_layout(
             height=600,
             xaxis_title="Business Impacts Achieved",

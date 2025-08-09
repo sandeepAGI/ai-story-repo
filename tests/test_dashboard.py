@@ -25,8 +25,8 @@ sys.modules['plotly.subplots'] = MagicMock()
 
 import dashboard
 from database.models import CustomerStory, DatabaseOperations
-from dashboard.core.data_loader import load_all_stories, get_source_stats, get_aileron_analytics
-from dashboard.core.data_processor import create_download_data, calculate_summary_stats
+from src.dashboard.core.data_loader import load_all_stories, get_source_stats, get_aileron_analytics
+from src.dashboard.core.data_processor import create_download_data, calculate_summary_stats
 
 @pytest.fixture
 def sample_stories_data():
@@ -145,7 +145,7 @@ class TestDataLoading:
     @patch('dashboard.core.data_loader.DatabaseOperations')
     def test_get_database_connection(self, mock_db_ops):
         """Test database connection initialization"""
-        from dashboard.core.data_loader import get_database_connection
+        from src.dashboard.core.data_loader import get_database_connection
         conn = get_database_connection()
         assert conn is not None
         mock_db_ops.assert_called_once()

@@ -1,7 +1,4 @@
-Review README and code base to get an understanding of current state
-Please review run_dashboard.py to see how the streamlit dashboard has been implemented.
+Review REFACTORING_PLAN.md to understand current state of refactoring
 Also, review all the git commits to get a good sense of the history of this build
-I would like your recommendations to refactor and simplify the code base
-For example, we still have a lot of test utilities that can be replaced by one or two regression test that we use as we make any further updates
-After we review your recommendations, we will come up with a plan
+Now time to proceed with phase 3 and 4
 Be thorough and take your time

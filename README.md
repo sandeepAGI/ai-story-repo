@@ -95,7 +95,9 @@ python update_all_databases.py reprocess --framework all
 python update_all_databases.py validate
 
 # Launch interactive web dashboard
-python run_dashboard.py
+# Simple: streamlit run dashboard.py
+# Enhanced: python scripts/production/run_dashboard.py
+# See DASHBOARD-LAUNCHER-GUIDE.md for comparison
 
 # Migrate to standardized industry taxonomy
 python migrate_industries_simple.py --analyze
@@ -291,7 +293,11 @@ This project uses a modular architecture with clear separation between scraping,
 ## Web Dashboard
 
 ### **Interactive Analytics Platform**
-Access the comprehensive web dashboard at `http://localhost:8501` after running `python run_dashboard.py`.
+Access the comprehensive web dashboard at `http://localhost:8501`. Launch options:
+- **Simple**: `streamlit run dashboard.py` (recommended for daily use)
+- **Enhanced**: `python scripts/production/run_dashboard.py` (includes validation)
+
+See `DASHBOARD-LAUNCHER-GUIDE.md` for detailed comparison.
 
 ### **Dashboard Pages:**
 

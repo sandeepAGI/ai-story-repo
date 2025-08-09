@@ -3,6 +3,11 @@
 AI Customer Stories Dashboard - Modular Version
 Streamlit-based web interface for exploring and analyzing AI customer stories
 
+🚀 How to Run:
+- Simple: streamlit run dashboard.py
+- Enhanced: python scripts/production/run_dashboard.py
+- See DASHBOARD-LAUNCHER-GUIDE.md for detailed comparison
+
 This is the refactored modular dashboard using the new component structure.
 """
 

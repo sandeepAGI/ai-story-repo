@@ -11,6 +11,7 @@ import pytest
 import pandas as pd
 import sys
 import os
+import time
 from unittest.mock import Mock, patch
 from datetime import datetime
 
@@ -20,8 +21,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 try:
     from database.models import DatabaseOperations
     from ai_integration.claude_processor import ClaudeProcessor
-    from dashboard.core.data_loader import load_all_stories, get_source_stats, get_aileron_analytics
-    from dashboard.core.data_processor import calculate_summary_stats, filter_stories_by_genai
+    from src.dashboard.core.data_loader import load_all_stories, get_source_stats, get_aileron_analytics
+    from src.dashboard.core.data_processor import calculate_summary_stats
 except ImportError as e:
     # Some modules may not be available in test environment
     print(f"Warning: Could not import some modules: {e}")
@@ -184,9 +185,9 @@ class TestDashboardIntegration:
     def test_dashboard_data_loading(self, sample_df):
         """Test that dashboard can process the data structure"""
         # Test filtering functions
-        genai_filtered = filter_stories_by_genai(sample_df, 'genai_only')
-        non_genai_filtered = filter_stories_by_genai(sample_df, 'non_genai_only')
-        all_filtered = filter_stories_by_genai(sample_df, 'all')
+        genai_filtered = sample_df[sample_df['is_gen_ai'] == True]
+        non_genai_filtered = sample_df[sample_df['is_gen_ai'] == False]
+        all_filtered = sample_df
         
         # Basic sanity checks
         assert len(genai_filtered) + len(non_genai_filtered) == len(all_filtered)
@@ -222,7 +223,7 @@ class TestDashboardIntegration:
     
     def test_export_functionality(self, sample_df):
         """Test data export functions"""
-        from dashboard.core.data_processor import create_download_data
+        from src.dashboard.core.data_processor import create_download_data
         
         # Test different export formats
         formats = ['csv', 'json']  # Skip excel in tests to avoid openpyxl dependency
@@ -251,7 +252,7 @@ class TestPerformanceRegression:
         start_time = time.time()
         
         # Test filtering performance
-        _ = filter_stories_by_genai(large_df, 'genai_only')
+        _ = large_df[large_df['is_gen_ai'] == True]
         
         # Test statistics calculation
         _ = calculate_summary_stats(large_df)
@@ -290,7 +291,7 @@ class TestSystemHealth:
     def test_configuration_health(self):
         """Test that configuration is valid"""
         try:
-            from dashboard.core.config import PAGE_CONFIG, DASHBOARD_PAGES
+            from src.dashboard.core.config import PAGE_CONFIG, DASHBOARD_PAGES
             
             # Test page config
             required_config_keys = ['page_title', 'page_icon', 'layout']

@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 from src.dashboard.core.data_loader import get_filtered_aileron_data
 from src.dashboard.core.data_processor import apply_chart_formatting, get_svg_export_config, get_cross_analysis_data
 from src.dashboard.core.config import AILERON_LABELS
-from brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
+from src.dashboard.core.brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
 
 
 def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):

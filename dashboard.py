@@ -36,7 +36,7 @@ from src.dashboard.pages.export import show_data_export
 
 # Import brand styling
 sys.path.insert(0, os.path.dirname(__file__))
-from brand_styles import apply_brand_styling
+from src.dashboard.core.brand_styles import apply_brand_styling
 
 # Configure Streamlit page
 st.set_page_config(**PAGE_CONFIG)

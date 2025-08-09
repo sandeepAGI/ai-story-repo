@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'core'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from src.dashboard.core.data_processor import apply_chart_formatting, get_svg_export_config
-from brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
+from src.dashboard.core.brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
 
 
 def show_overview(df: pd.DataFrame, source_stats: Dict):

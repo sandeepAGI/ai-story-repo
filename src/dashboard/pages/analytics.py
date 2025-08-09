@@ -24,7 +24,7 @@ from src.dashboard.components.charts import (
     create_metric_cards,
     apply_industry_chart_options
 )
-from brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
+from src.dashboard.core.brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
 
 
 def show_analytics(df: pd.DataFrame, source_stats: Dict):

@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'core'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 from src.dashboard.core.data_processor import apply_chart_formatting, get_svg_export_config
-from brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
+from src.dashboard.core.brand_styles import PLOTLY_COLOR_SCHEMES, get_plotly_theme
 
 
 def create_industry_pie_chart(df: pd.DataFrame, title: str = "Industry Distribution", top_n: int = 10) -> go.Figure:

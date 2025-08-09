@@ -192,6 +192,21 @@ def format_chart_title(title: str, max_length: int = 50) -> str:
     # Join lines with HTML line breaks for Plotly
     return '<br>'.join(lines)
 
+def get_svg_export_config(chart_title: str = "chart") -> Dict:
+    """Get Plotly configuration for SVG export (PowerPoint editable)"""
+    return {
+        'displayModeBar': True,
+        'toImageButtonOptions': {
+            'format': 'svg',
+            'filename': chart_title.lower().replace(' ', '_').replace('→', '_to_'),
+            'height': 600,
+            'width': 800,
+            'scale': 1
+        },
+        'displaylogo': False,
+        'modeBarButtonsToAdd': ['downloadSVG']
+    }
+
 def apply_chart_formatting(fig, title: str):
     """Apply consistent formatting to charts: centered, wrapped titles"""
     formatted_title = format_chart_title(title)
@@ -346,7 +361,7 @@ def show_overview(df: pd.DataFrame, source_stats: Dict):
         apply_chart_formatting(fig, "Story Count by AI Provider")
         fig.update_layout(get_plotly_theme()['layout'])
         fig.update_layout(height=400)
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': True})
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Story_Count_by_AI_Provider"))
     else:
         st.info("No data available for source breakdown")
     
@@ -603,7 +618,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
             fig.update_layout(showlegend=False)
     
         fig.update_layout(get_plotly_theme()['layout'])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Industry_Distribution"))
         
         # Add summary table for "No legend" option
         if label_style == "No legend":
@@ -630,7 +645,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
         fig.update_xaxes(title_text="")
         fig.update_yaxes(title_text="")
         fig.update_coloraxes(colorbar_title="Count")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Company_Size_Distribution"))
     
     with col2:
         st.subheader(f"Use Case Categories{filter_suffix}")
@@ -645,7 +660,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
         fig.update_xaxes(title_text="")
         fig.update_yaxes(title_text="")
         fig.update_coloraxes(colorbar_title="Count")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Top_AI_Use_Cases"))
     
     # Technology usage by source - Multiple alternatives
     st.subheader(f"Technology Usage Analysis{filter_suffix}")
@@ -722,7 +737,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
         fig.update_xaxes(title_text="")
         fig.update_yaxes(title_text="")
         fig.update_coloraxes(colorbar_title="Count")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Top_15_Technologies_Mentioned"))
         
     else:
         st.info("No technology data available in stories")
@@ -922,7 +937,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                     )
                     apply_chart_formatting(fig, "Financial Outcomes: Value Ranges → Achievement Types")
                     fig.update_layout(get_plotly_theme()['layout'])
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Financial_Outcomes_Value_Ranges_Achievement_Types"))
         
         else:
             st.info("No quantitative financial outcomes available")
@@ -986,7 +1001,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
                     apply_chart_formatting(fig, "Use Case vs Outcome Type Matrix")
                     fig.update_layout(get_plotly_theme()['layout'])
                     fig.update_layout(height=400)
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Use_Case_vs_Outcome_Type_Matrix"))
                 else:
                     st.info("No matrix data available")
             else:
@@ -1084,7 +1099,7 @@ def show_analytics(df: pd.DataFrame, source_stats: Dict):
             apply_chart_formatting(fig, "Industry vs Company Size Matrix")
             fig.update_layout(get_plotly_theme()['layout'])
             fig.update_layout(height=600)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Industry_vs_Company_Size_Matrix"))
         else:
             st.info("Insufficient data for cross-analysis")
     else:
@@ -1176,7 +1191,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
         fig.update_xaxes(tickangle=45, title_text="")
         fig.update_yaxes(title_text="")
         fig.update_coloraxes(colorbar_title="Count")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("SuperPowers_Distribution"))
     
     # Business Impacts and Functions
     col1, col2 = st.columns(2)
@@ -1206,7 +1221,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
                         color_discrete_sequence=PLOTLY_COLOR_SCHEMES['qualitative_set3'])
             apply_chart_formatting(fig, "Business Impacts Distribution")
             fig.update_layout(get_plotly_theme()['layout'])
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Business_Impacts_Distribution"))
     
     with col2:
         st.subheader("🏢 Business Value Chain - Functions Benefiting")
@@ -1233,7 +1248,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
                         color_discrete_sequence=PLOTLY_COLOR_SCHEMES['qualitative_set1'])
             apply_chart_formatting(fig, "Business Functions Distribution")
             fig.update_layout(get_plotly_theme()['layout'])
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Business_Functions_Distribution"))
     
     # Adoption Enablers
     st.subheader("🛡️ Adoption Enablers - Organizational Success Factors")
@@ -1267,7 +1282,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
         fig.update_xaxes(tickangle=45, title_text="")
         fig.update_yaxes(title_text="")
         fig.update_coloraxes(colorbar_title="Count")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("Adoption_Enablers_Distribution"))
     
     # Cross-analysis matrix
     st.subheader("🔄 Cross-Analysis: SuperPowers → Business Impacts")
@@ -1301,7 +1316,7 @@ def show_aileron_insights(df: pd.DataFrame, aileron_data: Dict):
         fig.update_layout(height=600)
         fig.update_xaxes(title_text="")
         fig.update_yaxes(title_text="")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config=get_svg_export_config("SuperPowers_Business_Impacts_Cross_Analysis"))
         
         # Summary insights
         st.markdown("### 📋 Key Insights from Cross-Analysis")

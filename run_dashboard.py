@@ -61,6 +61,7 @@ def main():
             sys.executable, "-m", "streamlit", "run", "dashboard.py",
             "--server.port", "8501",
             "--server.address", "localhost",
+            "--server.headless", "true",
             "--browser.gatherUsageStats", "false"
         ])
     except KeyboardInterrupt:

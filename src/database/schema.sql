@@ -47,6 +47,17 @@ CREATE TABLE customer_stories (
     scraped_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     publish_date DATE, -- When the story was originally published
+    publish_date_estimated BOOLEAN DEFAULT FALSE,
+    publish_date_confidence VARCHAR(10) DEFAULT NULL, -- 'high', 'medium', 'low'
+    publish_date_reasoning TEXT DEFAULT NULL,
+    
+    -- AI Classification
+    is_gen_ai BOOLEAN DEFAULT NULL, -- True for GenAI, False for Traditional AI, NULL for unclassified
+    
+    -- Language Detection
+    detected_language VARCHAR(50) DEFAULT 'English',
+    language_detection_method VARCHAR(50) DEFAULT 'default',
+    language_confidence NUMERIC DEFAULT 0.30
     
     -- Text search
     search_vector tsvector GENERATED ALWAYS AS (
@@ -119,6 +130,10 @@ CREATE INDEX idx_customer_stories_search ON customer_stories USING gin(search_ve
 CREATE INDEX idx_customer_stories_extracted_data ON customer_stories USING gin(extracted_data);
 CREATE INDEX idx_story_metrics_type ON story_metrics(metric_type);
 CREATE INDEX idx_story_technologies_story ON story_technologies(story_id);
+
+-- Additional indexes for new fields
+CREATE INDEX idx_customer_stories_is_gen_ai ON customer_stories(is_gen_ai);
+CREATE INDEX idx_customer_stories_detected_language ON customer_stories(detected_language);
 
 -- Indexes for discovered_urls table
 CREATE INDEX idx_discovered_urls_source_status ON discovered_urls(source_id, scrape_status);

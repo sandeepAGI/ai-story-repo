@@ -25,6 +25,8 @@ sys.modules['plotly.subplots'] = MagicMock()
 
 import dashboard
 from database.models import CustomerStory, DatabaseOperations
+from dashboard.core.data_loader import load_all_stories, get_source_stats, get_aileron_analytics
+from dashboard.core.data_processor import create_download_data, calculate_summary_stats
 
 @pytest.fixture
 def sample_stories_data():
@@ -140,14 +142,15 @@ class TestDashboard:
 class TestDataLoading:
     """Test data loading and processing functions"""
     
-    @patch('dashboard.DatabaseOperations')
+    @patch('dashboard.core.data_loader.DatabaseOperations')
     def test_get_database_connection(self, mock_db_ops):
         """Test database connection initialization"""
-        conn = dashboard.get_database_connection()
+        from dashboard.core.data_loader import get_database_connection
+        conn = get_database_connection()
         assert conn is not None
         mock_db_ops.assert_called_once()
     
-    @patch('dashboard.get_database_connection')
+    @patch('dashboard.core.data_loader.get_database_connection')
     def test_load_all_stories(self, mock_get_db, sample_stories_data):
         """Test loading all stories from database"""
         # Mock database operations
@@ -161,7 +164,7 @@ class TestDataLoading:
         mock_get_db.return_value = mock_db_ops
         
         # Test function
-        df = dashboard.load_all_stories()
+        df = load_all_stories()
         
         assert isinstance(df, pd.DataFrame)
         assert len(df) == 2
@@ -230,7 +233,7 @@ class TestDataProcessing:
     
     def test_create_download_data_csv(self, sample_df):
         """Test CSV data creation for download"""
-        csv_data = dashboard.create_download_data(sample_df, 'csv')
+        csv_data = create_download_data(sample_df, 'csv')
         
         assert isinstance(csv_data, bytes)
         csv_string = csv_data.decode('utf-8')
@@ -239,14 +242,14 @@ class TestDataProcessing:
     
     def test_create_download_data_excel(self, sample_df):
         """Test Excel data creation for download"""
-        excel_data = dashboard.create_download_data(sample_df, 'excel')
+        excel_data = create_download_data(sample_df, 'excel')
         
         assert isinstance(excel_data, bytes)
         assert len(excel_data) > 0
     
     def test_create_download_data_json(self, sample_df):
         """Test JSON data creation for download"""
-        json_data = dashboard.create_download_data(sample_df, 'json')
+        json_data = create_download_data(sample_df, 'json')
         
         assert isinstance(json_data, bytes)
         json_string = json_data.decode('utf-8')

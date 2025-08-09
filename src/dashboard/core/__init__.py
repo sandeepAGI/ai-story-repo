@@ -1,0 +1,1 @@
+"""Core dashboard functionality - data loading, processing, configuration"""
